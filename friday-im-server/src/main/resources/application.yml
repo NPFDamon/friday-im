@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: friday-im-server
+
+server:
+    port: 8989
