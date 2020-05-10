@@ -1,0 +1,228 @@
+[INFO]-[2020-05-10 11:00:24]-com.friday.FridayIMServerApplication[55]:Starting FridayIMServerApplication on Damon with PID 11180 (D:\workspace\friday-im\friday-im-server\target\classes started by 55458 in D:\workspace\friday-im)
+[INFO]-[2020-05-10 11:00:24]-com.friday.FridayIMServerApplication[651]:No active profile set, falling back to default profiles: default
+[INFO]-[2020-05-10 11:00:25]-org.springframework.boot.web.embedded.tomcat.TomcatWebServer[92]:Tomcat initialized with port(s): 8989 (http)
+[INFO]-[2020-05-10 11:00:25]-org.apache.coyote.http11.Http11NioProtocol[173]:Initializing ProtocolHandler ["http-nio-8989"]
+[INFO]-[2020-05-10 11:00:25]-org.apache.catalina.core.StandardService[173]:Starting service [Tomcat]
+[INFO]-[2020-05-10 11:00:25]-org.apache.catalina.core.StandardEngine[173]:Starting Servlet engine: [Apache Tomcat/9.0.33]
+[INFO]-[2020-05-10 11:00:25]-org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/][173]:Initializing Spring embedded WebApplicationContext
+[INFO]-[2020-05-10 11:00:25]-org.springframework.web.context.ContextLoader[284]:Root WebApplicationContext: initialization completed in 1007 ms
+[INFO]-[2020-05-10 11:00:26]-org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor[181]:Initializing ExecutorService 'applicationTaskExecutor'
+[INFO]-[2020-05-10 11:00:26]-org.apache.coyote.http11.Http11NioProtocol[173]:Starting ProtocolHandler ["http-nio-8989"]
+[INFO]-[2020-05-10 11:00:26]-org.springframework.boot.web.embedded.tomcat.TomcatWebServer[204]:Tomcat started on port(s): 8989 (http) with context path ''
+[INFO]-[2020-05-10 11:00:26]-com.friday.FridayIMServerApplication[61]:Started FridayIMServerApplication in 2.011 seconds (JVM running for 3.451)
+[INFO]-[2020-05-10 11:00:27]-org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener[136]:
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+[ERROR]-[2020-05-10 11:00:27]-org.springframework.boot.SpringApplication[826]:Application run failed
+java.lang.IllegalStateException: Failed to execute CommandLineRunner
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:787)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215)
+	at com.friday.FridayIMServerApplication.main(FridayIMServerApplication.java:18)
+Caused by: java.net.BindException: Address already in use: bind
+	at sun.nio.ch.Net.bind0(Native Method)
+	at sun.nio.ch.Net.bind(Net.java:433)
+	at sun.nio.ch.Net.bind(Net.java:425)
+	at sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:223)
+	at io.netty.channel.socket.nio.NioServerSocketChannel.doBind(NioServerSocketChannel.java:134)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe.bind(AbstractChannel.java:550)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.bind(DefaultChannelPipeline.java:1334)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeBind(AbstractChannelHandlerContext.java:506)
+	at io.netty.channel.AbstractChannelHandlerContext.bind(AbstractChannelHandlerContext.java:491)
+	at io.netty.channel.DefaultChannelPipeline.bind(DefaultChannelPipeline.java:973)
+	at io.netty.channel.AbstractChannel.bind(AbstractChannel.java:248)
+	at io.netty.bootstrap.AbstractBootstrap$2.run(AbstractBootstrap.java:356)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:164)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:500)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:989)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+[INFO]-[2020-05-10 11:00:27]-org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor[218]:Shutting down ExecutorService 'applicationTaskExecutor'
+[INFO]-[2020-05-10 11:02:03]-com.friday.FridayIMServerApplication[55]:Starting FridayIMServerApplication on Damon with PID 4084 (D:\workspace\friday-im\friday-im-server\target\classes started by 55458 in D:\workspace\friday-im)
+[INFO]-[2020-05-10 11:02:03]-com.friday.FridayIMServerApplication[651]:No active profile set, falling back to default profiles: default
+[INFO]-[2020-05-10 11:02:04]-org.springframework.boot.web.embedded.tomcat.TomcatWebServer[92]:Tomcat initialized with port(s): 8989 (http)
+[INFO]-[2020-05-10 11:02:04]-org.apache.coyote.http11.Http11NioProtocol[173]:Initializing ProtocolHandler ["http-nio-8989"]
+[INFO]-[2020-05-10 11:02:04]-org.apache.catalina.core.StandardService[173]:Starting service [Tomcat]
+[INFO]-[2020-05-10 11:02:04]-org.apache.catalina.core.StandardEngine[173]:Starting Servlet engine: [Apache Tomcat/9.0.33]
+[INFO]-[2020-05-10 11:02:04]-org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/][173]:Initializing Spring embedded WebApplicationContext
+[INFO]-[2020-05-10 11:02:04]-org.springframework.web.context.ContextLoader[284]:Root WebApplicationContext: initialization completed in 1100 ms
+[INFO]-[2020-05-10 11:02:04]-org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor[181]:Initializing ExecutorService 'applicationTaskExecutor'
+[INFO]-[2020-05-10 11:02:05]-org.apache.coyote.http11.Http11NioProtocol[173]:Starting ProtocolHandler ["http-nio-8989"]
+[INFO]-[2020-05-10 11:02:05]-org.springframework.boot.web.embedded.tomcat.TomcatWebServer[204]:Tomcat started on port(s): 8989 (http) with context path ''
+[INFO]-[2020-05-10 11:02:05]-com.friday.FridayIMServerApplication[61]:Started FridayIMServerApplication in 2.119 seconds (JVM running for 3.577)
+[INFO]-[2020-05-10 11:02:06]-com.friday.server.FridayIMServer[62]:Friday Server Start Success ...
+[INFO]-[2020-05-10 11:02:06]-com.friday.FridayIMServerApplication[19]:Friday IM Server Application is run ^_^
+[INFO]-[2020-05-10 11:03:25]-com.friday.FridayIMServerApplication[55]:Starting FridayIMServerApplication on Damon with PID 13632 (D:\workspace\friday-im\friday-im-server\target\classes started by 55458 in D:\workspace\friday-im)
+[INFO]-[2020-05-10 11:03:25]-com.friday.FridayIMServerApplication[651]:No active profile set, falling back to default profiles: default
+[INFO]-[2020-05-10 11:03:26]-org.springframework.boot.web.embedded.tomcat.TomcatWebServer[92]:Tomcat initialized with port(s): 8989 (http)
+[INFO]-[2020-05-10 11:03:26]-org.apache.coyote.http11.Http11NioProtocol[173]:Initializing ProtocolHandler ["http-nio-8989"]
+[INFO]-[2020-05-10 11:03:26]-org.apache.catalina.core.StandardService[173]:Starting service [Tomcat]
+[INFO]-[2020-05-10 11:03:26]-org.apache.catalina.core.StandardEngine[173]:Starting Servlet engine: [Apache Tomcat/9.0.33]
+[INFO]-[2020-05-10 11:03:26]-org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/][173]:Initializing Spring embedded WebApplicationContext
+[INFO]-[2020-05-10 11:03:26]-org.springframework.web.context.ContextLoader[284]:Root WebApplicationContext: initialization completed in 969 ms
+[INFO]-[2020-05-10 11:03:27]-org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor[181]:Initializing ExecutorService 'applicationTaskExecutor'
+[INFO]-[2020-05-10 11:03:27]-org.apache.coyote.http11.Http11NioProtocol[173]:Starting ProtocolHandler ["http-nio-8989"]
+[INFO]-[2020-05-10 11:03:27]-org.springframework.boot.web.embedded.tomcat.TomcatWebServer[204]:Tomcat started on port(s): 8989 (http) with context path ''
+[INFO]-[2020-05-10 11:03:27]-com.friday.FridayIMServerApplication[61]:Started FridayIMServerApplication in 2.029 seconds (JVM running for 3.316)
+[INFO]-[2020-05-10 11:03:28]-com.friday.server.FridayIMServer[62]:Friday Server Start Success ...
+[INFO]-[2020-05-10 11:03:28]-com.friday.FridayIMServerApplication[19]:Friday IM Server Application is run ^_^
+[INFO]-[2020-05-10 11:05:40]-com.friday.FridayIMServerApplication[55]:Starting FridayIMServerApplication on Damon with PID 11472 (D:\workspace\friday-im\friday-im-server\target\classes started by 55458 in D:\workspace\friday-im)
+[INFO]-[2020-05-10 11:05:40]-com.friday.FridayIMServerApplication[651]:No active profile set, falling back to default profiles: default
+[INFO]-[2020-05-10 11:05:41]-org.springframework.boot.web.embedded.tomcat.TomcatWebServer[92]:Tomcat initialized with port(s): 8989 (http)
+[INFO]-[2020-05-10 11:05:41]-org.apache.coyote.http11.Http11NioProtocol[173]:Initializing ProtocolHandler ["http-nio-8989"]
+[INFO]-[2020-05-10 11:05:41]-org.apache.catalina.core.StandardService[173]:Starting service [Tomcat]
+[INFO]-[2020-05-10 11:05:41]-org.apache.catalina.core.StandardEngine[173]:Starting Servlet engine: [Apache Tomcat/9.0.33]
+[INFO]-[2020-05-10 11:05:41]-org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/][173]:Initializing Spring embedded WebApplicationContext
+[INFO]-[2020-05-10 11:05:41]-org.springframework.web.context.ContextLoader[284]:Root WebApplicationContext: initialization completed in 886 ms
+[INFO]-[2020-05-10 11:05:42]-org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor[181]:Initializing ExecutorService 'applicationTaskExecutor'
+[INFO]-[2020-05-10 11:05:42]-org.apache.coyote.http11.Http11NioProtocol[173]:Starting ProtocolHandler ["http-nio-8989"]
+[INFO]-[2020-05-10 11:05:42]-org.springframework.boot.web.embedded.tomcat.TomcatWebServer[204]:Tomcat started on port(s): 8989 (http) with context path ''
+[INFO]-[2020-05-10 11:05:42]-com.friday.FridayIMServerApplication[61]:Started FridayIMServerApplication in 1.729 seconds (JVM running for 2.86)
+[INFO]-[2020-05-10 11:05:43]-com.friday.server.FridayIMServer[62]:Friday Server Start Success With Address[127.0.0.1],Port[8000] ...
+[INFO]-[2020-05-10 11:05:43]-com.friday.FridayIMServerApplication[19]:Friday IM Server Application is run ^_^
+[INFO]-[2020-05-10 11:31:56]-com.friday.FridayIMServerApplication[55]:Starting FridayIMServerApplication on Damon with PID 2244 (D:\workspace\friday-im\friday-im-server\target\classes started by 55458 in D:\workspace\friday-im)
+[INFO]-[2020-05-10 11:31:56]-com.friday.FridayIMServerApplication[651]:No active profile set, falling back to default profiles: default
+[INFO]-[2020-05-10 11:31:57]-org.springframework.boot.web.embedded.tomcat.TomcatWebServer[92]:Tomcat initialized with port(s): 8989 (http)
+[INFO]-[2020-05-10 11:31:57]-org.apache.coyote.http11.Http11NioProtocol[173]:Initializing ProtocolHandler ["http-nio-8989"]
+[INFO]-[2020-05-10 11:31:57]-org.apache.catalina.core.StandardService[173]:Starting service [Tomcat]
+[INFO]-[2020-05-10 11:31:57]-org.apache.catalina.core.StandardEngine[173]:Starting Servlet engine: [Apache Tomcat/9.0.33]
+[INFO]-[2020-05-10 11:31:57]-org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/][173]:Initializing Spring embedded WebApplicationContext
+[INFO]-[2020-05-10 11:31:57]-org.springframework.web.context.ContextLoader[284]:Root WebApplicationContext: initialization completed in 916 ms
+[INFO]-[2020-05-10 11:31:57]-org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor[181]:Initializing ExecutorService 'applicationTaskExecutor'
+[INFO]-[2020-05-10 11:31:58]-org.apache.coyote.http11.Http11NioProtocol[173]:Starting ProtocolHandler ["http-nio-8989"]
+[INFO]-[2020-05-10 11:31:58]-org.springframework.boot.web.embedded.tomcat.TomcatWebServer[204]:Tomcat started on port(s): 8989 (http) with context path ''
+[INFO]-[2020-05-10 11:31:58]-com.friday.FridayIMServerApplication[61]:Started FridayIMServerApplication in 1.8 seconds (JVM running for 2.933)
+[INFO]-[2020-05-10 11:31:59]-com.friday.server.FridayIMServer[62]:Friday Netty Server Start Success With Address[127.0.0.1],Port[8000] ...
+[INFO]-[2020-05-10 11:31:59]-com.friday.FridayIMServerApplication[19]:Friday IM Server Application is run ^_^
+[INFO]-[2020-05-10 11:34:56]-com.friday.FridayIMServerApplication[55]:Starting FridayIMServerApplication on Damon with PID 2880 (D:\workspace\friday-im\friday-im-server\target\classes started by 55458 in D:\workspace\friday-im)
+[INFO]-[2020-05-10 11:34:56]-com.friday.FridayIMServerApplication[651]:No active profile set, falling back to default profiles: default
+[INFO]-[2020-05-10 11:34:57]-org.springframework.boot.web.embedded.tomcat.TomcatWebServer[92]:Tomcat initialized with port(s): 8989 (http)
+[INFO]-[2020-05-10 11:34:57]-org.apache.coyote.http11.Http11NioProtocol[173]:Initializing ProtocolHandler ["http-nio-8989"]
+[INFO]-[2020-05-10 11:34:57]-org.apache.catalina.core.StandardService[173]:Starting service [Tomcat]
+[INFO]-[2020-05-10 11:34:57]-org.apache.catalina.core.StandardEngine[173]:Starting Servlet engine: [Apache Tomcat/9.0.33]
+[INFO]-[2020-05-10 11:34:58]-org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/][173]:Initializing Spring embedded WebApplicationContext
+[INFO]-[2020-05-10 11:34:58]-org.springframework.web.context.ContextLoader[284]:Root WebApplicationContext: initialization completed in 1141 ms
+[INFO]-[2020-05-10 11:34:58]-org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor[181]:Initializing ExecutorService 'applicationTaskExecutor'
+[INFO]-[2020-05-10 11:34:58]-org.apache.coyote.http11.Http11NioProtocol[173]:Starting ProtocolHandler ["http-nio-8989"]
+[INFO]-[2020-05-10 11:34:58]-org.springframework.boot.web.embedded.tomcat.TomcatWebServer[204]:Tomcat started on port(s): 8989 (http) with context path ''
+[INFO]-[2020-05-10 11:34:58]-com.friday.FridayIMServerApplication[61]:Started FridayIMServerApplication in 2.224 seconds (JVM running for 4.177)
+[INFO]-[2020-05-10 11:34:59]-com.friday.server.FridayIMServer[62]:Friday Netty Server Start Success With Address[127.0.0.1],Port[8000] ...
+[INFO]-[2020-05-10 11:34:59]-com.friday.FridayIMServerApplication[19]:Friday IM Server Application is run ^_^
+[INFO]-[2020-05-10 11:35:10]-com.friday.FridayIMClientApplication[55]:Starting FridayIMClientApplication on Damon with PID 9364 (D:\workspace\friday-im\friday-im-client\target\classes started by 55458 in D:\workspace\friday-im)
+[INFO]-[2020-05-10 11:35:10]-com.friday.FridayIMClientApplication[651]:No active profile set, falling back to default profiles: default
+[INFO]-[2020-05-10 11:35:10]-org.springframework.boot.web.embedded.tomcat.TomcatWebServer[92]:Tomcat initialized with port(s): 8990 (http)
+[INFO]-[2020-05-10 11:35:10]-org.apache.coyote.http11.Http11NioProtocol[173]:Initializing ProtocolHandler ["http-nio-8990"]
+[INFO]-[2020-05-10 11:35:10]-org.apache.catalina.core.StandardService[173]:Starting service [Tomcat]
+[INFO]-[2020-05-10 11:35:10]-org.apache.catalina.core.StandardEngine[173]:Starting Servlet engine: [Apache Tomcat/9.0.33]
+[INFO]-[2020-05-10 11:35:11]-org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/][173]:Initializing Spring embedded WebApplicationContext
+[INFO]-[2020-05-10 11:35:11]-org.springframework.web.context.ContextLoader[284]:Root WebApplicationContext: initialization completed in 898 ms
+[INFO]-[2020-05-10 11:35:11]-org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor[181]:Initializing ExecutorService 'applicationTaskExecutor'
+[INFO]-[2020-05-10 11:35:11]-org.apache.coyote.http11.Http11NioProtocol[173]:Starting ProtocolHandler ["http-nio-8990"]
+[INFO]-[2020-05-10 11:35:11]-org.springframework.boot.web.embedded.tomcat.TomcatWebServer[204]:Tomcat started on port(s): 8990 (http) with context path ''
+[INFO]-[2020-05-10 11:35:11]-com.friday.FridayIMClientApplication[61]:Started FridayIMClientApplication in 1.681 seconds (JVM running for 2.852)
+[INFO]-[2020-05-10 11:35:11]-org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener[136]:
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+[ERROR]-[2020-05-10 11:35:11]-org.springframework.boot.SpringApplication[826]:Application run failed
+java.lang.IllegalStateException: Failed to execute CommandLineRunner
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:787)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215)
+	at com.friday.FridayIMClientApplication.main(FridayIMClientApplication.java:18)
+Caused by: java.lang.IllegalStateException: channel or channelFactory not set
+	at io.netty.bootstrap.AbstractBootstrap.validate(AbstractBootstrap.java:208)
+	at io.netty.bootstrap.Bootstrap.validate(Bootstrap.java:271)
+	at io.netty.bootstrap.Bootstrap.connect(Bootstrap.java:138)
+	at io.netty.bootstrap.Bootstrap.connect(Bootstrap.java:123)
+	at com.friday.client.FridayIMClient.start(FridayIMClient.java:47)
+	at com.friday.FridayIMClientApplication.run(FridayIMClientApplication.java:25)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784)
+	... 5 common frames omitted
+[INFO]-[2020-05-10 11:35:11]-org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor[218]:Shutting down ExecutorService 'applicationTaskExecutor'
+[INFO]-[2020-05-10 11:35:38]-org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor[218]:Shutting down ExecutorService 'applicationTaskExecutor'
+[INFO]-[2020-05-10 11:36:51]-com.friday.FridayIMServerApplication[55]:Starting FridayIMServerApplication on Damon with PID 572 (D:\workspace\friday-im\friday-im-server\target\classes started by 55458 in D:\workspace\friday-im)
+[INFO]-[2020-05-10 11:36:51]-com.friday.FridayIMServerApplication[651]:No active profile set, falling back to default profiles: default
+[INFO]-[2020-05-10 11:36:52]-org.springframework.boot.web.embedded.tomcat.TomcatWebServer[92]:Tomcat initialized with port(s): 8989 (http)
+[INFO]-[2020-05-10 11:36:52]-org.apache.coyote.http11.Http11NioProtocol[173]:Initializing ProtocolHandler ["http-nio-8989"]
+[INFO]-[2020-05-10 11:36:52]-org.apache.catalina.core.StandardService[173]:Starting service [Tomcat]
+[INFO]-[2020-05-10 11:36:52]-org.apache.catalina.core.StandardEngine[173]:Starting Servlet engine: [Apache Tomcat/9.0.33]
+[INFO]-[2020-05-10 11:36:52]-org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/][173]:Initializing Spring embedded WebApplicationContext
+[INFO]-[2020-05-10 11:36:52]-org.springframework.web.context.ContextLoader[284]:Root WebApplicationContext: initialization completed in 862 ms
+[INFO]-[2020-05-10 11:36:52]-org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor[181]:Initializing ExecutorService 'applicationTaskExecutor'
+[INFO]-[2020-05-10 11:36:52]-org.apache.coyote.http11.Http11NioProtocol[173]:Starting ProtocolHandler ["http-nio-8989"]
+[INFO]-[2020-05-10 11:36:52]-org.springframework.boot.web.embedded.tomcat.TomcatWebServer[204]:Tomcat started on port(s): 8989 (http) with context path ''
+[INFO]-[2020-05-10 11:36:52]-com.friday.FridayIMServerApplication[61]:Started FridayIMServerApplication in 1.766 seconds (JVM running for 2.944)
+[INFO]-[2020-05-10 11:36:53]-com.friday.server.FridayIMServer[62]:Friday Netty Server Start Success With Address[127.0.0.1],Port[8000] ...
+[INFO]-[2020-05-10 11:36:53]-com.friday.FridayIMServerApplication[19]:Friday IM Server Application is run ^_^
+[INFO]-[2020-05-10 11:37:18]-com.friday.FridayIMClientApplication[55]:Starting FridayIMClientApplication on Damon with PID 2904 (D:\workspace\friday-im\friday-im-client\target\classes started by 55458 in D:\workspace\friday-im)
+[INFO]-[2020-05-10 11:37:18]-com.friday.FridayIMClientApplication[651]:No active profile set, falling back to default profiles: default
+[INFO]-[2020-05-10 11:37:19]-org.springframework.boot.web.embedded.tomcat.TomcatWebServer[92]:Tomcat initialized with port(s): 8990 (http)
+[INFO]-[2020-05-10 11:37:19]-org.apache.coyote.http11.Http11NioProtocol[173]:Initializing ProtocolHandler ["http-nio-8990"]
+[INFO]-[2020-05-10 11:37:19]-org.apache.catalina.core.StandardService[173]:Starting service [Tomcat]
+[INFO]-[2020-05-10 11:37:19]-org.apache.catalina.core.StandardEngine[173]:Starting Servlet engine: [Apache Tomcat/9.0.33]
+[INFO]-[2020-05-10 11:37:19]-org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/][173]:Initializing Spring embedded WebApplicationContext
+[INFO]-[2020-05-10 11:37:19]-org.springframework.web.context.ContextLoader[284]:Root WebApplicationContext: initialization completed in 868 ms
+[INFO]-[2020-05-10 11:37:19]-org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor[181]:Initializing ExecutorService 'applicationTaskExecutor'
+[INFO]-[2020-05-10 11:37:19]-org.apache.coyote.http11.Http11NioProtocol[173]:Starting ProtocolHandler ["http-nio-8990"]
+[INFO]-[2020-05-10 11:37:19]-org.springframework.boot.web.embedded.tomcat.TomcatWebServer[204]:Tomcat started on port(s): 8990 (http) with context path ''
+[INFO]-[2020-05-10 11:37:19]-com.friday.FridayIMClientApplication[61]:Started FridayIMClientApplication in 1.679 seconds (JVM running for 2.906)
+[INFO]-[2020-05-10 11:37:19]-org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener[136]:
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+[ERROR]-[2020-05-10 11:37:19]-org.springframework.boot.SpringApplication[826]:Application run failed
+java.lang.IllegalStateException: Failed to execute CommandLineRunner
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:787)
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:768)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:322)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1226)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1215)
+	at com.friday.FridayIMClientApplication.main(FridayIMClientApplication.java:18)
+Caused by: java.lang.IllegalStateException: channel or channelFactory not set
+	at io.netty.bootstrap.AbstractBootstrap.validate(AbstractBootstrap.java:208)
+	at io.netty.bootstrap.Bootstrap.validate(Bootstrap.java:271)
+	at io.netty.bootstrap.Bootstrap.connect(Bootstrap.java:138)
+	at io.netty.bootstrap.Bootstrap.connect(Bootstrap.java:123)
+	at com.friday.client.FridayIMClient.start(FridayIMClient.java:47)
+	at com.friday.FridayIMClientApplication.run(FridayIMClientApplication.java:25)
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:784)
+	... 5 common frames omitted
+[INFO]-[2020-05-10 11:37:19]-org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor[218]:Shutting down ExecutorService 'applicationTaskExecutor'
+[INFO]-[2020-05-10 11:39:32]-com.friday.FridayIMClientApplication[55]:Starting FridayIMClientApplication on Damon with PID 7364 (D:\workspace\friday-im\friday-im-client\target\classes started by 55458 in D:\workspace\friday-im)
+[INFO]-[2020-05-10 11:39:32]-com.friday.FridayIMClientApplication[651]:No active profile set, falling back to default profiles: default
+[INFO]-[2020-05-10 11:39:33]-org.springframework.boot.web.embedded.tomcat.TomcatWebServer[92]:Tomcat initialized with port(s): 8990 (http)
+[INFO]-[2020-05-10 11:39:33]-org.apache.coyote.http11.Http11NioProtocol[173]:Initializing ProtocolHandler ["http-nio-8990"]
+[INFO]-[2020-05-10 11:39:33]-org.apache.catalina.core.StandardService[173]:Starting service [Tomcat]
+[INFO]-[2020-05-10 11:39:33]-org.apache.catalina.core.StandardEngine[173]:Starting Servlet engine: [Apache Tomcat/9.0.33]
+[INFO]-[2020-05-10 11:39:33]-org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/][173]:Initializing Spring embedded WebApplicationContext
+[INFO]-[2020-05-10 11:39:33]-org.springframework.web.context.ContextLoader[284]:Root WebApplicationContext: initialization completed in 908 ms
+[INFO]-[2020-05-10 11:39:33]-org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor[181]:Initializing ExecutorService 'applicationTaskExecutor'
+[INFO]-[2020-05-10 11:39:33]-org.apache.coyote.http11.Http11NioProtocol[173]:Starting ProtocolHandler ["http-nio-8990"]
+[INFO]-[2020-05-10 11:39:33]-org.springframework.boot.web.embedded.tomcat.TomcatWebServer[204]:Tomcat started on port(s): 8990 (http) with context path ''
+[INFO]-[2020-05-10 11:39:33]-com.friday.FridayIMClientApplication[61]:Started FridayIMClientApplication in 1.754 seconds (JVM running for 2.906)
+[INFO]-[2020-05-10 11:39:34]-com.friday.handler.FridayIMServerHandler[21]:Received msg[Hello World!]
+[INFO]-[2020-05-10 11:39:34]-com.friday.handler.FridayIMClientHandler[21]:Msg[Server say: Hello World!]
+[ERROR]-[2020-05-10 11:39:59]-com.friday.handler.FridayIMServerHandler[28]:远程主机强迫关闭了一个现有的连接。
+java.io.IOException: 远程主机强迫关闭了一个现有的连接。
+	at sun.nio.ch.SocketDispatcher.read0(Native Method)
+	at sun.nio.ch.SocketDispatcher.read(SocketDispatcher.java:43)
+	at sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:223)
+	at sun.nio.ch.IOUtil.read(IOUtil.java:192)
+	at sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:380)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:253)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1133)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:350)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:148)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:714)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:650)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:576)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:493)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:989)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)

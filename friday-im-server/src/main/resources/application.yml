@@ -4,3 +4,8 @@ spring:
 
 server:
     port: 8989
+
+netty:
+  server:
+    port: 8000
+    address: 127.0.0.1
