@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.Scanner;
+
 /**
  * Copyright (C),Damon
  *
@@ -47,7 +49,14 @@ public class FridayIMClient {
                 });
         try {
             ChannelFuture future = bootstrap.connect(address, port).sync();
-            future.channel().writeAndFlush("Hello World!");
+            Scanner scanner = new Scanner(System.in);
+            while (true){
+                String msg = scanner.nextLine();
+                if("exit".equals(msg)){
+                    break;
+                }
+                future.channel().writeAndFlush(future.channel().id() + ": " + msg);
+            }
             future.channel().closeFuture().sync();
             if(future.isSuccess()){
                 log.info("Friday Netty Client Start Success With Address[{}],Port[{}] ...", address, port);

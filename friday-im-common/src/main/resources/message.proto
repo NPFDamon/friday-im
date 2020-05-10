@@ -1,0 +1,11 @@
+syntax = "proto3";
+package proto;
+
+option java_package = "com.friday.protobuf";
+option java_outer_classname = "TestProtobufProto";
+
+message TestProtobuf {
+     int64 requestId = 2;
+     string msg = 1;
+     int32 type = 3;
+}

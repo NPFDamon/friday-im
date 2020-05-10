@@ -1,5 +1,6 @@
 package com.friday.server;
 
+import com.friday.handler.FridayIMServerGroupHandler;
 import com.friday.handler.FridayIMServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -53,7 +54,8 @@ public class FridayIMServer {
                         ChannelPipeline pipeline = socketChannel.pipeline();
                         pipeline.addLast("decode", new StringDecoder(CharsetUtil.UTF_8));
                         pipeline.addLast("encode", new StringEncoder(CharsetUtil.UTF_8));
-                        pipeline.addLast(new FridayIMServerHandler());
+//                        pipeline.addLast(new FridayIMServerHandler());
+                        pipeline.addLast(new FridayIMServerGroupHandler());
                     }
                 });
         try {
