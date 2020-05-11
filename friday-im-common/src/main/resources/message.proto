@@ -2,10 +2,37 @@ syntax = "proto3";
 package proto;
 
 option java_package = "com.friday.protobuf";
-option java_outer_classname = "TestProtobufProto";
+option java_outer_classname = "FridayMessage";
 
-message TestProtobuf {
-     int64 requestId = 2;
-     string msg = 1;
-     int32 type = 3;
+message Message {
+     uint64 requestId = 1;//服务消息ID
+     uint64 cid = 2; //客户端ID
+     string fromUid = 3;//发送人ID
+     string toUid = 4;//接收人ID
+     string groupId = 5;//群ID
+     string converId = 6;//会话ID
+     MessageContent content = 7;//消息内容
+     ConverType converType = 8;//请求类型
+
+}
+
+message MessageContent{
+     uint64 id = 1;//消息ID
+     string uid = 2;//发送方ID
+     MessageType type = 3;//消息类型
+     string content = 4;//消息内容
+     uint64 time = 5;//消息时间
+}
+
+enum MessageType{
+     TEXT = 0;
+     PICTURE = 1;
+     VOICE = 2;
+     VIDEO = 3;
+}
+
+enum ConverType{
+     LOGIN = 0;//登录
+     MSG = 1;//会话
+     PING = 2;//心跳
 }

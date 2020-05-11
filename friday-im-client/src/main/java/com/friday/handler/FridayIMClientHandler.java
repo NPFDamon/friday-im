@@ -1,6 +1,6 @@
 package com.friday.handler;
 
-import io.netty.channel.ChannelHandler;
+import com.friday.protobuf.FridayMessage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +15,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j
-public class FridayIMClientHandler extends SimpleChannelInboundHandler<String> {
+public class FridayIMClientHandler extends SimpleChannelInboundHandler<FridayMessage.Message> {
+
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, String s) throws Exception {
-        log.info("Msg[{}]", s);
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, FridayMessage.Message message) throws Exception {
+        log.info("Msg[{}]",message.getContent().toString());
+
     }
 }
