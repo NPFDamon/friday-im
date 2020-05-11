@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="friday-im-client" />
+        <module name="friday-im-route" />
         <module name="friday-im-server" />
         <module name="friday-im-common" />
       </profile>
@@ -17,6 +18,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="friday-im-client" options="-parameters" />
       <module name="friday-im-common" options="-parameters" />
+      <module name="friday-im-route" options="-parameters" />
       <module name="friday-im-server" options="-parameters" />
     </option>
   </component>
