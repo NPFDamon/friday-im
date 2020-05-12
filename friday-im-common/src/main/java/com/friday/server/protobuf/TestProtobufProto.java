@@ -1,4 +1,4 @@
-package com.friday.protobuf;
+package com.friday.server.protobuf;
 
 /**
  * Copyright (C),Damon
@@ -131,15 +131,15 @@ public final class TestProtobufProto {
         }
         public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-            return com.friday.protobuf.TestProtobufProto.internal_static_proto_TestProtobuf_descriptor;
+            return TestProtobufProto.internal_static_proto_TestProtobuf_descriptor;
         }
 
         @java.lang.Override
         protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-            return com.friday.protobuf.TestProtobufProto.internal_static_proto_TestProtobuf_fieldAccessorTable
+            return TestProtobufProto.internal_static_proto_TestProtobuf_fieldAccessorTable
                     .ensureFieldAccessorsInitialized(
-                            com.friday.protobuf.TestProtobufProto.TestProtobuf.class, com.friday.protobuf.TestProtobufProto.TestProtobuf.Builder.class);
+                            TestProtobufProto.TestProtobuf.class, TestProtobufProto.TestProtobuf.Builder.class);
         }
 
         public static final int REQUESTID_FIELD_NUMBER = 2;
@@ -251,10 +251,10 @@ public final class TestProtobufProto {
             if (obj == this) {
                 return true;
             }
-            if (!(obj instanceof com.friday.protobuf.TestProtobufProto.TestProtobuf)) {
+            if (!(obj instanceof TestProtobufProto.TestProtobuf)) {
                 return super.equals(obj);
             }
-            com.friday.protobuf.TestProtobufProto.TestProtobuf other = (com.friday.protobuf.TestProtobufProto.TestProtobuf) obj;
+            TestProtobufProto.TestProtobuf other = (TestProtobufProto.TestProtobuf) obj;
 
             if (getRequestId()
                     != other.getRequestId()) return false;
@@ -285,69 +285,69 @@ public final class TestProtobufProto {
             return hash;
         }
 
-        public static com.friday.protobuf.TestProtobufProto.TestProtobuf parseFrom(
+        public static TestProtobufProto.TestProtobuf parseFrom(
                 java.nio.ByteBuffer data)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
-        public static com.friday.protobuf.TestProtobufProto.TestProtobuf parseFrom(
+        public static TestProtobufProto.TestProtobuf parseFrom(
                 java.nio.ByteBuffer data,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
-        public static com.friday.protobuf.TestProtobufProto.TestProtobuf parseFrom(
+        public static TestProtobufProto.TestProtobuf parseFrom(
                 com.google.protobuf.ByteString data)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
-        public static com.friday.protobuf.TestProtobufProto.TestProtobuf parseFrom(
+        public static TestProtobufProto.TestProtobuf parseFrom(
                 com.google.protobuf.ByteString data,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
-        public static com.friday.protobuf.TestProtobufProto.TestProtobuf parseFrom(byte[] data)
+        public static TestProtobufProto.TestProtobuf parseFrom(byte[] data)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
-        public static com.friday.protobuf.TestProtobufProto.TestProtobuf parseFrom(
+        public static TestProtobufProto.TestProtobuf parseFrom(
                 byte[] data,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
-        public static com.friday.protobuf.TestProtobufProto.TestProtobuf parseFrom(java.io.InputStream input)
+        public static TestProtobufProto.TestProtobuf parseFrom(java.io.InputStream input)
                 throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3
                     .parseWithIOException(PARSER, input);
         }
-        public static com.friday.protobuf.TestProtobufProto.TestProtobuf parseFrom(
+        public static TestProtobufProto.TestProtobuf parseFrom(
                 java.io.InputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3
                     .parseWithIOException(PARSER, input, extensionRegistry);
         }
-        public static com.friday.protobuf.TestProtobufProto.TestProtobuf parseDelimitedFrom(java.io.InputStream input)
+        public static TestProtobufProto.TestProtobuf parseDelimitedFrom(java.io.InputStream input)
                 throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3
                     .parseDelimitedWithIOException(PARSER, input);
         }
-        public static com.friday.protobuf.TestProtobufProto.TestProtobuf parseDelimitedFrom(
+        public static TestProtobufProto.TestProtobuf parseDelimitedFrom(
                 java.io.InputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3
                     .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
         }
-        public static com.friday.protobuf.TestProtobufProto.TestProtobuf parseFrom(
+        public static TestProtobufProto.TestProtobuf parseFrom(
                 com.google.protobuf.CodedInputStream input)
                 throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3
                     .parseWithIOException(PARSER, input);
         }
-        public static com.friday.protobuf.TestProtobufProto.TestProtobuf parseFrom(
+        public static TestProtobufProto.TestProtobuf parseFrom(
                 com.google.protobuf.CodedInputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws java.io.IOException {
@@ -360,7 +360,7 @@ public final class TestProtobufProto {
         public static Builder newBuilder() {
             return DEFAULT_INSTANCE.toBuilder();
         }
-        public static Builder newBuilder(com.friday.protobuf.TestProtobufProto.TestProtobuf prototype) {
+        public static Builder newBuilder(TestProtobufProto.TestProtobuf prototype) {
             return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
         }
         @java.lang.Override
@@ -381,18 +381,18 @@ public final class TestProtobufProto {
         public static final class Builder extends
                 com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
                 // @@protoc_insertion_point(builder_implements:proto.TestProtobuf)
-                com.friday.protobuf.TestProtobufProto.TestProtobufOrBuilder {
+                TestProtobufProto.TestProtobufOrBuilder {
             public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
-                return com.friday.protobuf.TestProtobufProto.internal_static_proto_TestProtobuf_descriptor;
+                return TestProtobufProto.internal_static_proto_TestProtobuf_descriptor;
             }
 
             @java.lang.Override
             protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
             internalGetFieldAccessorTable() {
-                return com.friday.protobuf.TestProtobufProto.internal_static_proto_TestProtobuf_fieldAccessorTable
+                return TestProtobufProto.internal_static_proto_TestProtobuf_fieldAccessorTable
                         .ensureFieldAccessorsInitialized(
-                                com.friday.protobuf.TestProtobufProto.TestProtobuf.class, com.friday.protobuf.TestProtobufProto.TestProtobuf.Builder.class);
+                                TestProtobufProto.TestProtobuf.class, TestProtobufProto.TestProtobuf.Builder.class);
             }
 
             // Construct using com.friday.protobuf.TestProtobufProto.TestProtobuf.newBuilder()
@@ -425,17 +425,17 @@ public final class TestProtobufProto {
             @java.lang.Override
             public com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
-                return com.friday.protobuf.TestProtobufProto.internal_static_proto_TestProtobuf_descriptor;
+                return TestProtobufProto.internal_static_proto_TestProtobuf_descriptor;
             }
 
             @java.lang.Override
-            public com.friday.protobuf.TestProtobufProto.TestProtobuf getDefaultInstanceForType() {
-                return com.friday.protobuf.TestProtobufProto.TestProtobuf.getDefaultInstance();
+            public TestProtobufProto.TestProtobuf getDefaultInstanceForType() {
+                return TestProtobufProto.TestProtobuf.getDefaultInstance();
             }
 
             @java.lang.Override
-            public com.friday.protobuf.TestProtobufProto.TestProtobuf build() {
-                com.friday.protobuf.TestProtobufProto.TestProtobuf result = buildPartial();
+            public TestProtobufProto.TestProtobuf build() {
+                TestProtobufProto.TestProtobuf result = buildPartial();
                 if (!result.isInitialized()) {
                     throw newUninitializedMessageException(result);
                 }
@@ -443,8 +443,8 @@ public final class TestProtobufProto {
             }
 
             @java.lang.Override
-            public com.friday.protobuf.TestProtobufProto.TestProtobuf buildPartial() {
-                com.friday.protobuf.TestProtobufProto.TestProtobuf result = new com.friday.protobuf.TestProtobufProto.TestProtobuf(this);
+            public TestProtobufProto.TestProtobuf buildPartial() {
+                TestProtobufProto.TestProtobuf result = new TestProtobufProto.TestProtobuf(this);
                 result.requestId_ = requestId_;
                 result.msg_ = msg_;
                 result.type_ = type_;
@@ -486,16 +486,16 @@ public final class TestProtobufProto {
             }
             @java.lang.Override
             public Builder mergeFrom(com.google.protobuf.Message other) {
-                if (other instanceof com.friday.protobuf.TestProtobufProto.TestProtobuf) {
-                    return mergeFrom((com.friday.protobuf.TestProtobufProto.TestProtobuf)other);
+                if (other instanceof TestProtobufProto.TestProtobuf) {
+                    return mergeFrom((TestProtobufProto.TestProtobuf)other);
                 } else {
                     super.mergeFrom(other);
                     return this;
                 }
             }
 
-            public Builder mergeFrom(com.friday.protobuf.TestProtobufProto.TestProtobuf other) {
-                if (other == com.friday.protobuf.TestProtobufProto.TestProtobuf.getDefaultInstance()) return this;
+            public Builder mergeFrom(TestProtobufProto.TestProtobuf other) {
+                if (other == TestProtobufProto.TestProtobuf.getDefaultInstance()) return this;
                 if (other.getRequestId() != 0L) {
                     setRequestId(other.getRequestId());
                 }
@@ -521,11 +521,11 @@ public final class TestProtobufProto {
                     com.google.protobuf.CodedInputStream input,
                     com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                     throws java.io.IOException {
-                com.friday.protobuf.TestProtobufProto.TestProtobuf parsedMessage = null;
+                TestProtobufProto.TestProtobuf parsedMessage = null;
                 try {
                     parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
                 } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-                    parsedMessage = (com.friday.protobuf.TestProtobufProto.TestProtobuf) e.getUnfinishedMessage();
+                    parsedMessage = (TestProtobufProto.TestProtobuf) e.getUnfinishedMessage();
                     throw e.unwrapIOException();
                 } finally {
                     if (parsedMessage != null) {
@@ -687,12 +687,12 @@ public final class TestProtobufProto {
         }
 
         // @@protoc_insertion_point(class_scope:proto.TestProtobuf)
-        private static final com.friday.protobuf.TestProtobufProto.TestProtobuf DEFAULT_INSTANCE;
+        private static final TestProtobufProto.TestProtobuf DEFAULT_INSTANCE;
         static {
-            DEFAULT_INSTANCE = new com.friday.protobuf.TestProtobufProto.TestProtobuf();
+            DEFAULT_INSTANCE = new TestProtobufProto.TestProtobuf();
         }
 
-        public static com.friday.protobuf.TestProtobufProto.TestProtobuf getDefaultInstance() {
+        public static TestProtobufProto.TestProtobuf getDefaultInstance() {
             return DEFAULT_INSTANCE;
         }
 
@@ -717,7 +717,7 @@ public final class TestProtobufProto {
         }
 
         @java.lang.Override
-        public com.friday.protobuf.TestProtobufProto.TestProtobuf getDefaultInstanceForType() {
+        public TestProtobufProto.TestProtobuf getDefaultInstanceForType() {
             return DEFAULT_INSTANCE;
         }
 

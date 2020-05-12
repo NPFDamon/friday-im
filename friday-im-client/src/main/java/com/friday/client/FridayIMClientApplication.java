@@ -1,6 +1,6 @@
-package com.friday;
+package com.friday.client;
 
-import com.friday.client.FridayIMClient;
+import com.friday.client.client.FridayIMClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

@@ -1,16 +1,18 @@
-package com.friday.server;
+package com.friday.server.server;
 
-import com.friday.handler.FridayIMServerGroupHandler;
-import com.friday.handler.FridayIMServerHandler;
+import com.friday.server.handler.FridayIMServerGroupHandler;
+import com.friday.server.handler.FridayIMServerHandler;
+import com.friday.server.protobuf.FridayMessage;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
-import io.netty.channel.local.LocalAddress;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
-import io.netty.util.CharsetUtil;
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -51,11 +53,16 @@ public class FridayIMServer {
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) {
-                        ChannelPipeline pipeline = socketChannel.pipeline();
-                        pipeline.addLast("decode", new StringDecoder(CharsetUtil.UTF_8));
-                        pipeline.addLast("encode", new StringEncoder(CharsetUtil.UTF_8));
-//                        pipeline.addLast(new FridayIMServerHandler());
-                        pipeline.addLast(new FridayIMServerGroupHandler());
+                        socketChannel.pipeline()
+                                //10秒没有向客户端发送消息就发送心跳
+                                .addLast(new IdleStateHandler(10, 0, 0))
+                                //google protobuf 编解码
+                                .addLast(new ProtobufVarint32FrameDecoder())
+                                .addLast(new ProtobufDecoder(FridayMessage.Message.getDefaultInstance()))
+                                .addLast(new ProtobufVarint32LengthFieldPrepender())
+                                .addLast(new ProtobufEncoder())
+                                .addLast(new FridayIMServerHandler());
+//                                .addLast(new FridayIMServerGroupHandler());
                     }
                 });
         try {

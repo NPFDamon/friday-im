@@ -8,9 +8,9 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="friday-im-client" />
-        <module name="friday-im-route" />
-        <module name="friday-im-server" />
         <module name="friday-im-common" />
+        <module name="friday-im-server" />
+        <module name="friday-im-route" />
       </profile>
     </annotationProcessing>
   </component>

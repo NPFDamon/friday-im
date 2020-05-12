@@ -1,4 +1,4 @@
-package com.friday.vo;
+package com.friday.client.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.friday.constant;
+package com.friday.server.constant;
 
 /**
  * Copyright (C),Damon

@@ -1,5 +1,6 @@
-package com.friday.handler;
+package com.friday.server.handler;
 
+import com.friday.server.protobuf.FridayMessage;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -18,13 +19,13 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class FridayIMServerGroupHandler extends SimpleChannelInboundHandler<String> {
+public class FridayIMServerGroupHandler extends SimpleChannelInboundHandler<FridayMessage.Message> {
 
     private static final ChannelGroup GROUP = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, String s) throws Exception {
-        log.info("Receive User[{}] msg[{}]", channelHandlerContext.channel().id(), s);
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, FridayMessage.Message s) throws Exception {
+        log.info("Receive User[{}] msg[{}]", channelHandlerContext.channel().id(), s.getContent().toString());
         for (Channel channel : GROUP) {
             channel.writeAndFlush(s);
         }

@@ -1,6 +1,6 @@
-package com.friday;
+package com.friday.server;
 
-import com.friday.server.FridayIMServer;
+import com.friday.server.server.FridayIMServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

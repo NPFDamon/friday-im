@@ -1,17 +1,13 @@
-package com.friday.utils;
+package com.friday.server.utils;
 
-import com.friday.constant.Constants;
-import com.friday.exception.TokenException;
+import com.friday.server.constant.Constants;
+import com.friday.server.exception.TokenException;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.crypto.*;
 import javax.crypto.spec.DESKeySpec;
-import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-
-import static com.friday.constant.Constants.DEFAULT_CIPHER_ALGORITHM;
 
 /**
  * Copyright (C),Damon
@@ -28,8 +24,8 @@ public class DesUtil {
 
     static {
         try {
-            secretKeyFactory = SecretKeyFactory.getInstance(DEFAULT_CIPHER_ALGORITHM);
-            keyGenerator = KeyGenerator.getInstance(DEFAULT_CIPHER_ALGORITHM);
+            secretKeyFactory = SecretKeyFactory.getInstance(Constants.DEFAULT_CIPHER_ALGORITHM);
+            keyGenerator = KeyGenerator.getInstance(Constants.DEFAULT_CIPHER_ALGORITHM);
             keyGenerator.init(secureRandom);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -42,7 +38,7 @@ public class DesUtil {
             DESKeySpec desKeySpec = new DESKeySpec(keyWord);
             SecretKey key = secretKeyFactory.generateSecret(desKeySpec);
 
-            Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
+            Cipher cipher = Cipher.getInstance(Constants.DEFAULT_CIPHER_ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, key, secureRandom);
             return cipher.doFinal(data);
         } catch (Exception e) {
@@ -57,7 +53,7 @@ public class DesUtil {
             DESKeySpec desKeySpec = new DESKeySpec(keyWord);
             SecretKey secretKey = secretKeyFactory.generateSecret(desKeySpec);
 
-            Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
+            Cipher cipher = Cipher.getInstance(Constants.DEFAULT_CIPHER_ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, secretKey, secureRandom);
             return cipher.doFinal(encryptData);
         } catch (Exception e) {

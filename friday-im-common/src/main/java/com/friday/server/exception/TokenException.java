@@ -1,4 +1,4 @@
-package com.friday.exception;
+package com.friday.server.exception;
 
 /**
  * Copyright (C),Damon

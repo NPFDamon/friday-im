@@ -1,8 +1,8 @@
-package com.friday.bean;
+package com.friday.client.bean;
 
-import com.friday.constant.Constants;
-import com.friday.exception.TokenException;
-import com.friday.utils.DesUtil;
+import com.friday.server.constant.Constants;
+import com.friday.server.exception.TokenException;
+import com.friday.server.utils.DesUtil;
 import lombok.Data;
 
 import java.nio.charset.StandardCharsets;
