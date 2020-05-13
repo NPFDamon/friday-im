@@ -1,6 +1,5 @@
 package com.friday.server.server;
 
-import com.friday.server.handler.FridayIMServerGroupHandler;
 import com.friday.server.handler.FridayIMServerHandler;
 import com.friday.server.protobuf.FridayMessage;
 import io.netty.bootstrap.ServerBootstrap;
@@ -62,7 +61,6 @@ public class FridayIMServer {
                                 .addLast(new ProtobufVarint32LengthFieldPrepender())
                                 .addLast(new ProtobufEncoder())
                                 .addLast(new FridayIMServerHandler());
-//                                .addLast(new FridayIMServerGroupHandler());
                     }
                 });
         try {

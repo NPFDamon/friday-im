@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: friday-im-server
+
+server:
+    port: 8009
+
+netty:
+  server:
+    port: 8000
+    address: 127.0.0.1
+
+zk:
+  address: 127.0.0.1:2181
+  switch: true
+  root: /router
+  connection:
+    timeout: 15000
+
+app:
+  im:
+    serverport:
