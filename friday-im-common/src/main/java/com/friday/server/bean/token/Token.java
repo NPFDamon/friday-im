@@ -1,4 +1,4 @@
-package com.friday.client.bean;
+package com.friday.server.bean.token;
 
 import com.friday.server.constant.Constants;
 import com.friday.server.exception.TokenException;

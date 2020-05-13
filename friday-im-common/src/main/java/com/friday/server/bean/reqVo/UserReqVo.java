@@ -1,8 +1,8 @@
 package com.friday.server.bean.reqVo;
 
-import com.friday.server.bean.BaseBean;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -13,7 +13,7 @@ import java.util.Date;
  * @Date: 2020-05-13:11:52
  */
 @Data
-public class UserReqVo extends BaseBean {
+public class UserReqVo extends BaseBean implements Serializable {
 
     private String uid;
     private String secret;

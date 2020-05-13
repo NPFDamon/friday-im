@@ -10,4 +10,13 @@ package com.friday.server.constant;
 public class Constants {
     public static final String DEFAULT_CIPHER_ALGORITHM = "DES";
     public static final String DEFAULT_SEPARATES = ":";
+
+    /**
+     * redis 前缀
+     */
+    //token 信息
+    public static final String USER_TOKEN = "user_token";
+    //user server 对应关系
+    public static String USER_SERVER_INFO = "user_server_info:";
+
 }

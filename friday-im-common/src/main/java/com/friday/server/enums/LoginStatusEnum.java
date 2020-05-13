@@ -1,18 +1,23 @@
 package com.friday.server.enums;
 
-public enum LoginEnum {
+public enum LoginStatusEnum {
     SUCCESS("8000", "login success"),
     FAIL("4000", "login fail"),
     REPEAT_LOGIN("5000", "repeat login"),
     /**
      * 请求限流
      */
-    REQUEST_LIMIT("6000", "请求限流"),
+    REQUEST_LIMIT("6000", "request limit"),
+
+    /**
+     * Token错误
+     */
+    TOKEN_NOT_MATCH("1000", "Token not match"),
 
     /**
      * 账号不在线
      */
-    OFF_LINE("7000", "你选择的账号不在线，请重新选择！"),
+    OFF_LINE("7000", "account is not exit"),
 
     /**
      * 服务不可用
@@ -31,13 +36,13 @@ public enum LoginEnum {
     private String code;
     private String msg;
 
-    private LoginEnum(String code, String msg) {
+    private LoginStatusEnum(String code, String msg) {
         this.code = code;
         this.msg = msg;
     }
 
-    public static LoginEnum getStatus(String code) {
-        for (LoginEnum loginEnum : values()) {
+    public static LoginStatusEnum getStatus(String code) {
+        for (LoginStatusEnum loginEnum : values()) {
             if (loginEnum.getCode().equals(code)) {
                 return loginEnum;
             }

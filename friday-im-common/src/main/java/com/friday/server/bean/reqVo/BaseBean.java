@@ -1,4 +1,4 @@
-package com.friday.server.bean;
+package com.friday.server.bean.reqVo;
 
 import lombok.Data;
 

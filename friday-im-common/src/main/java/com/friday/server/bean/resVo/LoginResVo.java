@@ -1,5 +1,10 @@
 package com.friday.server.bean.resVo;
 
+import com.friday.server.enums.LoginStatusEnum;
+import lombok.Data;
+
+import java.io.Serializable;
+
 /**
  * Copyright (C),Damon
  *
@@ -7,5 +12,14 @@ package com.friday.server.bean.resVo;
  * @Author: Damon(npf)
  * @Date: 2020-05-13:14:30
  */
-public class LoginResVo {
+@Data
+public class LoginResVo implements Serializable {
+    /**
+     * 登录信息
+     */
+    private LoginStatusEnum loginStatus;
+    /**
+     * token信息
+     */
+    private String token;
 }
