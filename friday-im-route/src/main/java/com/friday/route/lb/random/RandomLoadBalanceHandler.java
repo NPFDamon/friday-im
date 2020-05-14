@@ -1,6 +1,6 @@
 package com.friday.route.lb.random;
 
-import com.friday.route.lb.ServerRouteHandler;
+import com.friday.route.lb.ServerRouteLoadBalanceHandler;
 import com.friday.server.bean.im.ServerInfo;
 import com.friday.server.enums.LoginStatusEnum;
 import com.friday.server.exception.BizException;
@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @Author: Damon(npf)
  * @Date: 2020-05-14:11:05
  */
-public class RandomHandler implements ServerRouteHandler {
+public class RandomLoadBalanceHandler implements ServerRouteLoadBalanceHandler {
     @Override
     public ServerInfo routeServer(List<ServerInfo> serverInfos, String key) {
         int size = serverInfos.size();

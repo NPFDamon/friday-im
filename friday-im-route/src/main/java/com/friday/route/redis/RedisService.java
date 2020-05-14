@@ -1,7 +1,7 @@
 package com.friday.route.redis;
 
+import com.friday.server.bean.im.ServerInfo;
 import com.friday.server.bean.resVo.LoginResVo;
-import org.apache.catalina.util.ServerInfo;
 
 /**
  * Copyright (C),Damon

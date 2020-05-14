@@ -1,6 +1,6 @@
 package com.friday.route.lb.loop;
 
-import com.friday.route.lb.ServerRouteHandler;
+import com.friday.route.lb.ServerRouteLoadBalanceHandler;
 import com.friday.server.bean.im.ServerInfo;
 import com.friday.server.enums.LoginStatusEnum;
 import com.friday.server.exception.BizException;
@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * @Author: Damon(npf)
  * @Date: 2020-05-14:11:09
  */
-public class LoopHandler implements ServerRouteHandler {
+public class LoopLoadBalanceHandler implements ServerRouteLoadBalanceHandler {
     private AtomicLong atomicLong = new AtomicLong();
 
     @Override

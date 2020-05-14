@@ -1,13 +1,20 @@
 package com.friday.route.service.impl;
 
+import com.friday.route.cache.ServerCache;
+import com.friday.route.lb.ServerRouteLoadBalanceHandler;
 import com.friday.route.redis.RedisService;
 import com.friday.route.service.AccountService;
+import com.friday.route.util.ServerInfoParseUtil;
+import com.friday.server.bean.im.ServerInfo;
 import com.friday.server.bean.reqVo.UserReqVo;
 import com.friday.server.bean.resVo.LoginResVo;
 import com.friday.server.bean.token.Token;
 import com.friday.server.enums.LoginStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Copyright (C),Damon
@@ -16,6 +23,7 @@ import org.springframework.beans.factory.annotation.Value;
  * @Author: Damon(npf)
  * @Date: 2020-05-13:14:37
  */
+@Component
 public class AccountServiceImpl implements AccountService {
 
     @Value("123456")
@@ -25,6 +33,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private RedisService redisService;
+
+    @Autowired
+    private ServerCache serverCache;
+
+    @Autowired
+    private ServerRouteLoadBalanceHandler serverRouteLoadBalanceHandler;
 
 
     @Override
@@ -37,8 +51,13 @@ public class AccountServiceImpl implements AccountService {
         }
         resVo.setToken(new Token(uid, secret).getToken(secret));
         redisService.storeUserLoginInfo(resVo);
-        // 获取路由信息  绑定账号与路由关系
-//        redisService.storeIMServerInfo(uid,);
+        //获取服务器信息
+        List<String> servers = serverCache.getServerList();
+        //根据负载均衡策略选取服务器
+        ServerInfo serverInfo = serverRouteLoadBalanceHandler.routeServer(ServerInfoParseUtil.getServerInfoList(servers), userReqVo.getUid());
+        //保存服务器信息
+        redisService.storeIMServerInfo(userReqVo.getUid(), serverInfo);
+
         return resVo;
     }
 

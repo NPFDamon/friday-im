@@ -1,9 +1,9 @@
 package com.friday.route.redis.impl;
 
 import com.friday.route.redis.RedisService;
+import com.friday.server.bean.im.ServerInfo;
 import com.friday.server.bean.resVo.LoginResVo;
 import com.friday.server.constant.Constants;
-import org.apache.catalina.util.ServerInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -33,6 +33,6 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public void storeIMServerInfo(String uid, ServerInfo serverInfo) {
-
+        redisTemplate.opsForValue().set(uid, serverInfo);
     }
 }

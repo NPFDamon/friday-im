@@ -11,7 +11,7 @@ import java.util.List;
  * @Author: Damon(npf)
  * @Date: 2020-05-14:10:08
  */
-public interface ServerRouteHandler {
+public interface ServerRouteLoadBalanceHandler {
 
     ServerInfo routeServer(List<ServerInfo> serverInfos, String key);
 }

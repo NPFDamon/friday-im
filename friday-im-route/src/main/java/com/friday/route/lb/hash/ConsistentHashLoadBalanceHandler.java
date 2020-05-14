@@ -1,6 +1,6 @@
 package com.friday.route.lb.hash;
 
-import com.friday.route.lb.ServerRouteHandler;
+import com.friday.route.lb.ServerRouteLoadBalanceHandler;
 import com.friday.server.bean.im.ServerInfo;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
@@ -19,7 +19,7 @@ import java.util.TreeMap;
  * @Author: Damon(npf)
  * @Date: 2020-05-14:11:13
  */
-public class ConsistentHashHandler implements ServerRouteHandler {
+public class ConsistentHashLoadBalanceHandler implements ServerRouteLoadBalanceHandler {
 
     // 使用murmur哈希算法
     private static final HashFunction hashFunction = Hashing.murmur3_32();

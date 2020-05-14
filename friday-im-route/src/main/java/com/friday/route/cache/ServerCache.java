@@ -1,6 +1,8 @@
 package com.friday.route.cache;
 
 import com.friday.route.zk.ZK;
+import com.friday.server.bean.im.ServerInfo;
+import com.friday.server.constant.Constants;
 import com.google.common.cache.LoadingCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +67,6 @@ public class ServerCache {
         }
         return strings;
     }
-
 
     /**
      * rebuild
