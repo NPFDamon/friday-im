@@ -1,6 +1,7 @@
 package com.friday.route.service.impl;
 
 import com.friday.route.cache.ServerCache;
+import com.friday.route.client.RouteClient;
 import com.friday.route.lb.ServerRouteLoadBalanceHandler;
 import com.friday.route.redis.UserInfoRedisService;
 import com.friday.route.redis.UserServerRedisService;
@@ -11,6 +12,9 @@ import com.friday.server.bean.reqVo.UserReqVo;
 import com.friday.server.bean.resVo.LoginResVo;
 import com.friday.server.bean.token.Token;
 import com.friday.server.enums.LoginStatusEnum;
+import com.friday.server.netty.ServerChannelManager;
+import com.friday.server.netty.UidChannelManager;
+import io.netty.channel.Channel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -44,6 +48,15 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private UserServerRedisService userServerRedisService;
 
+    @Autowired
+    private RouteClient client;
+
+    @Autowired
+    private ServerChannelManager serverChannelManager;
+
+    @Autowired
+    private UidChannelManager uidChannelManager;
+
 
     @Override
     public LoginResVo login(UserReqVo userReqVo) {
@@ -60,8 +73,17 @@ public class AccountServiceImpl implements AccountService {
         //根据负载均衡策略选取服务器
         ServerInfo serverInfo = serverRouteLoadBalanceHandler.routeServer(ServerInfoParseUtil.getServerInfoList(servers), userReqVo.getUid());
         //保存服务器信息
-//        userInfoRedisService.storeIMServerInfo(userReqVo.getUid(), serverInfo);
         userServerRedisService.addUserToServer(userReqVo.getUid(), serverInfo);
+        //连接server
+        Channel channel = client.connect(serverInfo);
+        if (channel != null) {
+            //保存channel和server关系
+            serverChannelManager.addServerToChannel(serverInfo, channel);
+            //保存channel和UID关系
+            uidChannelManager.addUserToChannel(userReqVo.getUid(), channel);
+        } else {
+
+        }
 
         return resVo;
     }

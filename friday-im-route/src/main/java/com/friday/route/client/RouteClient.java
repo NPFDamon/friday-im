@@ -1,8 +1,10 @@
-package com.friday.client.client;
+package com.friday.route.client;
 
-import com.friday.client.handler.FridayIMClientHandler;
+import com.friday.route.client.handle.RouteClientHandler;
 import com.friday.server.bean.im.ServerInfo;
+import com.friday.server.exception.BizException;
 import com.friday.server.netty.ServerChannelManager;
+import com.friday.server.netty.UidChannelManager;
 import com.friday.server.protobuf.FridayMessage;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -13,41 +15,26 @@ import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import java.util.Scanner;
 
 /**
  * Copyright (C),Damon
  *
- * @Description: Friday IM Client
+ * @Description:
  * @Author: Damon(npf)
- * @Date: 2020-05-10:11:09
+ * @Date: 2020-05-15:15:07
  */
-@Slf4j
 @Component
-public class FridayIMClient {
+@Slf4j
+public class RouteClient {
 
-    @Value("${netty.server.port}")
-    private int port;
-
-    @Value("${netty.server.address}")
-    private String address;
-
-    @Autowired
-    private ServerChannelManager serverChannelManager;
-
-    public void start(/*ServerInfo serverInfo*/) {
-        EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
+    public Channel connect(ServerInfo serverInfo) {
+        EventLoopGroup loopGroup = new NioEventLoopGroup();
         Bootstrap bootstrap = new Bootstrap();
-
-        bootstrap.group(eventLoopGroup)
+        bootstrap.group(loopGroup)
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.TCP_NODELAY, true)
                 .handler(new ChannelInitializer<SocketChannel>() {
@@ -59,21 +46,20 @@ public class FridayIMClient {
                                 .addLast(new ProtobufDecoder(FridayMessage.Message.getDefaultInstance()))
                                 .addLast(new ProtobufVarint32LengthFieldPrepender())
                                 .addLast(new ProtobufEncoder())
-                                .addLast(new FridayIMClientHandler());
+                                .addLast(new RouteClientHandler());
                     }
                 });
         try {
-            ChannelFuture future = bootstrap.connect(address, port).sync();
-            //server和info绑定
-//            serverChannelManager.addServerToChannel(serverInfo,future.channel());
-//            ChannelFuture future = bootstrap.connect(serverInfo.getIp(), serverInfo.getPort()).sync();
+            ChannelFuture future = bootstrap.connect(serverInfo.getIp(), serverInfo.getPort()).sync();
             if (future.isSuccess()) {
-                log.info("Friday Netty Client Start Success With Address[{}],Port[{}] ...", address, port);
+                log.info("Friday Netty Client connect server Address[{}],Port[{}] ...", serverInfo.getIp(), serverInfo.getPort() + "Success");
+                return future.channel();
             }
+            return null;
         } catch (InterruptedException e) {
             e.printStackTrace();
-            log.error("Friday Netty Server Start fail With Address[{}],Port[{}] ...", address, port);
-            eventLoopGroup.shutdownGracefully();
+            log.error("Friday Netty Server connect server Address[{}],Port[{}] ...", serverInfo.getIp(), serverInfo.getPort() + "fail");
+            throw new BizException("");
         }
     }
 }

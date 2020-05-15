@@ -3,7 +3,9 @@ package com.friday.route.conf;
 import com.friday.route.lb.ServerRouteLoadBalanceHandler;
 import com.friday.server.exception.BizException;
 import com.friday.server.netty.ServerChannelManager;
+import com.friday.server.netty.UidChannelManager;
 import com.friday.server.netty.impl.ServerChannelManagerImpl;
+import com.friday.server.netty.impl.UidChannelManagerImpl;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -60,6 +62,11 @@ public class BeanConfig {
     @Bean
     public ServerChannelManager getServerChannelManager() {
         return new ServerChannelManagerImpl();
+    }
+
+    @Bean
+    public UidChannelManager uidChannelManager() {
+        return new UidChannelManagerImpl();
     }
 
 }
