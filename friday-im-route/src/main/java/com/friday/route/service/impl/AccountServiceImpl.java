@@ -62,7 +62,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void offLine(Long uid) {
-        redisService.offLine(toString());
+    public void offLine(Long uid, String token) {
+        //todo 下线逻辑
+        redisService.offLine(token);
     }
 }

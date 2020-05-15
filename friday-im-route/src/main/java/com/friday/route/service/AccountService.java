@@ -23,5 +23,5 @@ public interface AccountService {
      * 下线
      * @param uid
      */
-    void offLine(Long uid);
+    void offLine(Long uid,String token);
 }

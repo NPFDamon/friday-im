@@ -35,4 +35,9 @@ public class TestController {
     public LoginResVo login(@RequestBody UserReqVo userReqVo) {
         return accountService.login(userReqVo);
     }
+
+    @DeleteMapping("/offline/{uid}")
+    public void offline(@PathVariable("uid")Long uid,@RequestHeader String token){
+        accountService.offLine(uid,token);
+    }
 }
