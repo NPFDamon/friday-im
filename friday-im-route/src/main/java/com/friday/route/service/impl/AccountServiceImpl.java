@@ -59,6 +59,11 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private UidChannelManager uidChannelManager;
 
+    /**
+     * 只获取token server逻辑需转移
+     * @param userReqVo
+     * @return
+     */
 
     @Override
     public LoginResVo login(UserReqVo userReqVo) {
