@@ -7,14 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.stereotype.Component;
 
 /**
  * Copyright (C),Damon
  *
- * @Description: impl
+ * @Description: 保存用户server获取信息
  * @Author: Damon(npf)
  * @Date: 2020-05-15:14:06
  */
+@Component
 public class UserServerRedisServiceImpl implements UserServerRedisService {
 
     @Autowired

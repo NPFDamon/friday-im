@@ -13,6 +13,7 @@ import io.netty.util.AttributeKey;
  */
 public class NettyAttrUtil {
     private final static AttributeKey<String> ATTR_KEY_READ_TIME = AttributeKey.valueOf("readTime");
+    private final static AttributeKey<String> ATTR_KEY_UID = AttributeKey.valueOf("uid");
 
 
     public static void updateReadTime(Channel channel, Long time) {
@@ -30,6 +31,15 @@ public class NettyAttrUtil {
     public static String getAttribute(Channel channel, AttributeKey<String> key) {
         Attribute<String> value = channel.attr(key);
         return value.get();
+    }
+
+    public static void setAttrKeyUid(Channel channel, String uid) {
+        channel.attr(ATTR_KEY_UID).set(uid);
+    }
+
+    public static String getUid(Channel channel) {
+        String v = getAttribute(channel, ATTR_KEY_UID);
+        return v == null ? null : v;
     }
 
 }
