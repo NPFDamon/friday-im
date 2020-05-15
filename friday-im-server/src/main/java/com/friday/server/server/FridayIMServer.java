@@ -46,7 +46,7 @@ public class FridayIMServer {
         ServerBootstrap serverBootstrap = new ServerBootstrap()
                 .group(boot, work)
                 .channel(NioServerSocketChannel.class)
-                .localAddress(new InetSocketAddress(address, port))
+                .localAddress(new InetSocketAddress(port))
                 //保持长连接
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .childHandler(new ChannelInitializer<SocketChannel>() {
@@ -66,11 +66,11 @@ public class FridayIMServer {
         try {
             ChannelFuture channelFuture = serverBootstrap.bind().sync();
             if (channelFuture.isSuccess()) {
-                log.info("Friday Netty Server Start Success With Address[{}],Port[{}] ...", address, port);
+                log.info("Friday Netty Server Start Success With Port[{}] ...", port);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
-            log.error("Friday Netty Server Start  With Address[{}],Port[{}] ...", address, port);
+            log.error("Friday Netty Server Start  With Port[{}] ...", port);
             destroy();
         }
     }

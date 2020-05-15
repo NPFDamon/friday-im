@@ -15,6 +15,7 @@ import com.friday.server.enums.LoginStatusEnum;
 import com.friday.server.netty.ServerChannelManager;
 import com.friday.server.netty.UidChannelManager;
 import io.netty.channel.Channel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,7 @@ import java.util.List;
  * @Date: 2020-05-13:14:37
  */
 @Component
+@Slf4j
 public class AccountServiceImpl implements AccountService {
 
     @Value("123456")
@@ -84,7 +86,7 @@ public class AccountServiceImpl implements AccountService {
         } else {
 
         }
-
+        log.info("connect server ip[{}]:port[{}] success", serverInfo.getIp(), serverInfo.getIp());
         return resVo;
     }
 

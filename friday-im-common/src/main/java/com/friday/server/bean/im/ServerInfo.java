@@ -44,7 +44,7 @@ public class ServerInfo {
     public String toString() {
         return "{ \"port\":" + port
                 + "\"ip\":" + ip
-                + "\"netTypeEnum\"" + netTypeEnum.getType()
+//                + "\"netTypeEnum\"" + netTypeEnum.getType()
                 + "}";
     }
 }

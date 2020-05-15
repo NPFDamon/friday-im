@@ -58,6 +58,7 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<FridayMes
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, FridayMessage.Message message) throws Exception {
         log.info("Received msg[{}]", message.getContent().toString());
         if (message.getConverType().equals(FridayMessage.ConverType.LOGIN)) {
+            //todo 登录逻辑放到此处
             log.info("login ...");
         }
 
@@ -65,6 +66,13 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<FridayMes
             log.info("Server Received client heat bean PING message ... ");
             //心跳时间更新
             NettyAttrUtil.updateReadTime(channelHandlerContext.channel(), System.currentTimeMillis());
+            FridayMessage.Message heartBean = FridayMessage.Message.newBuilder().setConverType(FridayMessage.ConverType.PING).build();
+            channelHandlerContext.writeAndFlush(heartBean).addListeners((ChannelFutureListener) channelFuture -> {
+                if (!channelFuture.isSuccess()) {
+                    log.info("IO Error, close channel ...");
+                    channelFuture.channel().close();
+                }
+            });
 
         }
     }
