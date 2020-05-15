@@ -2,7 +2,7 @@ package com.friday.route.service.impl;
 
 import com.friday.route.cache.ServerCache;
 import com.friday.route.lb.ServerRouteLoadBalanceHandler;
-import com.friday.route.redis.RedisService;
+import com.friday.route.redis.UserInfoRedisService;
 import com.friday.route.service.AccountService;
 import com.friday.route.util.ServerInfoParseUtil;
 import com.friday.server.bean.im.ServerInfo;
@@ -32,7 +32,7 @@ public class AccountServiceImpl implements AccountService {
     private String secret;
 
     @Autowired
-    private RedisService redisService;
+    private UserInfoRedisService userInfoRedisService;
 
     @Autowired
     private ServerCache serverCache;
@@ -50,13 +50,13 @@ public class AccountServiceImpl implements AccountService {
             resVo.setLoginStatus(LoginStatusEnum.ACCOUNT_NOT_MATCH);
         }
         resVo.setToken(new Token(uid, secret).getToken(secret));
-        redisService.storeUserLoginInfo(resVo);
+        userInfoRedisService.storeUserLoginInfo(resVo);
         //获取服务器信息
         List<String> servers = serverCache.getServerList();
         //根据负载均衡策略选取服务器
         ServerInfo serverInfo = serverRouteLoadBalanceHandler.routeServer(ServerInfoParseUtil.getServerInfoList(servers), userReqVo.getUid());
         //保存服务器信息
-        redisService.storeIMServerInfo(userReqVo.getUid(), serverInfo);
+        userInfoRedisService.storeIMServerInfo(userReqVo.getUid(), serverInfo);
 
         return resVo;
     }
@@ -64,6 +64,6 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void offLine(Long uid, String token) {
         //todo 下线逻辑
-        redisService.offLine(token);
+        userInfoRedisService.offLine(token);
     }
 }

@@ -1,6 +1,6 @@
 package com.friday.route.redis.impl;
 
-import com.friday.route.redis.RedisService;
+import com.friday.route.redis.UserInfoRedisService;
 import com.friday.server.bean.im.ServerInfo;
 import com.friday.server.bean.resVo.LoginResVo;
 import com.friday.server.constant.Constants;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  * @Date: 2020-05-13:14:37
  */
 @Component
-public class RedisServiceImpl implements RedisService {
+public class UserInfoRedisServiceImpl implements UserInfoRedisService {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;

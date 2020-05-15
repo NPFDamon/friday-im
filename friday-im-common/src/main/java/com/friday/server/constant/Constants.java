@@ -18,5 +18,7 @@ public class Constants {
     public static final String USER_TOKEN = "user_token";
     //user server 对应关系
     public static String USER_SERVER_INFO = "user_server_info:";
+    //
+    public static String SERVER_ROUTE_INFO = "server_route_info";
 
 }

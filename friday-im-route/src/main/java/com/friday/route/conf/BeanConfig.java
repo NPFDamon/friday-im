@@ -2,6 +2,8 @@ package com.friday.route.conf;
 
 import com.friday.route.lb.ServerRouteLoadBalanceHandler;
 import com.friday.server.exception.BizException;
+import com.friday.server.netty.ServerChannelManager;
+import com.friday.server.netty.impl.ServerChannelManagerImpl;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -35,7 +37,7 @@ public class BeanConfig {
     }
 
     @Bean
-    public LoadingCache<String,String> buildCache(){
+    public LoadingCache<String, String> buildCache() {
         return CacheBuilder.newBuilder().build(new CacheLoader<String, String>() {
             @Override
             public String load(String s) throws Exception {
@@ -45,7 +47,7 @@ public class BeanConfig {
     }
 
     @Bean
-    public ServerRouteLoadBalanceHandler choseLBHandler(){
+    public ServerRouteLoadBalanceHandler choseLBHandler() {
         try {
             return (ServerRouteLoadBalanceHandler) Class.forName(lb).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
@@ -53,6 +55,11 @@ public class BeanConfig {
             log.error("LB Class load fail");
             throw new BizException("Server Load Balance Is Not Set Or Server Load Balance Set Wrong ...");
         }
+    }
+
+    @Bean
+    public ServerChannelManager getServerChannelManager() {
+        return new ServerChannelManagerImpl();
     }
 
 }

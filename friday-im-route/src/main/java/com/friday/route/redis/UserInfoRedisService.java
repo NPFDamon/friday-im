@@ -10,7 +10,7 @@ import com.friday.server.bean.resVo.LoginResVo;
  * @Author: Damon(npf)
  * @Date: 2020-05-12:16:37
  */
-public interface RedisService {
+public interface UserInfoRedisService {
 
     /**
      * 保存登录信息

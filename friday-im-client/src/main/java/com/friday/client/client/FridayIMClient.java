@@ -1,6 +1,8 @@
 package com.friday.client.client;
 
 import com.friday.client.handler.FridayIMClientHandler;
+import com.friday.server.bean.im.ServerInfo;
+import com.friday.server.netty.ServerChannelManager;
 import com.friday.server.protobuf.FridayMessage;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -15,6 +17,7 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +40,10 @@ public class FridayIMClient {
     @Value("${netty.server.address}")
     private String address;
 
-    public void start() {
+    @Autowired
+    private ServerChannelManager serverChannelManager;
+
+    public void start(/*ServerInfo serverInfo*/) {
         EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
         Bootstrap bootstrap = new Bootstrap();
 
@@ -57,17 +63,10 @@ public class FridayIMClient {
                     }
                 });
         try {
-//            ChannelFuture future = bootstrap.connect(address, port).sync();
-//            Scanner scanner = new Scanner(System.in);
-//            while (true){
-//                String msg = scanner.nextLine();
-//                if("exit".equals(msg)){
-//                    break;
-//                }
-//                future.channel().writeAndFlush(future.channel().id() + ": " + msg);
-//            }
-//            future.channel().closeFuture().sync();
             ChannelFuture future = bootstrap.connect(address, port).sync();
+            //server和info绑定
+//            serverChannelManager.addServerToChannel(serverInfo,future.channel());
+//            ChannelFuture future = bootstrap.connect(serverInfo.getIp(), serverInfo.getPort()).sync();
             if (future.isSuccess()) {
                 log.info("Friday Netty Client Start Success With Address[{}],Port[{}] ...", address, port);
             }
