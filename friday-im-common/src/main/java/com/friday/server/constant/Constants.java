@@ -17,8 +17,13 @@ public class Constants {
     //token 信息
     public static final String USER_TOKEN = "user_token";
     //user server 对应关系
-    public static String USER_SERVER_INFO = "user_server_info:";
-    //
-    public static String SERVER_ROUTE_INFO = "server_route_info";
+    public static final String USER_SERVER_INFO = "user_server_info:";
+    //server channel对应关系
+    public static final String SERVER_ROUTE_INFO = "server_route_info";
+    //user client 对应关系
+    public static final String USER_CLIENT_INFO = "user-client-info";
 
+    //kafka topic
+    public static final String KAFKA_TOPIC_SINGLE = "single";
+    public static final String KAFKA_TOPIC_GROUP = "group";
 }

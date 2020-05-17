@@ -1,12 +1,16 @@
 package com.friday.server.handler;
 
 import com.friday.server.netty.NettyAttrUtil;
+import com.friday.server.netty.UidChannelManager;
 import com.friday.server.protobuf.FridayMessage;
+import com.friday.server.redis.ConversationRedisServer;
 import com.friday.server.utils.SpringBeanFactory;
 import io.netty.channel.*;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.protocol.types.Field;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Copyright (C),Damon
@@ -18,6 +22,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ChannelHandler.Sharable
 public class FridayIMServerHandler extends SimpleChannelInboundHandler<FridayMessage.Message> {
+
+    @Autowired
+    private UidChannelManager uidChannelManager;
+
+    @Autowired
+    private ConversationRedisServer conversationRedisServer;
 
 
     @Override
@@ -57,6 +67,16 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<FridayMes
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, FridayMessage.Message message) throws Exception {
         log.info("Received msg[{}]", message.getContent().toString());
+        if (message.getConverType().equals(FridayMessage.ConverType.MSG)) {
+            if (isMsgClientIsInvalid(channelHandlerContext, message)) {
+                log.error("client msg is repeat: [{}]", message.getCid());
+                return;
+            }else {
+                saveUserClient(channelHandlerContext,message);
+            }
+
+
+        }
         if (message.getConverType().equals(FridayMessage.ConverType.LOGIN)) {
             //todo 登录逻辑放到此处
             log.info("login ...");
@@ -86,5 +106,28 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<FridayMes
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         log.error(cause.getMessage(), cause);
         ctx.close();
+    }
+
+    private boolean isMsgClientIsInvalid(ChannelHandlerContext ctx, FridayMessage.Message message) {
+        if (message.getCid() == 0) {
+            return false;
+        }
+        String uid = uidChannelManager.getIdByChannel(ctx.channel());
+        return conversationRedisServer.isUserCidExit(uid, String.valueOf(message.getCid()));
+    }
+
+    private void saveUserClient(ChannelHandlerContext ctx, FridayMessage.Message clientId) {
+        String uid = uidChannelManager.getIdByChannel(ctx.channel());
+        conversationRedisServer.saveUserClientId(uid, String.valueOf(clientId.getCid()));
+    }
+
+    private FridayMessage buildMessage(ChannelHandlerContext ctx, FridayMessage.Message message){
+//        String uid = uidChannelManager.getIdByChannel(ctx.channel());
+//        FridayMessage.MessageContent content = FridayMessage.MessageContent.newBuilder()
+//                .setId("11111")
+//                .setUid(uid)
+//                .setType(FridayMessage.MessageType.TEXT)
+//                .setContent(message.g)
+        return null;
     }
 }

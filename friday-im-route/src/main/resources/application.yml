@@ -4,6 +4,7 @@ server:
 spring:
   application:
     name: friday-im-router
+  # redis 配置
   redis:
     host: localhost
     port: 6379
@@ -13,6 +14,15 @@ spring:
         max-active: 100
         max-wait: 1000
         min-idle: 10
+  # Kafka 配置
+  kafka:
+    consumer:
+      group-id: fridayIm
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+      auto-commit-interval: 100
+      key-deserializer: org.apache.kafka.common.serialization.StringSerializer
+      value-deserializer: org.apache.kafka.common.serialization.StringSerializer
 
 netty:
   server:
