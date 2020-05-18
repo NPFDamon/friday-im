@@ -1,6 +1,15 @@
 package com.friday.route.kafka;
 
+import com.friday.route.redis.UserServerRedisService;
+import com.friday.server.bean.im.ServerInfo;
+import com.friday.server.constant.Constants;
+import com.friday.server.netty.ServerChannelManager;
+import com.friday.server.protobuf.FridayMessage;
+import com.friday.server.utils.JsonHelper;
+import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,4 +22,32 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class KafkaConsumerManage {
+    @Autowired
+    private UserServerRedisService userServerRedisService;
+    @Autowired
+    private ServerChannelManager serverChannelManager;
+
+    @KafkaListener(topics = Constants.KAFKA_TOPIC_SINGLE)
+    public void start(String message) {
+        log.info("get kafka msg:{}", message);
+        FridayMessage.Message.Builder builder = FridayMessage.Message.newBuilder();
+        JsonHelper.readValue(message, builder);
+        FridayMessage.MessageContent msg = builder.getContent();
+        String uid = builder.getFromUid();
+        ServerInfo serverInfo = userServerRedisService.getServerInfoByUid(uid);
+        if (serverInfo != null) {
+            log.info("server info :[{}]", serverInfo.toString());
+            Channel channel = serverChannelManager.getChannelByServer(serverInfo);
+            if (channel != null) {
+                log.info("channel :[{}]", channel.toString());
+                channel.writeAndFlush(msg);
+            } else {
+                log.error("cannot find channel！ server:{}", serverInfo);
+            }
+        } else {
+            log.info("uid:{} no server to push down msg:{}.", uid, msg.getId());
+        }
+    }
+
+
 }

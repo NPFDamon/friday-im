@@ -1,6 +1,7 @@
 package com.friday.route.controller;
 
 import com.friday.route.cache.ServerCache;
+import com.friday.route.kafka.KafkaConsumerManage;
 import com.friday.route.service.AccountService;
 import com.friday.server.bean.reqVo.UserReqVo;
 import com.friday.server.bean.resVo.LoginResVo;
@@ -26,6 +27,9 @@ public class TestController {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private KafkaConsumerManage manage;
+
     @GetMapping("/server")
     public List<String> getServer() {
         return serverCache.getServerList();
@@ -40,4 +44,5 @@ public class TestController {
     public void offline(@PathVariable("uid")Long uid,@RequestHeader String token){
         accountService.offLine(uid,token);
     }
+
 }

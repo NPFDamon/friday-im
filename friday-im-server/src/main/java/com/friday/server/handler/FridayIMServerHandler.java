@@ -1,9 +1,11 @@
 package com.friday.server.handler;
 
+import com.friday.server.constant.Constants;
 import com.friday.server.netty.NettyAttrUtil;
 import com.friday.server.netty.UidChannelManager;
 import com.friday.server.protobuf.FridayMessage;
 import com.friday.server.redis.ConversationRedisServer;
+import com.friday.server.utils.JsonHelper;
 import com.friday.server.utils.SpringBeanFactory;
 import io.netty.channel.*;
 import io.netty.handler.timeout.IdleState;
@@ -11,6 +13,7 @@ import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 
 /**
  * Copyright (C),Damon
@@ -28,6 +31,9 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<FridayMes
 
     @Autowired
     private ConversationRedisServer conversationRedisServer;
+
+    @Autowired
+    private KafkaTemplate kafkaTemplate;
 
 
     @Override
@@ -74,8 +80,8 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<FridayMes
             }else {
                 saveUserClient(channelHandlerContext,message);
             }
-
-
+            kafkaTemplate.send(Constants.KAFKA_TOPIC_SINGLE,message.getCid(), JsonHelper.toJsonString(message));
+            log.info("send to kafka success .....");
         }
         if (message.getConverType().equals(FridayMessage.ConverType.LOGIN)) {
             //todo 登录逻辑放到此处
@@ -121,13 +127,14 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<FridayMes
         conversationRedisServer.saveUserClientId(uid, String.valueOf(clientId.getCid()));
     }
 
-    private FridayMessage buildMessage(ChannelHandlerContext ctx, FridayMessage.Message message){
+//    private FridayMessage buildMessage(ChannelHandlerContext ctx, FridayMessage.Message message){
 //        String uid = uidChannelManager.getIdByChannel(ctx.channel());
 //        FridayMessage.MessageContent content = FridayMessage.MessageContent.newBuilder()
-//                .setId("11111")
+//                .setId(11111L)
 //                .setUid(uid)
 //                .setType(FridayMessage.MessageType.TEXT)
-//                .setContent(message.g)
-        return null;
-    }
+//                .setContent(message.getContent().getContent())
+//                .build();
+//        return FridayMessage.Message.newBuilder().setCid();
+//    }
 }
