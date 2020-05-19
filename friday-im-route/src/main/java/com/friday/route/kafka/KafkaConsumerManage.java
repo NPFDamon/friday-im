@@ -1,16 +1,19 @@
 package com.friday.route.kafka;
 
-import com.friday.route.redis.UserServerRedisService;
-import com.friday.server.bean.im.ServerInfo;
-import com.friday.server.constant.Constants;
-import com.friday.server.netty.ServerChannelManager;
-import com.friday.server.protobuf.FridayMessage;
-import com.friday.server.utils.JsonHelper;
-import io.netty.channel.Channel;
+import com.friday.route.message.listener.MessageListener;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import javax.annotation.PostConstruct;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Copyright (C),Damon
@@ -21,33 +24,68 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j
-public class KafkaConsumerManage {
-    @Autowired
-    private UserServerRedisService userServerRedisService;
-    @Autowired
-    private ServerChannelManager serverChannelManager;
+public class KafkaConsumerManage<K, V> {
 
-    @KafkaListener(topics = Constants.KAFKA_TOPIC_SINGLE)
+    private Properties properties = new Properties();
+
+    @Autowired(required = false)
+    private List<MessageListener> messageListeners;
+
+    private Map<String, MessageListener> messageListenerMap = new HashMap<>();
+
+    @PostConstruct
     public void start(String message) {
-        log.info("get kafka msg:{}", message);
-        FridayMessage.Message.Builder builder = FridayMessage.Message.newBuilder();
-        JsonHelper.readValue(message, builder);
-        FridayMessage.MessageContent msg = builder.getContent();
-        String uid = builder.getFromUid();
-        ServerInfo serverInfo = userServerRedisService.getServerInfoByUid(uid);
-        if (serverInfo != null) {
-            log.info("server info :[{}]", serverInfo.toString());
-            Channel channel = serverChannelManager.getChannelByServer(serverInfo);
-            if (channel != null) {
-                log.info("channel :[{}]", channel.toString());
-                channel.writeAndFlush(msg);
-            } else {
-                log.error("cannot find channel！ server:{}", serverInfo);
+        consumerProperties();
+        this.analyzeMessageListeners(messageListeners);
+        messageListenerMap.forEach((topic, messageListener) -> {
+            KafkaConsumer<K, V> consumer = new KafkaConsumer<K, V>(properties);
+            consumer.subscribe(Collections.singletonList(topic));
+            KafkaMessageProcessor<K, V> messageProcessor = new KafkaMessageProcessor<K,V>(topic, consumer, messageListener);
+            ExecutorService executorService = Executors.newFixedThreadPool(2);
+            executorService.submit(messageProcessor);
+        });
+
+    }
+
+    private void analyzeMessageListeners(List<MessageListener> messageListeners) {
+        if (!CollectionUtils.isEmpty(messageListeners)) {
+            for (MessageListener messageListener : messageListeners) {
+                String topic = messageListener.getTopic();
+                if (StringUtils.isBlank(topic)) {
+                    log.warn("MessageListener:{} topic is null",
+                            messageListener.getClass().getCanonicalName());
+                    continue;
+                }
+                messageListenerMap.put(topic, messageListener);
             }
-        } else {
-            log.info("uid:{} no server to push down msg:{}.", uid, msg.getId());
         }
     }
 
+    @Value("${spring.kafka.consumer.group-id}")
+    private String groupId;
+
+    @Value("${spring.kafka.consumer.enable-auto-commit}")
+    private String autoCommit;
+
+    @Value("${spring.kafka.consumer.auto-commit-interval}")
+    private String autoCommitInterval;
+
+    @Value("${spring.kafka.consumer.bootstrap-servers}")
+    private String bootstrapServers;
+
+    @Value("${spring.kafka.consumer.key-deserializer}")
+    private String keyDeserializer;
+
+    @Value("${spring.kafka.consumer.value-deserializer}")
+    private String valueDeserializer;
+
+    private void consumerProperties() {
+        properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+        properties.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, autoCommit);
+        properties.setProperty(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, autoCommitInterval);
+        properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, keyDeserializer);
+        properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, valueDeserializer);
+    }
 
 }
