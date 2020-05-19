@@ -34,7 +34,7 @@ public class KafkaConsumerManage<K, V> {
     private Map<String, MessageListener> messageListenerMap = new HashMap<>();
 
     @PostConstruct
-    public void start(String message) {
+    public void start() {
         consumerProperties();
         this.analyzeMessageListeners(messageListeners);
         messageListenerMap.forEach((topic, messageListener) -> {

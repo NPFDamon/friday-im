@@ -49,16 +49,16 @@ public class KafkaProducerManage {
 //        }
     }
 
-    @Value("${spring.kafka.producer.bootstrap-servers}")
+    @Value("${spring.kafka.producer.acks}")
     private String acks;
 
-    @Value("${spring.kafka.producer.bootstrap-servers}")
+    @Value("${spring.kafka.producer.retries}")
     private String retries;
 
-    @Value("${spring.kafka.producer.bootstrap-servers}")
+    @Value("${spring.kafka.producer.buffer-memory}")
     private String bufferMemory;
 
-    @Value("${spring.kafka.producer.bootstrap-servers}")
+    @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
     @Value("${spring.kafka.producer.key-serializer}")

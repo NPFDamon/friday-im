@@ -2,7 +2,7 @@ spring:
   application:
     name: friday-im-server
   kafka:
-    bootstrap-servers: 127.0.0.1:9092
+    bootstrap-servers: 39.96.95.188:9092
     producer:
       retries: 0
       batch-size: 16384
