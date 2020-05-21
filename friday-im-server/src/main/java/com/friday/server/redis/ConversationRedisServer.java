@@ -1,5 +1,6 @@
 package com.friday.server.redis;
 
+
 public interface ConversationRedisServer {
     void saveUserClientId(String uid, String clientId);
 

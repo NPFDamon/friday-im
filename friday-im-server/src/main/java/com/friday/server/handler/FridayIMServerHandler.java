@@ -4,10 +4,14 @@ import com.friday.server.constant.Constants;
 import com.friday.server.kafka.KafkaProducerManage;
 import com.friday.server.netty.NettyAttrUtil;
 import com.friday.server.netty.UidChannelManager;
-import com.friday.server.protobuf.FridayMessage;
+import com.friday.server.protobuf.Message;
+import com.friday.server.protobuf.Message.FridayMessage;
 import com.friday.server.redis.ConversationRedisServer;
 import com.friday.server.utils.JsonHelper;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Slf4j
 @ChannelHandler.Sharable
-public class FridayIMServerHandler extends SimpleChannelInboundHandler<FridayMessage.Message> {
+public class FridayIMServerHandler extends SimpleChannelInboundHandler<FridayMessage> {
 
     @Autowired
     private UidChannelManager uidChannelManager;
@@ -49,7 +53,8 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<FridayMes
                     log.info("Client heat bean more than 30 seconds");
                     ctx.close();
                 }
-                FridayMessage.Message heartBean = FridayMessage.Message.newBuilder().setConverType(FridayMessage.ConverType.PING).build();
+                Message.HeartBeat heartBeat = Message.HeartBeat.newBuilder().setHeartBeatType(Message.HeartBeatType.PONG).build();
+                FridayMessage heartBean = FridayMessage.newBuilder().setHeartBeat(heartBeat).build();
                 ctx.writeAndFlush(heartBean).addListeners((ChannelFutureListener) channelFuture -> {
                     if (!channelFuture.isSuccess()) {
                         log.info("IO Error, close channel ...");
@@ -69,36 +74,19 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<FridayMes
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, FridayMessage.Message message) throws Exception {
-        log.info("Received msg[{}]", message.getContent().toString());
-        if (message.getConverType().equals(FridayMessage.ConverType.MSG)) {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, FridayMessage message) throws Exception {
+        log.info("Received msg[{}]", message.getUpDownMessage().getContent().getContent());
+        if (message.getUpDownMessage().getConverType().equals(Message.ConverType.SINGLE)) {
             if (isMsgClientIsInvalid(channelHandlerContext, message)) {
-                log.error("client msg is repeat: [{}]", message.getCid());
+                log.error("client msg is repeat: [{}]", message.getUpDownMessage().getCid());
                 return;
             }else {
                 saveUserClient(channelHandlerContext,message);
             }
-            kafkaProducerManage.send(Constants.KAFKA_TOPIC_SINGLE,String.valueOf(message.getCid()), JsonHelper.toJsonString(message));
+            kafkaProducerManage.send(Constants.KAFKA_TOPIC_SINGLE,String.valueOf(message.getUpDownMessage().getCid()), JsonHelper.toJsonString(message));
             log.info("send to kafka success .....");
         }
-        if (message.getConverType().equals(FridayMessage.ConverType.LOGIN)) {
-            //todo 登录逻辑放到此处
-            log.info("login ...");
-        }
 
-        if (message.getConverType().equals(FridayMessage.ConverType.PING)) {
-            log.info("Server Received client heat bean PING message ... ");
-            //心跳时间更新
-            NettyAttrUtil.updateReadTime(channelHandlerContext.channel(), System.currentTimeMillis());
-            FridayMessage.Message heartBean = FridayMessage.Message.newBuilder().setConverType(FridayMessage.ConverType.PING).build();
-            channelHandlerContext.writeAndFlush(heartBean).addListeners((ChannelFutureListener) channelFuture -> {
-                if (!channelFuture.isSuccess()) {
-                    log.info("IO Error, close channel ...");
-                    channelFuture.channel().close();
-                }
-            });
-
-        }
     }
 
     @Override
@@ -112,17 +100,17 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<FridayMes
         ctx.close();
     }
 
-    private boolean isMsgClientIsInvalid(ChannelHandlerContext ctx, FridayMessage.Message message) {
-        if (message.getCid() == 0) {
+    private boolean isMsgClientIsInvalid(ChannelHandlerContext ctx, FridayMessage message) {
+        if (message.getUpDownMessage().getCid() == 0) {
             return false;
         }
         String uid = uidChannelManager.getIdByChannel(ctx.channel());
-        return conversationRedisServer.isUserCidExit(uid, String.valueOf(message.getCid()));
+        return conversationRedisServer.isUserCidExit(uid, String.valueOf(message.getUpDownMessage().getCid()));
     }
 
-    private void saveUserClient(ChannelHandlerContext ctx, FridayMessage.Message clientId) {
+    private void saveUserClient(ChannelHandlerContext ctx, FridayMessage message) {
         String uid = uidChannelManager.getIdByChannel(ctx.channel());
-        conversationRedisServer.saveUserClientId(uid, String.valueOf(clientId.getCid()));
+        conversationRedisServer.saveUserClientId(uid, String.valueOf(message.getUpDownMessage().getCid()));
     }
 
 //    private FridayMessage buildMessage(ChannelHandlerContext ctx, FridayMessage.Message message){

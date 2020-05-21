@@ -4,6 +4,7 @@ import com.friday.server.constant.Constants;
 import com.friday.server.redis.ConversationRedisServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 
 /**
  * Copyright (C),Damon
@@ -12,6 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
  * @Author: Damon(npf)
  * @Date: 2020-05-17:11:32
  */
+@Component
 public class ConversationRedisServerImpl implements ConversationRedisServer {
 
     @Autowired

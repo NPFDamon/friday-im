@@ -1,7 +1,6 @@
 package com.friday.client.handler;
 
 import com.friday.server.netty.NettyAttrUtil;
-import com.friday.server.protobuf.FridayMessage;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

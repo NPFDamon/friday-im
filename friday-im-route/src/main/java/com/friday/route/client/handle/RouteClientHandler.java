@@ -1,10 +1,9 @@
 package com.friday.route.client.handle;
 
 import com.friday.server.bean.im.ServerInfo;
-import com.friday.server.netty.NettyAttrUtil;
 import com.friday.server.netty.ServerChannelManager;
-import com.friday.server.netty.UidChannelManager;
-import com.friday.server.protobuf.FridayMessage;
+import com.friday.server.protobuf.Message;
+import com.friday.server.protobuf.Message.FridayMessage;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -23,16 +22,17 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @ChannelHandler.Sharable
-public class RouteClientHandler extends SimpleChannelInboundHandler<FridayMessage.Message> {
+public class RouteClientHandler extends SimpleChannelInboundHandler<FridayMessage> {
     @Autowired
     private ServerChannelManager serverChannelManager;
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, FridayMessage.Message message) throws Exception {
-        if (message.getConverType().equals(FridayMessage.ConverType.PING)) {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, FridayMessage message) throws Exception {
+        if (message.getUpDownMessage().getConverType().equals(Message.HeartBeatType.PING)) {
             log.info("Client Received heart bean PONG msg ...");
             //返回心跳回应
-            FridayMessage.Message heartBean = FridayMessage.Message.newBuilder().setConverType(FridayMessage.ConverType.PING).build();
+            Message.HeartBeat heartBeat = Message.HeartBeat.newBuilder().setHeartBeatType(Message.HeartBeatType.PING).build();
+            FridayMessage heartBean = FridayMessage.newBuilder().setHeartBeat(heartBeat).build();
             channelHandlerContext.writeAndFlush(heartBean).addListeners((ChannelFutureListener) channelFuture -> {
                 if (!channelFuture.isSuccess()) {
                     log.info("IO Error, close channel ...");
@@ -41,7 +41,6 @@ public class RouteClientHandler extends SimpleChannelInboundHandler<FridayMessag
             });
         }
 
-        log.info("MsgType[{}],MsgContent[{}]", message.getConverType().toString(), message.getContent().toString());
     }
 
     @Override

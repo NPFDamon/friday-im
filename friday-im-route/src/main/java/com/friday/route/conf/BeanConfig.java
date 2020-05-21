@@ -68,5 +68,4 @@ public class BeanConfig {
     public UidChannelManager uidChannelManager() {
         return new UidChannelManagerImpl();
     }
-
 }

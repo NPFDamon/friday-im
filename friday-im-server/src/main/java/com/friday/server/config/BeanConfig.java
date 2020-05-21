@@ -1,8 +1,9 @@
 package com.friday.server.config;
 
+import com.friday.server.netty.UidChannelManager;
+import com.friday.server.netty.impl.UidChannelManagerImpl;
 import org.I0Itec.zkclient.ZkClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,5 +23,10 @@ public class BeanConfig {
     @Bean
     public ZkClient buildZKClient() {
         return new ZkClient(zkConfiguration.getZkAddress(), zkConfiguration.getZkConnectTimeOut());
+    }
+
+    @Bean
+    public UidChannelManager uidChannelManager() {
+        return new UidChannelManagerImpl();
     }
 }

@@ -1,9 +1,12 @@
 package com.friday.server.server;
 
 import com.friday.server.handler.FridayIMServerHandler;
-import com.friday.server.protobuf.FridayMessage;
+import com.friday.server.protobuf.Message;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -57,7 +60,7 @@ public class FridayIMServer {
                                 .addLast(new IdleStateHandler(10, 0, 0))
                                 //google protobuf 编解码
                                 .addLast(new ProtobufVarint32FrameDecoder())
-                                .addLast(new ProtobufDecoder(FridayMessage.Message.getDefaultInstance()))
+                                .addLast(new ProtobufDecoder(Message.FridayMessage.getDefaultInstance()))
                                 .addLast(new ProtobufVarint32LengthFieldPrepender())
                                 .addLast(new ProtobufEncoder())
                                 .addLast(new FridayIMServerHandler());

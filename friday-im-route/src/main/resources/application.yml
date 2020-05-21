@@ -23,7 +23,7 @@ spring:
       auto-commit-interval: 100
       key-deserializer: org.apache.kafka.common.serialization.StringSerializer
       value-deserializer: org.apache.kafka.common.serialization.StringSerializer
-      bootstrap-servers: 127.0.0.1:9092
+      bootstrap-servers: localhost:9092
 
 netty:
   server:

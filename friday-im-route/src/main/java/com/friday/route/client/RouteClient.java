@@ -3,9 +3,7 @@ package com.friday.route.client;
 import com.friday.route.client.handle.RouteClientHandler;
 import com.friday.server.bean.im.ServerInfo;
 import com.friday.server.exception.BizException;
-import com.friday.server.netty.ServerChannelManager;
-import com.friday.server.netty.UidChannelManager;
-import com.friday.server.protobuf.FridayMessage;
+import com.friday.server.protobuf.Message;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -17,7 +15,6 @@ import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -43,7 +40,7 @@ public class RouteClient {
                         socketChannel.pipeline()
                                 .addLast(new IdleStateHandler(10, 0, 0))
                                 .addLast(new ProtobufVarint32FrameDecoder())
-                                .addLast(new ProtobufDecoder(FridayMessage.Message.getDefaultInstance()))
+                                .addLast(new ProtobufDecoder(Message.FridayMessage.getDefaultInstance()))
                                 .addLast(new ProtobufVarint32LengthFieldPrepender())
                                 .addLast(new ProtobufEncoder())
                                 .addLast(new RouteClientHandler());
