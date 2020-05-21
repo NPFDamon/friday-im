@@ -1,7 +1,7 @@
 package com.friday.route.service;
 
-import com.friday.server.bean.reqVo.UserReqVo;
-import com.friday.server.bean.resVo.LoginResVo;
+import com.friday.common.bean.reqVo.UserReqVo;
+import com.friday.common.bean.resVo.LoginResVo;
 
 /**
  * Copyright (C),Damon

@@ -1,9 +1,8 @@
 package com.friday.route.client.handle;
 
-import com.friday.server.bean.im.ServerInfo;
-import com.friday.server.netty.ServerChannelManager;
-import com.friday.server.protobuf.Message;
-import com.friday.server.protobuf.Message.FridayMessage;
+import com.friday.common.bean.im.ServerInfo;
+import com.friday.common.netty.ServerChannelManager;
+import com.friday.common.protobuf.Message;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -22,17 +21,17 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @ChannelHandler.Sharable
-public class RouteClientHandler extends SimpleChannelInboundHandler<FridayMessage> {
+public class RouteClientHandler extends SimpleChannelInboundHandler<Message.FridayMessage> {
     @Autowired
     private ServerChannelManager serverChannelManager;
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, FridayMessage message) throws Exception {
-        if (message.getUpDownMessage().getConverType().equals(Message.HeartBeatType.PING)) {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message.FridayMessage message) throws Exception {
+        if (message.getUpDownMessage().getConverType().equals(Message.HeartBeatType.PONG)) {
             log.info("Client Received heart bean PONG msg ...");
             //返回心跳回应
             Message.HeartBeat heartBeat = Message.HeartBeat.newBuilder().setHeartBeatType(Message.HeartBeatType.PING).build();
-            FridayMessage heartBean = FridayMessage.newBuilder().setHeartBeat(heartBeat).build();
+            Message.FridayMessage heartBean = Message.FridayMessage.newBuilder().setHeartBeat(heartBeat).build();
             channelHandlerContext.writeAndFlush(heartBean).addListeners((ChannelFutureListener) channelFuture -> {
                 if (!channelFuture.isSuccess()) {
                     log.info("IO Error, close channel ...");

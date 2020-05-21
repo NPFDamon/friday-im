@@ -1,11 +1,11 @@
 package com.friday.route.conf;
 
 import com.friday.route.lb.ServerRouteLoadBalanceHandler;
-import com.friday.server.exception.BizException;
-import com.friday.server.netty.ServerChannelManager;
-import com.friday.server.netty.UidChannelManager;
-import com.friday.server.netty.impl.ServerChannelManagerImpl;
-import com.friday.server.netty.impl.UidChannelManagerImpl;
+import com.friday.common.exception.BizException;
+import com.friday.common.netty.ServerChannelManager;
+import com.friday.common.netty.UidChannelManager;
+import com.friday.common.netty.impl.ServerChannelManagerImpl;
+import com.friday.common.netty.impl.UidChannelManagerImpl;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;

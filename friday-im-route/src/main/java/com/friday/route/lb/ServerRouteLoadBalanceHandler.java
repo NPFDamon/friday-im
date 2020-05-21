@@ -1,6 +1,6 @@
 package com.friday.route.lb;
 
-import com.friday.server.bean.im.ServerInfo;
+import com.friday.common.bean.im.ServerInfo;
 
 import java.util.List;
 

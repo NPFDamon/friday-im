@@ -1,13 +1,12 @@
 package com.friday.server.handler;
 
-import com.friday.server.constant.Constants;
+import com.friday.common.constant.Constants;
+import com.friday.common.netty.NettyAttrUtil;
+import com.friday.common.netty.UidChannelManager;
+import com.friday.common.protobuf.Message;
+import com.friday.common.redis.ConversationRedisServer;
+import com.friday.common.utils.JsonHelper;
 import com.friday.server.kafka.KafkaProducerManage;
-import com.friday.server.netty.NettyAttrUtil;
-import com.friday.server.netty.UidChannelManager;
-import com.friday.server.protobuf.Message;
-import com.friday.server.protobuf.Message.FridayMessage;
-import com.friday.server.redis.ConversationRedisServer;
-import com.friday.server.utils.JsonHelper;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -26,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Slf4j
 @ChannelHandler.Sharable
-public class FridayIMServerHandler extends SimpleChannelInboundHandler<FridayMessage> {
+public class FridayIMServerHandler extends SimpleChannelInboundHandler<Message.FridayMessage> {
 
     @Autowired
     private UidChannelManager uidChannelManager;
@@ -54,7 +53,7 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<FridayMes
                     ctx.close();
                 }
                 Message.HeartBeat heartBeat = Message.HeartBeat.newBuilder().setHeartBeatType(Message.HeartBeatType.PONG).build();
-                FridayMessage heartBean = FridayMessage.newBuilder().setHeartBeat(heartBeat).build();
+                Message.FridayMessage heartBean = Message.FridayMessage.newBuilder().setHeartBeat(heartBeat).build();
                 ctx.writeAndFlush(heartBean).addListeners((ChannelFutureListener) channelFuture -> {
                     if (!channelFuture.isSuccess()) {
                         log.info("IO Error, close channel ...");
@@ -74,7 +73,7 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<FridayMes
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, FridayMessage message) throws Exception {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message.FridayMessage message) throws Exception {
         log.info("Received msg[{}]", message.getUpDownMessage().getContent().getContent());
         if (message.getUpDownMessage().getConverType().equals(Message.ConverType.SINGLE)) {
             if (isMsgClientIsInvalid(channelHandlerContext, message)) {
@@ -100,7 +99,7 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<FridayMes
         ctx.close();
     }
 
-    private boolean isMsgClientIsInvalid(ChannelHandlerContext ctx, FridayMessage message) {
+    private boolean isMsgClientIsInvalid(ChannelHandlerContext ctx, Message.FridayMessage message) {
         if (message.getUpDownMessage().getCid() == 0) {
             return false;
         }
@@ -108,7 +107,7 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<FridayMes
         return conversationRedisServer.isUserCidExit(uid, String.valueOf(message.getUpDownMessage().getCid()));
     }
 
-    private void saveUserClient(ChannelHandlerContext ctx, FridayMessage message) {
+    private void saveUserClient(ChannelHandlerContext ctx, Message.FridayMessage message) {
         String uid = uidChannelManager.getIdByChannel(ctx.channel());
         conversationRedisServer.saveUserClientId(uid, String.valueOf(message.getUpDownMessage().getCid()));
     }

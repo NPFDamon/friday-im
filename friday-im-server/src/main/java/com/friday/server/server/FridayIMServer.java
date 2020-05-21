@@ -1,7 +1,7 @@
 package com.friday.server.server;
 
+import com.friday.common.protobuf.Message;
 import com.friday.server.handler.FridayIMServerHandler;
-import com.friday.server.protobuf.Message;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;

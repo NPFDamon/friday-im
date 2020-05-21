@@ -1,8 +1,8 @@
 package com.friday.route.redis.impl;
 
 import com.friday.route.redis.UserServerRedisService;
-import com.friday.server.bean.im.ServerInfo;
-import com.friday.server.constant.Constants;
+import com.friday.common.bean.im.ServerInfo;
+import com.friday.common.constant.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;

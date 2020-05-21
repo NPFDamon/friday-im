@@ -1,7 +1,7 @@
 package com.friday.server.redis.impl;
 
-import com.friday.server.constant.Constants;
-import com.friday.server.redis.ConversationRedisServer;
+import com.friday.common.constant.Constants;
+import com.friday.common.redis.ConversationRedisServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;

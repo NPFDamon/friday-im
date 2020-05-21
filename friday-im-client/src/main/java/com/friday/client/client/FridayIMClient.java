@@ -1,9 +1,13 @@
 package com.friday.client.client;
 
 import com.friday.client.handler.FridayIMClientHandler;
-import com.friday.server.netty.ServerChannelManager;
+import com.friday.common.netty.ServerChannelManager;
+import com.friday.common.protobuf.Message;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -50,7 +54,7 @@ public class FridayIMClient {
                         socketChannel.pipeline()
                                 .addLast(new IdleStateHandler(10, 0, 0))
                                 .addLast(new ProtobufVarint32FrameDecoder())
-                                .addLast(new ProtobufDecoder(FridayMessage.Message.getDefaultInstance()))
+                                .addLast(new ProtobufDecoder(Message.FridayMessage.getDefaultInstance()))
                                 .addLast(new ProtobufVarint32LengthFieldPrepender())
                                 .addLast(new ProtobufEncoder())
                                 .addLast(new FridayIMClientHandler());

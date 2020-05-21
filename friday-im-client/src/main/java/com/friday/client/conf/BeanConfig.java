@@ -1,7 +1,7 @@
 package com.friday.client.conf;
 
-import com.friday.server.netty.ServerChannelManager;
-import com.friday.server.netty.impl.ServerChannelManagerImpl;
+import com.friday.common.netty.ServerChannelManager;
+import com.friday.common.netty.impl.ServerChannelManagerImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

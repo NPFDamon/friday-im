@@ -1,7 +1,7 @@
 package com.friday.server.config;
 
-import com.friday.server.netty.UidChannelManager;
-import com.friday.server.netty.impl.UidChannelManagerImpl;
+import com.friday.common.netty.UidChannelManager;
+import com.friday.common.netty.impl.UidChannelManagerImpl;
 import org.I0Itec.zkclient.ZkClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

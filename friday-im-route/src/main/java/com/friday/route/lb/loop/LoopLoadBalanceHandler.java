@@ -1,9 +1,9 @@
 package com.friday.route.lb.loop;
 
 import com.friday.route.lb.ServerRouteLoadBalanceHandler;
-import com.friday.server.bean.im.ServerInfo;
-import com.friday.server.enums.LoginStatusEnum;
-import com.friday.server.exception.BizException;
+import com.friday.common.bean.im.ServerInfo;
+import com.friday.common.enums.LoginStatusEnum;
+import com.friday.common.exception.BizException;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;

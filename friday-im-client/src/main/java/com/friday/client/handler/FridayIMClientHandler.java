@@ -1,6 +1,7 @@
 package com.friday.client.handler;
 
-import com.friday.server.netty.NettyAttrUtil;
+import com.friday.common.netty.NettyAttrUtil;
+import com.friday.common.protobuf.Message;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -18,11 +19,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j
-public class FridayIMClientHandler extends SimpleChannelInboundHandler<FridayMessage.Message> {
+public class FridayIMClientHandler extends SimpleChannelInboundHandler<Message.FridayMessage> {
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-        if (evt instanceof FridayMessage.Message) {
+        if (evt instanceof Message.FridayMessage) {
             log.info("定时检查server存活 ... ");
             IdleStateEvent event = (IdleStateEvent) evt;
             if (event.state() == IdleState.WRITER_IDLE) {
@@ -35,8 +36,8 @@ public class FridayIMClientHandler extends SimpleChannelInboundHandler<FridayMes
                     log.info("Server heat bean more than 30 seconds");
                     ctx.close();
                 }
-                FridayMessage.Message heartBean = FridayMessage.Message.newBuilder()
-                        .setConverType(FridayMessage.ConverType.PING).build();
+                Message.FridayMessage heartBean = Message.FridayMessage.newBuilder()
+                        .setHeartBeat(Message.HeartBeat.newBuilder().setHeartBeatType(Message.HeartBeatType.PONG).build()).build();
                 ctx.writeAndFlush(heartBean).addListeners((ChannelFutureListener) channelFuture -> {
                     if (!channelFuture.isSuccess()) {
                         log.info("IO Error, close channel ...");
@@ -60,12 +61,12 @@ public class FridayIMClientHandler extends SimpleChannelInboundHandler<FridayMes
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, FridayMessage.Message message) throws Exception {
-        if (message.getConverType().equals(FridayMessage.ConverType.PING)) {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message.FridayMessage message) throws Exception {
+        if (message.getHeartBeat().equals(Message.HeartBeatType.PING)) {
             log.info("Client Received heart bean PONG msg ...");
             NettyAttrUtil.updateReadTime(channelHandlerContext.channel(), System.currentTimeMillis());
-            FridayMessage.Message heartBean = FridayMessage.Message.newBuilder()
-                    .setConverType(FridayMessage.ConverType.PING).build();
+            Message.FridayMessage heartBean = Message.FridayMessage.newBuilder()
+                    .setHeartBeat(Message.HeartBeat.newBuilder().setHeartBeatType(Message.HeartBeatType.PONG).build()).build();
             channelHandlerContext.writeAndFlush(heartBean).addListeners((ChannelFutureListener) channelFuture -> {
                 if (!channelFuture.isSuccess()) {
                     log.info("IO Error, close channel ...");
@@ -73,7 +74,5 @@ public class FridayIMClientHandler extends SimpleChannelInboundHandler<FridayMes
                 }
             });
         }
-
-        log.info("MsgType[{}],MsgContent[{}]", message.getConverType().toString(), message.getContent().toString());
     }
 }

@@ -2,8 +2,8 @@ package com.friday.route.controller;
 
 import com.friday.route.cache.ServerCache;
 import com.friday.route.service.AccountService;
-import com.friday.server.bean.reqVo.UserReqVo;
-import com.friday.server.bean.resVo.LoginResVo;
+import com.friday.common.bean.reqVo.UserReqVo;
+import com.friday.common.bean.resVo.LoginResVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

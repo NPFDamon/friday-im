@@ -1,10 +1,10 @@
 package com.friday.route.message.processor;
 
+import com.friday.common.bean.im.ServerInfo;
+import com.friday.common.netty.ServerChannelManager;
+import com.friday.common.protobuf.Message;
+import com.friday.common.utils.JsonHelper;
 import com.friday.route.redis.UserServerRedisService;
-import com.friday.server.bean.im.ServerInfo;
-import com.friday.server.netty.ServerChannelManager;
-import com.friday.server.protobuf.Message;
-import com.friday.server.utils.JsonHelper;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,7 +1,7 @@
 package com.friday.route.lb.hash;
 
 import com.friday.route.lb.ServerRouteLoadBalanceHandler;
-import com.friday.server.bean.im.ServerInfo;
+import com.friday.common.bean.im.ServerInfo;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;

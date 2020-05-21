@@ -1,6 +1,6 @@
 package com.friday.route.redis;
 
-import com.friday.server.bean.im.ServerInfo;
+import com.friday.common.bean.im.ServerInfo;
 
 /**
  * Copyright (C),Damon

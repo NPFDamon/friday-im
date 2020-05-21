@@ -1,8 +1,8 @@
 package com.friday.route.util;
 
-import com.friday.server.bean.im.ServerInfo;
-import com.friday.server.constant.Constants;
-import com.friday.server.exception.BizException;
+import com.friday.common.bean.im.ServerInfo;
+import com.friday.common.constant.Constants;
+import com.friday.common.exception.BizException;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,9 +1,9 @@
 package com.friday.route.client;
 
+import com.friday.common.bean.im.ServerInfo;
+import com.friday.common.exception.BizException;
+import com.friday.common.protobuf.Message;
 import com.friday.route.client.handle.RouteClientHandler;
-import com.friday.server.bean.im.ServerInfo;
-import com.friday.server.exception.BizException;
-import com.friday.server.protobuf.Message;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
