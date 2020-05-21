@@ -1,7 +1,9 @@
 package com.friday.server.server;
 
 import com.friday.common.protobuf.Message;
+import com.friday.server.handler.FridayIMServerAuthHandler;
 import com.friday.server.handler.FridayIMServerHandler;
+import com.friday.server.handler.FridayIMServerHeartBeanHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -16,6 +18,7 @@ import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -42,6 +45,15 @@ public class FridayIMServer {
     @Value("${netty.server.address}")
     private String address;
 
+    @Autowired
+    private FridayIMServerHeartBeanHandler fridayIMServerHeartBeanHandler;
+
+    @Autowired
+    private FridayIMServerHandler fridayIMServerHandler;
+
+    @Autowired
+    private FridayIMServerAuthHandler fridayIMServerAuthHandler;
+
     /***
      * Server 启动方法
      */
@@ -63,7 +75,9 @@ public class FridayIMServer {
                                 .addLast(new ProtobufDecoder(Message.FridayMessage.getDefaultInstance()))
                                 .addLast(new ProtobufVarint32LengthFieldPrepender())
                                 .addLast(new ProtobufEncoder())
-                                .addLast(new FridayIMServerHandler());
+                                .addLast(fridayIMServerAuthHandler)
+                                .addLast(fridayIMServerHeartBeanHandler)
+                                .addLast(fridayIMServerHandler);
                     }
                 });
         try {

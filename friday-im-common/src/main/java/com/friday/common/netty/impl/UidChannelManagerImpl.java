@@ -3,6 +3,7 @@ package com.friday.common.netty.impl;
 import com.friday.common.netty.NettyAttrUtil;
 import com.friday.common.netty.UidChannelManager;
 import io.netty.channel.Channel;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Author: Damon(npf)
  * @Date: 2020-05-15:14:48
  */
+@Component
 public class UidChannelManagerImpl implements UidChannelManager {
     private static final Map<String, List<Channel>> map = new ConcurrentHashMap<>();
 

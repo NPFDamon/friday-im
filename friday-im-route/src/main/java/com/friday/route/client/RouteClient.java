@@ -15,6 +15,7 @@ import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -27,6 +28,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class RouteClient {
+    @Autowired
+    private RouteClientHandler routeClientHandler;
 
     public Channel connect(ServerInfo serverInfo) {
         EventLoopGroup loopGroup = new NioEventLoopGroup();
@@ -43,14 +46,14 @@ public class RouteClient {
                                 .addLast(new ProtobufDecoder(Message.FridayMessage.getDefaultInstance()))
                                 .addLast(new ProtobufVarint32LengthFieldPrepender())
                                 .addLast(new ProtobufEncoder())
-                                .addLast(new RouteClientHandler());
+                                .addLast(routeClientHandler);
                     }
                 });
         try {
             ChannelFuture future = bootstrap.connect(serverInfo.getIp(), serverInfo.getPort()).sync();
             if (future.isSuccess()) {
                 log.info("Friday Netty Client connect server Address[{}],Port[{}] ...", serverInfo.getIp(), serverInfo.getPort() + "Success");
-                return future.channel();
+                    return future.channel();
             }
             return null;
         } catch (InterruptedException e) {

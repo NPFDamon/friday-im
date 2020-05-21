@@ -4,6 +4,7 @@ import com.friday.common.bean.im.ServerInfo;
 import com.friday.common.netty.ServerChannelManager;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date: 2020-05-15:11:09
  */
 @Slf4j
+@Component
 public class ServerChannelManagerImpl implements ServerChannelManager {
     private static final Map<ServerInfo, Channel> serverChannelMap = new ConcurrentHashMap<>();
     private static final Map<Channel, ServerInfo> channelServerMap = new ConcurrentHashMap<>();

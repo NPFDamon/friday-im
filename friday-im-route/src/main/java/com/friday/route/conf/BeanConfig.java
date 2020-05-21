@@ -1,5 +1,9 @@
 package com.friday.route.conf;
 
+import com.friday.common.redis.UserInfoRedisService;
+import com.friday.common.redis.UserServerRedisService;
+import com.friday.common.redis.impl.UserInfoRedisServiceImpl;
+import com.friday.common.redis.impl.UserServerRedisServiceImpl;
 import com.friday.route.lb.ServerRouteLoadBalanceHandler;
 import com.friday.common.exception.BizException;
 import com.friday.common.netty.ServerChannelManager;
@@ -60,12 +64,22 @@ public class BeanConfig {
     }
 
     @Bean
-    public ServerChannelManager getServerChannelManager() {
+    public ServerChannelManager serverChannelManager() {
         return new ServerChannelManagerImpl();
     }
 
     @Bean
     public UidChannelManager uidChannelManager() {
         return new UidChannelManagerImpl();
+    }
+
+    @Bean
+    public UserServerRedisService userServerRedisService(){
+        return new UserServerRedisServiceImpl();
+    }
+
+    @Bean
+    public UserInfoRedisService uerInfoRedisService(){
+        return new UserInfoRedisServiceImpl();
     }
 }

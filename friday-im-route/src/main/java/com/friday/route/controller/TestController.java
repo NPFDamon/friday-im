@@ -37,8 +37,13 @@ public class TestController {
     }
 
     @DeleteMapping("/offline/{uid}")
-    public void offline(@PathVariable("uid")Long uid,@RequestHeader String token){
-        accountService.offLine(uid,token);
+    public void offline(@PathVariable("uid") Long uid, @RequestHeader String token) {
+        accountService.offLine(uid, token);
+    }
+
+    @GetMapping("/msg")
+    public void sendMsg(@RequestParam("token") String uid, @RequestParam("msg") String msg) {
+        accountService.sendMsg(uid, msg);
     }
 
 }

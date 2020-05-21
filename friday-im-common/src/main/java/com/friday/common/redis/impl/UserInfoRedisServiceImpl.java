@@ -4,7 +4,9 @@ import com.friday.common.bean.im.ServerInfo;
 import com.friday.common.bean.resVo.LoginResVo;
 import com.friday.common.constant.Constants;
 import com.friday.common.redis.UserInfoRedisService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 
 
 /**
@@ -14,8 +16,10 @@ import org.springframework.data.redis.core.RedisTemplate;
  * @Author: Damon(npf)
  * @Date: 2020-05-13:14:37
  */
+@Component
 public class UserInfoRedisServiceImpl implements UserInfoRedisService {
 
+    @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
     @Override

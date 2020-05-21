@@ -3,6 +3,7 @@ package com.friday.route.client.handle;
 import com.friday.common.bean.im.ServerInfo;
 import com.friday.common.netty.ServerChannelManager;
 import com.friday.common.protobuf.Message;
+import com.friday.common.utils.JsonHelper;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -18,20 +19,21 @@ import org.springframework.stereotype.Component;
  * @Author: Damon(npf)
  * @Date: 2020-05-15:15:09
  */
-@Component
 @Slf4j
 @ChannelHandler.Sharable
+@Component
 public class RouteClientHandler extends SimpleChannelInboundHandler<Message.FridayMessage> {
+
     @Autowired
     private ServerChannelManager serverChannelManager;
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message.FridayMessage message) throws Exception {
-        if (message.getUpDownMessage().getConverType().equals(Message.HeartBeatType.PONG)) {
-            log.info("Client Received heart bean PONG msg ...");
+        if (message.getHeartBeat().getHeartBeatType() == Message.HeartBeatType.PING) {
+            log.info("Client Received heart bean PING msg ...");
             //返回心跳回应
-            Message.HeartBeat heartBeat = Message.HeartBeat.newBuilder().setHeartBeatType(Message.HeartBeatType.PING).build();
-            Message.FridayMessage heartBean = Message.FridayMessage.newBuilder().setHeartBeat(heartBeat).build();
+            Message.HeartBeat heartBeat = Message.HeartBeat.newBuilder().setHeartBeatType(Message.HeartBeatType.PONG).build();
+            Message.FridayMessage heartBean = Message.FridayMessage.newBuilder().setType(Message.FridayMessage.Type.HeartBeat).setHeartBeat(heartBeat).build();
             channelHandlerContext.writeAndFlush(heartBean).addListeners((ChannelFutureListener) channelFuture -> {
                 if (!channelFuture.isSuccess()) {
                     log.info("IO Error, close channel ...");
@@ -39,7 +41,25 @@ public class RouteClientHandler extends SimpleChannelInboundHandler<Message.Frid
                 }
             });
         }
-
+        Message.MessageContent content = Message.MessageContent.newBuilder()
+                .setId(10000000L)
+                .setTime(System.currentTimeMillis())
+                .setUid("123456")
+                .setType(Message.MessageType.TEXT)
+                .setContent("Hello world").build();
+        Message.UpDownMessage upDownMessage = Message.UpDownMessage.newBuilder()
+                .setRequestId(100000L)
+                .setCid(1000)
+                .setFromUid("10000")
+                .setToUid("1000001")
+                .setConverId("00001")
+                .setConverType(Message.ConverType.SINGLE)
+                .setContent(content).build();
+        Message.FridayMessage s = Message.FridayMessage.newBuilder()
+                .setType(Message.FridayMessage.Type.UpDownMessage)
+                .setUpDownMessage(upDownMessage).build();
+        channelHandlerContext.writeAndFlush(s).sync();
+        log.info("Send msg:{}", JsonHelper.toJsonString(s));
     }
 
     @Override

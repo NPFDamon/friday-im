@@ -1,8 +1,8 @@
 package com.friday.route.message.executor;
 
-import com.friday.route.message.processor.SingleMessageProcessor;
-import com.friday.route.redis.UserServerRedisService;
 import com.friday.common.netty.ServerChannelManager;
+import com.friday.common.redis.UserServerRedisService;
+import com.friday.route.message.processor.SingleMessageProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -24,4 +24,7 @@ public interface AccountService {
      * @param uid
      */
     void offLine(Long uid,String token);
+
+
+    void sendMsg(String uid,String msg);
 }
