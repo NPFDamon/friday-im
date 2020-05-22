@@ -1,2 +1,2 @@
 # friday-im
-empty project now
+基于netty的IM实现
