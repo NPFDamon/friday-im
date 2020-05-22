@@ -1,5 +1,6 @@
 package com.friday.route.controller;
 
+import com.friday.common.bean.resVo.Result;
 import com.friday.route.cache.ServerCache;
 import com.friday.route.service.AccountService;
 import com.friday.common.bean.reqVo.UserReqVo;
@@ -32,9 +33,15 @@ public class TestController {
     }
 
     @PostMapping("/login")
-    public LoginResVo login(@RequestBody UserReqVo userReqVo) {
-        return accountService.login(userReqVo);
+    public LoginResVo getToken(@RequestBody UserReqVo userReqVo) {
+        return accountService.getToken(userReqVo);
     }
+
+    @GetMapping("/sendLogin")
+    public Result sendLogin(@RequestParam("uid") String uid, @RequestHeader("token") String token) {
+        return accountService.sendLogin(uid, token);
+    }
+
 
     @DeleteMapping("/offline/{uid}")
     public void offline(@PathVariable("uid") Long uid, @RequestHeader String token) {

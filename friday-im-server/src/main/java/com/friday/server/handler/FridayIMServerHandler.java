@@ -1,15 +1,19 @@
 package com.friday.server.handler;
 
+import com.friday.common.bean.resVo.Result;
 import com.friday.common.constant.Constants;
+import com.friday.common.enums.ResultCode;
 import com.friday.common.netty.UidChannelManager;
 import com.friday.common.protobuf.Message;
 import com.friday.common.redis.ConversationRedisServer;
 import com.friday.common.utils.JsonHelper;
+import com.friday.common.utils.SnowFlake;
 import com.friday.server.kafka.KafkaProducerManage;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,11 +38,14 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<Message.F
     @Autowired
     private KafkaProducerManage kafkaProducerManage;
 
+    @Autowired
+    private SnowFlake snowFlake;
+
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message.FridayMessage message) throws Exception {
         if (message.getType() == Message.FridayMessage.Type.UpDownMessage) {
-            log.info("received msg:{}",JsonHelper.toJsonString(message));
+            log.info("received msg:{}", JsonHelper.toJsonString(message));
             Message.UpDownMessage upDownMessage = message.getUpDownMessage();
             if (!isMsgClientIsInvalid(channelHandlerContext, upDownMessage)) {
                 log.error("client msg is repeat: [{}]", message.getUpDownMessage().getCid());
@@ -47,15 +54,29 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<Message.F
                 saveUserClient(channelHandlerContext, message);
             }
 
-//            if(upDownMessage.getConverType() == Message.ConverType.SINGLE){
-//                if(Strings.isNotBlank(upDownMessage.getConverId())){
-//
-//                }
-//            }
+            String topic;
+            String convId;
+            if (upDownMessage.getConverType() == Message.ConverType.SINGLE) {
+                if (StringUtils.isNotBlank(upDownMessage.getConverId())) {
+                    convId = upDownMessage.getConverId();
+                } else if (StringUtils.isNotBlank(upDownMessage.getToUid())) {
 
-            Message.FridayMessage fridayMessage = buildMessage(channelHandlerContext,upDownMessage,100000);
-            kafkaProducerManage.send(Constants.KAFKA_TOPIC_SINGLE, String.valueOf(message.getUpDownMessage().getCid()), JsonHelper.toJsonString(fridayMessage));
-            log.info("send to kafka success .....");
+                }
+                topic = Constants.KAFKA_TOPIC_SINGLE;
+            } else if (upDownMessage.getConverType() == Message.ConverType.GROUP) {
+                topic = Constants.KAFKA_TOPIC_GROUP;
+            } else {
+                log.error("illegal conversation type.");
+                return;
+            }
+
+            Message.FridayMessage fridayMessage = buildMessage(channelHandlerContext, upDownMessage, snowFlake.nextId());
+            boolean res = sendToKafka(topic, upDownMessage.getRequestId(), fridayMessage);
+            if (res) {
+                log.info("send to kafka success .....");
+            } else {
+                log.info("send kafka fail");
+            }
 
         } else {
             channelHandlerContext.fireChannelRead(message);
@@ -88,17 +109,27 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<Message.F
         conversationRedisServer.saveUserClientId(uid, String.valueOf(message.getUpDownMessage().getCid()));
     }
 
+    private boolean sendToKafka(String topic, long id, Message.FridayMessage message) {
+        String msg = JsonHelper.toJsonString(message);
+        if (message == null) {
+            return false;
+        }
+        Result result = kafkaProducerManage.send(topic, String.valueOf(id), msg);
+        return result.getCode() == ResultCode.COMMON_SUCCESS.getCode();
+    }
+
     private Message.FridayMessage buildMessage(ChannelHandlerContext ctx, Message.UpDownMessage message, long msgId) {
         String uid = uidChannelManager.getIdByChannel(ctx.channel());
         Message.MessageContent content = Message.MessageContent.newBuilder()
                 .setId(msgId)
                 .setType(message.getContent().getType())
-                .setUid("123456")
+                .setUid(uid)
                 .setContent(message.getContent().getContent())
                 .setTime(System.currentTimeMillis()).build();
         Message.UpDownMessage upDownMessage = Message.UpDownMessage.newBuilder()
                 .setCid(message.getCid())
                 .setFromUid(message.getFromUid())
+                .setToUid(message.getToUid())
                 .setContent(content)
                 .setConverId(message.getConverId())
                 .setConverType(message.getConverType())

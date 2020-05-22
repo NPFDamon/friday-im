@@ -26,4 +26,7 @@ public class Constants {
     //kafka topic
     public static final String KAFKA_TOPIC_SINGLE = "single";
     public static final String KAFKA_TOPIC_GROUP = "group";
+
+    public static final long TOKEN_CACHE_DURATION = 1; // 1 days
+
 }

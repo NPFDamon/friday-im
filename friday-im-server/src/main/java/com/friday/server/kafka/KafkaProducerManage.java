@@ -1,5 +1,7 @@
 package com.friday.server.kafka;
 
+import com.friday.common.bean.resVo.Result;
+import com.friday.common.enums.ResultCode;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.*;
@@ -27,10 +29,10 @@ public class KafkaProducerManage {
         producer = new KafkaProducer<String, String>(producerProperties());
     }
 
-    public void send(String topic, String key, String message) {
+    public Result send(String topic, String key, String message) {
         if (Strings.isNullOrEmpty(topic) || message == null) {
             log.error("param error! topic:[{}], key:[{}],message:[{}]", topic, key, message);
-            return;
+            return Result.failure(ResultCode.COMMON_KAFKA_PRODUCE_ERROR);
         }
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, message);
         Future<RecordMetadata> future = producer.send(record, (recordMetadata, e) -> {
@@ -40,13 +42,14 @@ public class KafkaProducerManage {
                 log.info("send message to topic:{} success, current offset:{}, messageStr:{}", topic, recordMetadata.hasOffset(), message);
             }
         });
-//        Result result = Result.success();
-//        try {
-//            result.setData(future.get());
-//        } catch (Exception e) {
-//            result = Result.failure(ResultCode.COMMON_KAFKA_PRODUCE_ERROR);
-//            log.error("produce message error", e);
-//        }
+        Result result = Result.success();
+        try {
+            result.setData(future.get());
+        } catch (Exception e) {
+            result = Result.failure(ResultCode.COMMON_KAFKA_PRODUCE_ERROR);
+            log.error("produce message error", e);
+        }
+        return result;
     }
 
     @Value("${spring.kafka.producer.acks}")

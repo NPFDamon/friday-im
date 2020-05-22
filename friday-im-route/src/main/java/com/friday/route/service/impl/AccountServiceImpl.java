@@ -3,9 +3,11 @@ package com.friday.route.service.impl;
 import com.friday.common.bean.im.ServerInfo;
 import com.friday.common.bean.reqVo.UserReqVo;
 import com.friday.common.bean.resVo.LoginResVo;
+import com.friday.common.bean.resVo.Result;
 import com.friday.common.bean.token.Token;
+import com.friday.common.constant.Constants;
 import com.friday.common.enums.LoginStatusEnum;
-import com.friday.common.netty.NettyAttrUtil;
+import com.friday.common.exception.BizException;
 import com.friday.common.netty.ServerChannelManager;
 import com.friday.common.netty.UidChannelManager;
 import com.friday.common.protobuf.Message;
@@ -21,9 +23,11 @@ import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Copyright (C),Damon
@@ -62,6 +66,9 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private UidChannelManager uidChannelManager;
 
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
     /**
      * 只获取token server逻辑需转移
      *
@@ -70,35 +77,32 @@ public class AccountServiceImpl implements AccountService {
      */
 
     @Override
-    public LoginResVo login(UserReqVo userReqVo) {
-        LoginResVo resVo = new LoginResVo();
-        if (userReqVo.getUid().equals(uid) && userReqVo.getSecret().equals(secret)) {
-            resVo.setLoginStatus(LoginStatusEnum.SUCCESS);
-        } else {
-            resVo.setLoginStatus(LoginStatusEnum.ACCOUNT_NOT_MATCH);
-        }
-        resVo.setToken(new Token(uid, secret).getToken(secret));
-        userInfoRedisService.storeUserLoginInfo(resVo);
-        //获取服务器信息
-        List<String> servers = serverCache.getServerList();
-        //根据负载均衡策略选取服务器
-        ServerInfo serverInfo = serverRouteLoadBalanceHandler.routeServer(ServerInfoParseUtil.getServerInfoList(servers), userReqVo.getUid());
-        //保存服务器信息
-        userServerRedisService.addUserToServer(userReqVo.getUid(), serverInfo);
-        //连接server
-        Channel channel = client.connect(serverInfo);
-        if (channel != null) {
-            log.info("client channel:[{}]", channel.id());
-            //保存channel和server关系
-            serverChannelManager.addServerToChannel(serverInfo, channel);
-            //保存channel和UID关系
-            uidChannelManager.addUserToChannel(userReqVo.getUid(), channel);
-            NettyAttrUtil.updateReadTime(channel, System.currentTimeMillis());
-        } else {
+    public LoginResVo getToken(UserReqVo userReqVo) {
+        try {
+            LoginResVo resVo = new LoginResVo();
+            if (userReqVo.getUid().equals(uid) && userReqVo.getSecret().equals(secret)) {
+                resVo.setLoginStatus(LoginStatusEnum.SUCCESS);
+            } else {
+                resVo.setLoginStatus(LoginStatusEnum.ACCOUNT_NOT_MATCH);
+            }
+            //获取token
+            String token = new Token(uid, secret).getToken(secret);
+            resVo.setToken(token);
+            //存储token
+            stringRedisTemplate.opsForValue().set(token, userReqVo.getUid(), Constants.TOKEN_CACHE_DURATION, TimeUnit.DAYS);
+            //获取服务器信息
+            List<String> servers = serverCache.getServerList();
+            //根据负载均衡策略选取服务器
+            ServerInfo serverInfo = serverRouteLoadBalanceHandler.routeServer(ServerInfoParseUtil.getServerInfoList(servers), userReqVo.getUid());
+            //保存服务器信息
+            userServerRedisService.addUserToServer(userReqVo.getUid(), serverInfo);
 
+            log.info("connect server ip[{}]:port[{}] success", serverInfo.getIp(), serverInfo.getPort());
+            return resVo;
+        } catch (Exception e) {
+            throw new BizException("login error");
         }
-        log.info("connect server ip[{}]:port[{}] success", serverInfo.getIp(), serverInfo.getPort());
-        return resVo;
+
     }
 
     @Override
@@ -136,5 +140,10 @@ public class AccountServiceImpl implements AccountService {
         }
 
 
+    }
+
+    @Override
+    public Result sendLogin(String uid, String token) {
+        return null;
     }
 }

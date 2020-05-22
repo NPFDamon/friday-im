@@ -2,6 +2,7 @@ package com.friday.route.service;
 
 import com.friday.common.bean.reqVo.UserReqVo;
 import com.friday.common.bean.resVo.LoginResVo;
+import com.friday.common.bean.resVo.Result;
 
 /**
  * Copyright (C),Damon
@@ -16,7 +17,7 @@ public interface AccountService {
      * @param userReqVo
      * @return
      */
-    LoginResVo login(UserReqVo userReqVo);
+    LoginResVo getToken(UserReqVo userReqVo);
 
 
     /**
@@ -27,4 +28,6 @@ public interface AccountService {
 
 
     void sendMsg(String uid,String msg);
+
+    Result sendLogin(String uid,String token);
 }

@@ -1,19 +1,19 @@
 package com.friday.server.handler;
 
+import com.friday.common.bean.im.ServerInfo;
 import com.friday.common.netty.NettyAttrUtil;
 import com.friday.common.netty.UidChannelManager;
 import com.friday.common.protobuf.Message;
-import com.friday.common.redis.ConversationRedisServer;
-import com.friday.common.redis.UserInfoRedisService;
+import com.friday.common.redis.UserServerRedisService;
 import com.friday.common.utils.JsonHelper;
-import com.friday.server.kafka.KafkaProducerManage;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Copyright (C),Damon
@@ -31,19 +31,14 @@ public class FridayIMServerAuthHandler extends SimpleChannelInboundHandler<Messa
     private UidChannelManager uidChannelManager;
 
     @Autowired
-    private ConversationRedisServer conversationRedisServer;
+    private UserServerRedisService userServerRedisService;
 
     @Autowired
-    private KafkaProducerManage kafkaProducerManage;
-
-    @Autowired
-    private UserInfoRedisService userInfoRedisService;
-
-    @Autowired
-    private RedisTemplate redisTemplate;
+    private StringRedisTemplate redisTemplate;
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message.FridayMessage fridayMessage) throws Exception {
+        NettyAttrUtil.updateReadTime(channelHandlerContext.channel(), System.currentTimeMillis());
         if (fridayMessage.getType() == Message.FridayMessage.Type.Login) {
             Message.Login login = fridayMessage.getLogin();
             log.info("login msg:[{}]", JsonHelper.toJsonString(login));
@@ -55,19 +50,43 @@ public class FridayIMServerAuthHandler extends SimpleChannelInboundHandler<Messa
                         .setTime(System.currentTimeMillis()).build();
                 channelHandlerContext.writeAndFlush(ack);
             }
-        }else {
+            uidChannelManager.addUserToChannel(login.getUid(), channelHandlerContext.channel());
+        } else {
             channelHandlerContext.fireChannelRead(fridayMessage);
         }
 
     }
 
     @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        String uid = uidChannelManager.getIdByChannel(ctx.channel());
+        if (null != uid) {
+            log.info("client disconnected uid:[{}]", uid);
+            uidChannelManager.removeChannel(ctx.channel());
+            if (CollectionUtils.isEmpty(uidChannelManager.getChannelById(uid))) {
+                // todo
+                userServerRedisService.removeUserFromServer(uid, new ServerInfo());
+            }
+        }
+    }
+
+    @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        NettyAttrUtil.updateReadTime(ctx.channel(), System.currentTimeMillis());
         super.channelActive(ctx);
     }
 
     private boolean verifyToken(String token) {
         return redisTemplate.hasKey(token);
+    }
+
+    private void sendLoginAck(ChannelHandlerContext context, long id, Message.Code code) {
+        Message.LoginAck loginAck = Message.LoginAck.newBuilder()
+                .setId(id)
+                .setCode(code)
+                .setTime(System.currentTimeMillis())
+                .build();
+        Message.FridayMessage fridayMessage = Message.FridayMessage.newBuilder().setType(Message.FridayMessage.Type.LoginAck)
+                .setLoginAck(loginAck).build();
+        context.writeAndFlush(fridayMessage);
     }
 }
