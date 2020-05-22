@@ -1,6 +1,7 @@
 package com.friday.common.bean.im;
 
 import com.friday.common.enums.NetTypeEnum;
+import com.friday.common.utils.JsonHelper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,9 +43,6 @@ public class ServerInfo {
 
     @Override
     public String toString() {
-        return "{ \"port\":" + port
-                + "\"ip\":" + ip
-//                + "\"netTypeEnum\"" + netTypeEnum.getType()
-                + "}";
+        return JsonHelper.toJsonString(this);
     }
 }

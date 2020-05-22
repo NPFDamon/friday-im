@@ -1,9 +1,7 @@
 package com.friday.route.client.handle;
 
-import com.friday.common.bean.im.ServerInfo;
 import com.friday.common.netty.ServerChannelManager;
 import com.friday.common.protobuf.Message;
-import com.friday.common.utils.JsonHelper;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -41,25 +39,6 @@ public class RouteClientHandler extends SimpleChannelInboundHandler<Message.Frid
                 }
             });
         }
-        Message.MessageContent content = Message.MessageContent.newBuilder()
-                .setId(10000000L)
-                .setTime(System.currentTimeMillis())
-                .setUid("123456")
-                .setType(Message.MessageType.TEXT)
-                .setContent("Hello world").build();
-        Message.UpDownMessage upDownMessage = Message.UpDownMessage.newBuilder()
-                .setRequestId(100000L)
-                .setCid(1000)
-                .setFromUid("10000")
-                .setToUid("1000001")
-                .setConverId("00001")
-                .setConverType(Message.ConverType.SINGLE)
-                .setContent(content).build();
-        Message.FridayMessage s = Message.FridayMessage.newBuilder()
-                .setType(Message.FridayMessage.Type.UpDownMessage)
-                .setUpDownMessage(upDownMessage).build();
-        channelHandlerContext.writeAndFlush(s).sync();
-        log.info("Send msg:{}", JsonHelper.toJsonString(s));
     }
 
     @Override
@@ -71,8 +50,6 @@ public class RouteClientHandler extends SimpleChannelInboundHandler<Message.Frid
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         log.info("Friday IM route server disconnected from address:[{}]", ctx.channel().remoteAddress());
-        ServerInfo serverInfo = serverChannelManager.getServerByChannel(ctx.channel());
-        serverChannelManager.removeServer(serverInfo);
     }
 
     @Override

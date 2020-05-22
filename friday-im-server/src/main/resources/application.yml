@@ -10,7 +10,7 @@ spring:
       acks: 1
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-  nodeId: 9094
+  nodeId: 1
 
 server:
     port: 8989

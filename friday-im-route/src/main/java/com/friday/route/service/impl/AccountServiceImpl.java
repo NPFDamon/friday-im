@@ -13,13 +13,15 @@ import com.friday.common.netty.UidChannelManager;
 import com.friday.common.protobuf.Message;
 import com.friday.common.redis.UserInfoRedisService;
 import com.friday.common.redis.UserServerRedisService;
-import com.friday.common.utils.JsonHelper;
+import com.friday.common.utils.SnowFlake;
 import com.friday.route.cache.ServerCache;
 import com.friday.route.client.RouteClient;
 import com.friday.route.lb.ServerRouteLoadBalanceHandler;
 import com.friday.route.service.AccountService;
 import com.friday.route.util.ServerInfoParseUtil;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -69,6 +71,11 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    private SnowFlake snowFlake;
+
+    private Channel channel;
+
     /**
      * 只获取token server逻辑需转移
      *
@@ -96,6 +103,25 @@ public class AccountServiceImpl implements AccountService {
             ServerInfo serverInfo = serverRouteLoadBalanceHandler.routeServer(ServerInfoParseUtil.getServerInfoList(servers), userReqVo.getUid());
             //保存服务器信息
             userServerRedisService.addUserToServer(userReqVo.getUid(), serverInfo);
+            //连接服务器
+            channel = client.connect(serverInfo);
+            //保存server channel关系
+            serverChannelManager.addServerToChannel(serverInfo, channel);
+
+            Message.Login login = Message.Login.newBuilder()
+                    .setToken(token).setId(snowFlake.nextId())
+                    .setUid(uid).build();
+            Message.FridayMessage message = Message.FridayMessage.newBuilder().setType(Message.FridayMessage.Type.Login).setLogin(login).build();
+            ChannelFuture future = channel.writeAndFlush(message);
+            future.addListeners(new ChannelFutureListener() {
+                @Override
+                public void operationComplete(ChannelFuture channelFuture) throws Exception {
+                    if (future.isSuccess()) {
+                        log.info("login success");
+                    }
+                }
+            });
+
 
             log.info("connect server ip[{}]:port[{}] success", serverInfo.getIp(), serverInfo.getPort());
             return resVo;
@@ -113,37 +139,49 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void sendMsg(String token, String msg) {
-        List<Channel> channel = uidChannelManager.getChannelById(token);
-        if (channel != null && channel.size() > 0) {
-            channel.forEach(c -> {
-                Message.MessageContent content = Message.MessageContent.newBuilder()
-                        .setId(10000000L)
-                        .setTime(System.currentTimeMillis())
-                        .setUid(uid)
-                        .setType(Message.MessageType.TEXT)
-                        .setContent(msg).build();
-                Message.UpDownMessage upDownMessage = Message.UpDownMessage.newBuilder()
-                        .setRequestId(100000L)
-                        .setCid(1000)
-                        .setFromUid(token)
-                        .setToUid("1000001")
-                        .setConverId("00001")
-                        .setConverType(Message.ConverType.SINGLE)
-                        .setContent(content).build();
-                Message.FridayMessage message = Message.FridayMessage.newBuilder()
-                        .setType(Message.FridayMessage.Type.UpDownMessage)
-                        .setUpDownMessage(upDownMessage).build();
-                log.info("send msg:[{}]", JsonHelper.toJsonString(message));
-                c.writeAndFlush(message);
-
-            });
-        }
-
-
+        Message.MessageContent content = Message.MessageContent.newBuilder()
+                .setId(snowFlake.nextId())
+                .setTime(System.currentTimeMillis())
+                .setUid(String.valueOf(snowFlake.nextId()))
+                .setType(Message.MessageType.TEXT)
+                .setContent(msg).build();
+        Message.UpDownMessage upDownMessage = Message.UpDownMessage.newBuilder()
+                .setRequestId(snowFlake.nextId())
+                .setCid(Long.valueOf(token))
+                .setFromUid(token)
+                .setToUid(String.valueOf(snowFlake.nextId()))
+                .setConverType(Message.ConverType.SINGLE)
+                .setContent(content).build();
+        Message.FridayMessage message = Message.FridayMessage.newBuilder()
+                .setType(Message.FridayMessage.Type.UpDownMessage)
+                .setUpDownMessage(upDownMessage).build();
+        ChannelFuture future = channel.writeAndFlush(message);
+        future.addListeners(new ChannelFutureListener() {
+            @Override
+            public void operationComplete(ChannelFuture channelFuture) throws Exception {
+                if (future.isSuccess()) {
+                    log.info("send msg success");
+                }
+            }
+        });
     }
 
     @Override
     public Result sendLogin(String uid, String token) {
+
+//        ChannelFuture future = channel.writeAndFlush(login);
+//        future.addListeners(new ChannelFutureListener() {
+//            @Override
+//            public void operationComplete(ChannelFuture channelFuture) throws Exception {
+//
+//                log.info(String.valueOf(channelFuture.isSuccess()));
+//            }
+//        });
+//        if (future.isSuccess()) {
+//            return Result.success(ResultCode.COMMON_SUCCESS);
+//        } else {
+//            return Result.failure(ResultCode.COMMON_ERROR);
+//        }
         return null;
     }
 }

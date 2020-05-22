@@ -4,6 +4,7 @@ import com.friday.common.redis.UserInfoRedisService;
 import com.friday.common.redis.UserServerRedisService;
 import com.friday.common.redis.impl.UserInfoRedisServiceImpl;
 import com.friday.common.redis.impl.UserServerRedisServiceImpl;
+import com.friday.common.utils.SnowFlake;
 import com.friday.route.lb.ServerRouteLoadBalanceHandler;
 import com.friday.common.exception.BizException;
 import com.friday.common.netty.ServerChannelManager;
@@ -81,5 +82,10 @@ public class BeanConfig {
     @Bean
     public UserInfoRedisService uerInfoRedisService(){
         return new UserInfoRedisServiceImpl();
+    }
+
+    @Bean
+    public SnowFlake snowFlake(){
+        return new SnowFlake(1,1);
     }
 }

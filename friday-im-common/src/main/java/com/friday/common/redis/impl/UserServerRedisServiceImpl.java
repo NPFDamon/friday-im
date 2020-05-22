@@ -3,6 +3,7 @@ package com.friday.common.redis.impl;
 import com.friday.common.bean.im.ServerInfo;
 import com.friday.common.constant.Constants;
 import com.friday.common.redis.UserServerRedisService;
+import com.friday.common.utils.JsonHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -51,6 +52,6 @@ public class UserServerRedisServiceImpl implements UserServerRedisService {
         if (o == null) {
             return null;
         }
-        return (ServerInfo) o;
+        return JsonHelper.readValue(o.toString(), ServerInfo.class);
     }
 }

@@ -10,6 +10,7 @@ spring:
       acks: 1
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  nodeId: 1
 
 server:
     port: 8989
@@ -25,6 +26,8 @@ zk:
   root: /router
   connection:
     timeout: 15000
+
+
 
 app:
   im:
