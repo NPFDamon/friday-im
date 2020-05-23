@@ -8,6 +8,7 @@ import com.friday.common.protobuf.Message;
 import com.friday.common.redis.ConversationRedisServer;
 import com.friday.common.utils.JsonHelper;
 import com.friday.common.utils.SnowFlake;
+import com.friday.common.utils.UidUtil;
 import com.friday.server.kafka.KafkaProducerManage;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -55,21 +56,46 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<Message.F
             }
 
             String topic;
-            String convId;
+            String conversationId;
+            //单聊处理
             if (upDownMessage.getConverType() == Message.ConverType.SINGLE) {
                 if (StringUtils.isNotBlank(upDownMessage.getConverId())) {
-                    convId = upDownMessage.getConverId();
-                } else if (StringUtils.isNotBlank(upDownMessage.getToUid())) {
+                    if (!conversationRedisServer.isSingleConversationIdValid(upDownMessage.getConverId())) {
+                        log.error("illegal conversation id !");
+                        return;
+                    } else {
+                        conversationId = upDownMessage.getConverId();
+                    }
 
+                } else if (StringUtils.isNotBlank(upDownMessage.getToUid())) {
+                    conversationId = conversationRedisServer.newSingleConversationId(upDownMessage.getFromUid(), upDownMessage.getToUid());
+                    upDownMessage = upDownMessage.toBuilder().setConverId(conversationId).build();
                 }
                 topic = Constants.KAFKA_TOPIC_SINGLE;
+                //群聊处理
             } else if (upDownMessage.getConverType() == Message.ConverType.GROUP) {
+
+                conversationId = upDownMessage.getConverId();
+
+                if (StringUtils.isNotBlank(conversationId)) {
+                    String groupId = conversationRedisServer.getGroupIdByConversationId(conversationId);
+                    if (StringUtils.isBlank(groupId)) {
+                        log.error("illegal conversation id ！");
+                    }
+                    upDownMessage = upDownMessage.toBuilder().setGroupId(groupId).build();
+                } else if (StringUtils.isNotBlank(upDownMessage.getGroupId())) {
+                    conversationId = UidUtil.uuid24ByFactor(upDownMessage.getGroupId());
+                    upDownMessage = upDownMessage.toBuilder().setConverId(conversationId).build();
+
+                } else {
+                    log.error("conversation id and group id all empty.");
+                    return;
+                }
                 topic = Constants.KAFKA_TOPIC_GROUP;
             } else {
                 log.error("illegal conversation type.");
                 return;
             }
-
             Message.FridayMessage fridayMessage = buildMessage(channelHandlerContext, upDownMessage, snowFlake.nextId());
             boolean res = sendToKafka(topic, upDownMessage.getRequestId(), fridayMessage);
             if (res) {

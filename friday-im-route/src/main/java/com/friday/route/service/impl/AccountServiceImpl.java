@@ -147,7 +147,7 @@ public class AccountServiceImpl implements AccountService {
                 .setContent(msg).build();
         Message.UpDownMessage upDownMessage = Message.UpDownMessage.newBuilder()
                 .setRequestId(snowFlake.nextId())
-                .setCid(Long.valueOf(token))
+                .setCid(Long.parseLong(token))
                 .setFromUid(token)
                 .setToUid(String.valueOf(snowFlake.nextId()))
                 .setConverType(Message.ConverType.SINGLE)
@@ -156,12 +156,9 @@ public class AccountServiceImpl implements AccountService {
                 .setType(Message.FridayMessage.Type.UpDownMessage)
                 .setUpDownMessage(upDownMessage).build();
         ChannelFuture future = channel.writeAndFlush(message);
-        future.addListeners(new ChannelFutureListener() {
-            @Override
-            public void operationComplete(ChannelFuture channelFuture) throws Exception {
-                if (future.isSuccess()) {
-                    log.info("send msg success");
-                }
+        future.addListeners((ChannelFutureListener) channelFuture -> {
+            if (future.isSuccess()) {
+                log.info("send msg success");
             }
         });
     }

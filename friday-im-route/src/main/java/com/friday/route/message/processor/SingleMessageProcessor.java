@@ -36,7 +36,7 @@ public class SingleMessageProcessor implements Runnable {
         Message.FridayMessage.Builder builder = Message.FridayMessage.newBuilder();
         JsonHelper.readValue(message, builder);
         Message.UpDownMessage upDownMessage = builder.getUpDownMessage();
-        String uid = builder.getUpDownMessage().getFromUid();
+        String uid = builder.getUpDownMessage().getToUid();
         ServerInfo serverInfo = userServerRedisService.getServerInfoByUid(uid);
         if (serverInfo != null) {
             Message.UpDownMessage downMessage = Message.UpDownMessage.newBuilder().mergeFrom(upDownMessage).build();

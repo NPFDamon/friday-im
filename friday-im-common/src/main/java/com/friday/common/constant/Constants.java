@@ -15,13 +15,19 @@ public class Constants {
      * redis 前缀
      */
     //token 信息
-    public static final String USER_TOKEN = "user_token";
+    public static final String USER_TOKEN = "user_token:";
     //user server 对应关系
     public static final String USER_SERVER_INFO = "user_server_info:";
     //server channel对应关系
-    public static final String SERVER_ROUTE_INFO = "server_route_info";
+    public static final String SERVER_ROUTE_INFO = "server_route_info:";
     //user client 对应关系
-    public static final String USER_CLIENT_INFO = "user-client-info";
+    public static final String USER_CLIENT_INFO = "user-client-info:";
+
+    public static final String CONVERSATION_LIST = "conversation_list:";
+
+    public static final String GROUP_MEMBER = "group_member:";
+
+    public static final String WAIT_USER_ACK = "wait_user_ack:";
 
     //kafka topic
     public static final String KAFKA_TOPIC_SINGLE = "single";

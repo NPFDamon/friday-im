@@ -35,18 +35,15 @@ public class KafkaConsumerManage<K, V> {
 
     @PostConstruct
     public void start() {
-        log.info(">>>>>>>>>>>>>>>>>>>>> kafka consumer manager start..... <<<<<<<<<<<<<<<<<<<<<<<<<<<");
         consumerProperties();
         this.analyzeMessageListeners(messageListeners);
-        for (Map.Entry<String, MessageListener> entry : messageListenerMap.entrySet()) {
-            String topic = entry.getKey();
-            MessageListener messageListener = entry.getValue();
+        messageListenerMap.forEach((topic, messageListener) -> {
             KafkaConsumer<K, V> consumer = new KafkaConsumer<>(properties);
             consumer.subscribe(Collections.singletonList(topic));
             KafkaMessageProcessor<K, V> messageProcessor = new KafkaMessageProcessor<K, V>(topic, consumer, messageListener);
             ExecutorService executorService = Executors.newFixedThreadPool(2);
             executorService.submit(messageProcessor);
-        }
+        });
 
     }
 
