@@ -34,10 +34,8 @@ public class FridayIMServerHeartBeanHandler extends SimpleChannelInboundHandler<
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent idleStateEvent = (IdleStateEvent) evt;
             if (idleStateEvent.state() == IdleState.READER_IDLE) {
-                log.info("定时检查客户端存活 ... ");
-                log.info("server channel:[{}]",ctx.channel().id());
-                String uid = "123456";
-                        //uidChannelManager.getIdByChannel(ctx.channel());
+                log.info("check client is alive ... ");
+                String uid = uidChannelManager.getIdByChannel(ctx.channel());
                 Long lastReadTime = NettyAttrUtil.getReadTime(ctx.channel());
                 if (lastReadTime == null || uid == null) {
                     log.info("last read time is null or uid is null");

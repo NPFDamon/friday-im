@@ -27,7 +27,7 @@ public interface ConversationRedisServer {
 
     String getGroupIdByConversationId(String conversationId);
 
-    void saveMsgToConversation(MessageContent messageContent, String conversationId);
+    void saveMsgToConversation(Message.MessageContent messageContent, String conversationId);
 
     List<MessageContent> getHistoryMsg(String conversationId, long beginId);
 

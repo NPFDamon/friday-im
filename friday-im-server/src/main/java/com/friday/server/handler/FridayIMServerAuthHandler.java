@@ -51,6 +51,7 @@ public class FridayIMServerAuthHandler extends SimpleChannelInboundHandler<Messa
                 channelHandlerContext.writeAndFlush(ack);
             }
             uidChannelManager.addUserToChannel(login.getUid(), channelHandlerContext.channel());
+            sendLoginAck(channelHandlerContext, login.getId(), Message.Code.SUCCESS);
         } else {
             channelHandlerContext.fireChannelRead(fridayMessage);
         }

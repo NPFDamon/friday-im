@@ -29,6 +29,8 @@ public class Constants {
 
     public static final String WAIT_USER_ACK = "wait_user_ack:";
 
+    public static final String MESSAGE_ID = "message_id:";
+
     //kafka topic
     public static final String KAFKA_TOPIC_SINGLE = "single";
     public static final String KAFKA_TOPIC_GROUP = "group";

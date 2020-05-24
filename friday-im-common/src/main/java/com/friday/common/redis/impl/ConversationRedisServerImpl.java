@@ -9,14 +9,14 @@ import com.friday.common.redis.ConversationRedisServer;
 import com.friday.common.utils.JsonHelper;
 import com.friday.common.utils.UidUtil;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Copyright (C),Damon
@@ -26,6 +26,7 @@ import java.util.Set;
  * @Date: 2020-05-17:11:32
  */
 @Component
+@Slf4j
 public class ConversationRedisServerImpl implements ConversationRedisServer {
 
     @Autowired
@@ -110,32 +111,38 @@ public class ConversationRedisServerImpl implements ConversationRedisServer {
     @Override
     public boolean isSingleConversationIdValid(String conversationId) {
         Conversation conversation = getConversation(conversationId);
-        return conversation == null ? false
-                : conversation.getType() == Message.ConverType.SINGLE.getNumber();
+        return conversation != null && conversation.getType() == Message.ConverType.SINGLE.getNumber();
     }
 
     @Override
     public String getGroupIdByConversationId(String conversationId) {
         Conversation conversation = getConversation(conversationId);
-        if (conversation != null ? false : conversation.getType() == Message.ConverType.GROUP.getNumber()) {
+        if (conversation == null && conversation.getType() == Message.ConverType.GROUP.getNumber()) {
             return conversation.getGroupId();
         }
         return null;
     }
 
     @Override
-    public void saveMsgToConversation(MessageContent messageContent, String conversationId) {
-
+    public void saveMsgToConversation(Message.MessageContent messageContent, String conversationId) {
+        MessageContent msgContent = new MessageContent().builder().id(messageContent.getId()).uid(messageContent.getUid())
+                .type(messageContent.getType().getNumber()).content(messageContent.getContent()).time(messageContent.getTime()).build();
+        String str = JsonHelper.toJsonString(msgContent);
+        redisTemplate.boundZSetOps(Constants.MESSAGE_ID + conversationId).add(str, msgContent.getId());
     }
 
     @Override
     public List<MessageContent> getHistoryMsg(String conversationId, long beginId) {
-        return null;
+        Set<String> messages = redisTemplate.opsForZSet()
+                .rangeByScore(Constants.MESSAGE_ID + conversationId, beginId + 1, Long.MAX_VALUE, 0, 100);
+        return Objects.requireNonNull(messages).stream().map(message -> JsonHelper.readValue(message, MessageContent.class)).collect(Collectors.toList());
     }
 
     @Override
     public long getHistoryUnreadCount(String conversationId, long beginId) {
-        return 0;
+        Long unReadCount = redisTemplate.boundZSetOps(Constants.MESSAGE_ID + conversationId)
+                .count(beginId + 1, Long.MAX_VALUE);
+        return unReadCount;
     }
 
     @Override
@@ -155,31 +162,77 @@ public class ConversationRedisServerImpl implements ConversationRedisServer {
 
     @Override
     public UserConversation getConversationListInfo(String uid, String conversationId) {
+        Conversation conversation = getConversation(conversationId);
+        if (null != conversation) {
+            UserConversation converListInfo = new UserConversation().builder()
+                    .id(conversation.getId()).groupId(conversation.getGroupId())
+                    .uidList(conversation.getUidList())
+                    .type(conversation.getType()).build();
+            Long readMsgId = getUserReadMsg(uid, conversationId);
+            if (null != readMsgId) {
+                converListInfo.setReadMsgId(readMsgId);
+            }
+            getMessgContent(conversation, converListInfo);
+            return converListInfo;
+        }
         return null;
     }
 
     @Override
     public List<UserConversation> getConversationListByUid(String uid) {
-        return null;
+        List<UserConversation> list = new ArrayList<>();
+        Map<String, Long> converList = redisTemplate.boundHashOps(Constants.CONVERSATION_LIST + uid).entries();
+        Objects.requireNonNull(converList).forEach((key, value) -> {
+            Conversation conversation = getConversation(key);
+            if (null != conversation) {
+                UserConversation converListInfo = new UserConversation().builder()
+                        .id(conversation.getId()).groupId(conversation.getGroupId())
+                        .uidList(conversation.getUidList()).type(conversation.getType())
+                        .readMsgId(value).build();
+                getMessgContent(conversation, converListInfo);
+                list.add(converListInfo);
+            }
+        });
+        return list;
+    }
+
+    private void getMessgContent(Conversation conversation, UserConversation converListInfo) {
+        Set<String> strs = redisTemplate.boundZSetOps(Constants.MESSAGE_ID + conversation.getId()).range(-1, -1);
+        if (strs != null && strs.size() >= 1) {
+            MessageContent msgContent = JsonHelper.readValue(strs.iterator().next(), MessageContent.class);
+            converListInfo.setMessageContent(msgContent);
+        }
     }
 
     @Override
     public List<String> getUidListByConversation(String conversationId) {
-        return null;
+        Conversation conversation = getConversation(conversationId);
+        return conversation.getUidList();
     }
 
     @Override
     public List<String> getUidListByConversationExcludeSender(String conversation, String fromUid) {
-        return null;
+        List<String> uids = getUidListByConversation(conversation);
+        uids.remove(fromUid);
+        return uids;
     }
 
     @Override
     public void updateUserReadMessageId(String uid, String conversationId, Long msgId) {
-
+        Object oldMsgId = redisTemplate.boundHashOps(Constants.CONVERSATION_LIST + uid).get(conversationId);
+        if (null != oldMsgId) {
+            if ((Long) oldMsgId < msgId) {
+                redisTemplate.boundHashOps(Constants.CONVERSATION_LIST + uid).put(conversationId, msgId);
+            }
+        }
     }
 
     @Override
     public Long getUserReadMsg(String uid, String conversationId) {
+        Object msgId = redisTemplate.boundHashOps(Constants.CONVERSATION_LIST + uid).get(conversationId);
+        if (null != msgId) {
+            return (Long) msgId;
+        }
         return null;
     }
 
@@ -195,7 +248,36 @@ public class ConversationRedisServerImpl implements ConversationRedisServer {
 
     @Override
     public List<Message.UpDownMessage> getWaitUserAckMsg(String uid) {
-        return null;
+        String key = Constants.WAIT_USER_ACK + uid;
+        Set<String> keyList = redisTemplate.opsForZSet().rangeByScore(key, 0, System.currentTimeMillis() - 5000, 0, 3);
+        List<Message.UpDownMessage> upDownMessages = new ArrayList<>();
+        Objects.requireNonNull(keyList).forEach(str -> {
+            log.info("not ack msg key:{}", str);
+            String converId = str.split(Constants.DEFAULT_SEPARATES)[0];
+            String msgId = str.split(Constants.DEFAULT_SEPARATES)[1];
+            Set<String> messages = redisTemplate.opsForZSet().rangeByScore(Constants.MESSAGE_ID + converId, Long.parseLong(msgId), Long.parseLong(msgId), 0, 1);
+            if (CollectionUtils.isNotEmpty(messages)) {
+                MessageContent msgContent = JsonHelper
+                        .readValue(messages.iterator().next(), MessageContent.class);
+                Message.MessageContent content = Message.MessageContent.newBuilder()
+                        .setId(Objects.requireNonNull(msgContent).getId())
+                        .setUid(msgContent.getUid())
+                        .setContent(msgContent.getContent())
+                        .setTime(msgContent.getTime())
+                        .setType(Message.MessageType.valueOf(msgContent.getType())).build();
+                Conversation conversation = getConversation(converId);
+                Message.UpDownMessage downMessage = Message.UpDownMessage.newBuilder()
+                        .setRequestId(msgContent.getId())
+                        .setFromUid(msgContent.getUid())
+                        .setToUid(uid)
+                        .setConverType(Message.ConverType.forNumber(conversation.getType()))
+                        .setContent(content)
+                        .setConverId(converId)
+                        .build();
+                upDownMessages.add(downMessage);
+            }
+        });
+        return upDownMessages;
     }
 
 
