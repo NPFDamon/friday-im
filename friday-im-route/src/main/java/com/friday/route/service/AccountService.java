@@ -27,7 +27,7 @@ public interface AccountService {
     void offLine(Long uid,String token);
 
 
-    void sendMsg(String uid,String msg);
+    void sendMsg(String uid,String msg,String toUid);
 
     Result sendLogin(String uid,String token);
 }

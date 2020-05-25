@@ -40,7 +40,7 @@ public class ConversationRedisServerImpl implements ConversationRedisServer {
 
     @Override
     public boolean isUserCidExit(String uid, String clientId) {
-        return redisTemplate.boundZSetOps(Constants.USER_CLIENT_INFO + uid).rank(clientId) == null;
+        return redisTemplate.boundZSetOps(Constants.USER_CLIENT_INFO + uid).rank(clientId) != null;
     }
 
     @Override

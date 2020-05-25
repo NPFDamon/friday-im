@@ -6,7 +6,6 @@ import com.friday.common.bean.resVo.LoginResVo;
 import com.friday.common.bean.resVo.Result;
 import com.friday.common.bean.token.Token;
 import com.friday.common.constant.Constants;
-import com.friday.common.enums.LoginStatusEnum;
 import com.friday.common.exception.BizException;
 import com.friday.common.netty.ServerChannelManager;
 import com.friday.common.netty.UidChannelManager;
@@ -18,13 +17,12 @@ import com.friday.route.cache.ServerCache;
 import com.friday.route.client.RouteClient;
 import com.friday.route.lb.ServerRouteLoadBalanceHandler;
 import com.friday.route.service.AccountService;
-import com.friday.route.util.ServerInfoParseUtil;
+import com.friday.common.utils.ServerInfoParseUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -42,10 +40,10 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class AccountServiceImpl implements AccountService {
 
-    @Value("123456")
-    private String uid;
-    @Value("test123456")
-    private String secret;
+//    @Value("123456")
+//    private String uid;
+//    @Value("test123456")
+//    private String secret;
 
     @Autowired
     private UserInfoRedisService userInfoRedisService;
@@ -87,13 +85,13 @@ public class AccountServiceImpl implements AccountService {
     public LoginResVo getToken(UserReqVo userReqVo) {
         try {
             LoginResVo resVo = new LoginResVo();
-            if (userReqVo.getUid().equals(uid) && userReqVo.getSecret().equals(secret)) {
-                resVo.setLoginStatus(LoginStatusEnum.SUCCESS);
-            } else {
-                resVo.setLoginStatus(LoginStatusEnum.ACCOUNT_NOT_MATCH);
-            }
+//            if (userReqVo.getUid().equals(uid) && userReqVo.getSecret().equals(secret)) {
+//                resVo.setLoginStatus(LoginStatusEnum.SUCCESS);
+//            } else {
+//                resVo.setLoginStatus(LoginStatusEnum.ACCOUNT_NOT_MATCH);
+//            }
             //获取token
-            String token = new Token(uid, secret).getToken(secret);
+            String token = new Token(userReqVo.getUid(), userReqVo.getSecret()).getToken(userReqVo.getSecret());
             resVo.setToken(token);
             //存储token
             stringRedisTemplate.opsForValue().set(token, userReqVo.getUid(), Constants.TOKEN_CACHE_DURATION, TimeUnit.DAYS);
@@ -110,7 +108,7 @@ public class AccountServiceImpl implements AccountService {
 
             Message.Login login = Message.Login.newBuilder()
                     .setToken(token).setId(snowFlake.nextId())
-                    .setUid(uid).build();
+                    .setUid(userReqVo.getUid()).build();
             Message.FridayMessage message = Message.FridayMessage.newBuilder().setType(Message.FridayMessage.Type.Login).setLogin(login).build();
             ChannelFuture future = channel.writeAndFlush(message);
             future.addListeners(new ChannelFutureListener() {
@@ -138,18 +136,18 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void sendMsg(String token, String msg) {
+    public void sendMsg(String uid, String msg,String toUid) {
         Message.MessageContent content = Message.MessageContent.newBuilder()
                 .setId(snowFlake.nextId())
                 .setTime(System.currentTimeMillis())
-                .setUid(String.valueOf(snowFlake.nextId()))
+                .setUid(uid)
                 .setType(Message.MessageType.TEXT)
                 .setContent(msg).build();
         Message.UpDownMessage upDownMessage = Message.UpDownMessage.newBuilder()
                 .setRequestId(snowFlake.nextId())
-                .setCid(Long.parseLong(token))
-                .setFromUid(token)
-                .setToUid(String.valueOf(snowFlake.nextId()))
+                .setCid(Long.parseLong(uid))
+                .setFromUid(uid)
+                .setToUid(toUid)
                 .setConverType(Message.ConverType.SINGLE)
                 .setContent(content).build();
         Message.FridayMessage message = Message.FridayMessage.newBuilder()

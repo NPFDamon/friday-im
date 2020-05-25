@@ -1,7 +1,6 @@
 package com.friday.route.zk;
 
 import com.alibaba.fastjson.JSON;
-import com.friday.route.conf.BeanConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.I0Itec.zkclient.IZkChildListener;
 import org.I0Itec.zkclient.ZkClient;
@@ -24,8 +23,7 @@ public class ZK {
 
     @Autowired
     private ZkClient zkClient;
-    @Autowired
-    private BeanConfig beanConfig;
+
 
     @Value("${zk.root}")
     private String zkRoot;

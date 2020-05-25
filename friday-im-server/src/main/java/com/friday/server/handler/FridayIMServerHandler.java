@@ -49,7 +49,8 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<Message.F
             log.info("received msg:{}", JsonHelper.toJsonString(message));
             Message.UpDownMessage upDownMessage = message.getUpDownMessage();
             if (!isMsgClientIsInvalid(channelHandlerContext, upDownMessage)) {
-                log.error("client msg is repeat: [{}]", message.getUpDownMessage().getCid());
+                log.error("client:[{}] msg is repeat", message.getUpDownMessage().getCid());
+                sendFailAck(channelHandlerContext,upDownMessage, Message.Code.CLIENT_ID_REPEAT);
                 return;
             } else {
                 saveUserClient(channelHandlerContext, message);
@@ -127,7 +128,7 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<Message.F
             return false;
         }
         String uid = uidChannelManager.getIdByChannel(ctx.channel());
-        return conversationRedisServer.isUserCidExit(uid, String.valueOf(message.getCid()));
+        return !conversationRedisServer.isUserCidExit(uid, String.valueOf(message.getCid()));
     }
 
     private void saveUserClient(ChannelHandlerContext ctx, Message.FridayMessage message) {
@@ -162,4 +163,23 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<Message.F
                 .setGroupId(message.getGroupId()).build();
         return Message.FridayMessage.newBuilder().setType(Message.FridayMessage.Type.UpDownMessage).setUpDownMessage(upDownMessage).build();
     }
+    private void sendFailAck(ChannelHandlerContext ctx, Message.UpDownMessage message, Message.Code code) {
+        sendAck(ctx, message, code, 0);
+    }
+
+    private void sendAck(ChannelHandlerContext ctx, Message.UpDownMessage message, Message.Code code, long msgId) {
+        Message.MessageAck messageAck = Message.MessageAck.newBuilder()
+                .setId(msgId)
+                .setConverId(message.getConverId())
+                .setTargetUid(message.getFromUid())
+                .setCid(message.getCid())
+                .setCode(code)
+                .setTime(System.currentTimeMillis())
+                .build();
+        Message.FridayMessage ravenMessage = Message.FridayMessage.newBuilder().setType(Message.FridayMessage.Type.MessageAck)
+                .setMessageAck(messageAck).build();
+        ctx.writeAndFlush(ravenMessage);
+    }
+
+
 }

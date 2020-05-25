@@ -1,10 +1,14 @@
 package com.friday.server.zk;
 
+import com.friday.common.utils.JsonHelper;
 import com.friday.server.config.ZKConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.I0Itec.zkclient.ZkClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Copyright (C),Damon
@@ -22,6 +26,9 @@ public class ZK {
 
     @Autowired
     private ZKConfiguration zkConfiguration;
+
+    @Value("${zk.root}")
+    private String zkRoot;
 
     /**
      * 创建父及节点
@@ -44,4 +51,9 @@ public class ZK {
         zkClient.createEphemeral(path);
     }
 
+    public List<String> getAllNode() {
+        List<String> node = zkClient.getChildren(zkRoot);
+        log.info("Get All Node Success, Node:[{}]", JsonHelper.toJsonString(node));
+        return node;
+    }
 }

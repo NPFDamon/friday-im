@@ -1,5 +1,6 @@
 package com.friday.server;
 
+import com.friday.server.server.FridayIMIntelServer;
 import com.friday.server.server.FridayIMServer;
 import com.friday.server.zk.RegistryZK;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,8 @@ public class FridayIMServerApplication implements CommandLineRunner {
 
     @Autowired
     private FridayIMServer fridayIMServer;
+    @Autowired
+    private FridayIMIntelServer fridayIMIntelServer;
 
     public static void main(String[] args) {
         SpringApplication.run(FridayIMServerApplication.class, args);
@@ -33,10 +36,10 @@ public class FridayIMServerApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws UnknownHostException {
         String addr = InetAddress.getLocalHost().getHostAddress();
-        Thread thread =new Thread(new RegistryZK(addr,imServerPort,httpPort));
+        Thread thread = new Thread(new RegistryZK(addr, imServerPort, httpPort));
         thread.setName("REGISTRY-ZK");
         thread.start();
         fridayIMServer.start();
-
+        fridayIMIntelServer.start();
     }
 }

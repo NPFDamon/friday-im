@@ -1,6 +1,7 @@
 package com.friday.route.message.executor;
 
 import com.friday.common.netty.ServerChannelManager;
+import com.friday.common.redis.ConversationRedisServer;
 import com.friday.common.redis.UserServerRedisService;
 import com.friday.route.message.processor.SingleMessageProcessor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +26,11 @@ public class SingleMessageExecutor {
     private ServerChannelManager serverChannelManager;
     @Autowired
     private UserServerRedisService userServerRedisService;
+    @Autowired
+    private ConversationRedisServer conversationRedisServer;
 
     public void sendAndSaveMsg(String message) {
-        SingleMessageProcessor singleMessageProcessor = new SingleMessageProcessor(serverChannelManager, userServerRedisService, message);
+        SingleMessageProcessor singleMessageProcessor = new SingleMessageProcessor(serverChannelManager, userServerRedisService, message, conversationRedisServer);
         executor.execute(singleMessageProcessor);
     }
 }

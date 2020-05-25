@@ -110,13 +110,15 @@ public class FridayIMConversationHandler extends SimpleChannelInboundHandler<Fri
             builder.setGroupId(userConversation.getGroupId());
         }
         MessageContent msgContent = userConversation.getMessageContent();
-        Message.MessageContent content = Message.MessageContent.newBuilder().setId(msgContent.getId())
-                .setUid(msgContent.getUid())
-                .setType(Message.MessageType.valueOf(msgContent.getType()))
-                .setContent(msgContent.getContent())
-                .setTime(msgContent.getTime())
-                .build();
-        builder.setLastContent(content);
+        if(msgContent != null){
+            Message.MessageContent content = Message.MessageContent.newBuilder().setId(msgContent.getId())
+                    .setUid(msgContent.getUid())
+                    .setType(Message.MessageType.valueOf(msgContent.getType()))
+                    .setContent(msgContent.getContent())
+                    .setTime(msgContent.getTime())
+                    .build();
+            builder.setLastContent(content);
+        }
         builder.setReadMsgId(userConversation.getReadMsgId());
         return builder.build();
     }

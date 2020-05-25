@@ -1,4 +1,4 @@
-package com.friday.route.util;
+package com.friday.common.utils;
 
 import com.friday.common.bean.im.ServerInfo;
 import com.friday.common.constant.Constants;

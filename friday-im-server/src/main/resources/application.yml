@@ -26,9 +26,3 @@ zk:
   root: /router
   connection:
     timeout: 15000
-
-
-
-app:
-  im:
-    serverport:

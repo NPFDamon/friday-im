@@ -1,7 +1,9 @@
 package com.friday.route.conf;
 
+import com.friday.common.redis.ConversationRedisServer;
 import com.friday.common.redis.UserInfoRedisService;
 import com.friday.common.redis.UserServerRedisService;
+import com.friday.common.redis.impl.ConversationRedisServerImpl;
 import com.friday.common.redis.impl.UserInfoRedisServiceImpl;
 import com.friday.common.redis.impl.UserServerRedisServiceImpl;
 import com.friday.common.utils.SnowFlake;
@@ -75,17 +77,22 @@ public class BeanConfig {
     }
 
     @Bean
-    public UserServerRedisService userServerRedisService(){
+    public UserServerRedisService userServerRedisService() {
         return new UserServerRedisServiceImpl();
     }
 
     @Bean
-    public UserInfoRedisService uerInfoRedisService(){
+    public UserInfoRedisService uerInfoRedisService() {
         return new UserInfoRedisServiceImpl();
     }
 
     @Bean
-    public SnowFlake snowFlake(){
-        return new SnowFlake(1,1);
+    public SnowFlake snowFlake() {
+        return new SnowFlake(1, 1);
+    }
+
+    @Bean
+    public ConversationRedisServer conversationRedisServer() {
+        return new ConversationRedisServerImpl();
     }
 }

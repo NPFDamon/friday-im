@@ -49,8 +49,8 @@ public class TestController {
     }
 
     @GetMapping("/msg")
-    public void sendMsg(@RequestParam("token") String uid, @RequestParam("msg") String msg) {
-        accountService.sendMsg(uid, msg);
+    public void sendMsg(@RequestParam("token") String uid, @RequestParam("msg") String msg, @RequestParam("toUid") String toUid) {
+        accountService.sendMsg(uid, msg, toUid);
     }
 
 }

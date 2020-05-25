@@ -1,11 +1,7 @@
 package com.friday.server.server;
 
-import com.friday.common.bean.im.ServerInfo;
 import com.friday.common.protobuf.Message;
-import com.friday.common.redis.UserServerRedisService;
-import com.friday.common.utils.ServerInfoParseUtil;
-import com.friday.server.handler.*;
-import com.friday.server.zk.ZK;
+import com.friday.server.handler.FridayIMMessageRouteHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -19,70 +15,34 @@ import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.timeout.IdleStateHandler;
-import io.netty.util.NettyRuntime;
-import io.netty.util.concurrent.DefaultEventExecutorGroup;
-import io.netty.util.concurrent.EventExecutorGroup;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Copyright (C),Damon
  *
- * @Description: Im Netty Server
+ * @Description:
  * @Author: Damon(npf)
- * @Date: 2020-05-10:10:04
+ * @Date: 2020-05-25:14:33
  */
 @Slf4j
 @Component
-public class FridayIMServer {
-
-    private final EventLoopGroup boss = new NioEventLoopGroup();
-
-    private final EventLoopGroup work = new NioEventLoopGroup();
+public class FridayIMIntelServer {
+    private EventLoopGroup boss = new NioEventLoopGroup();
+    private EventLoopGroup work = new NioEventLoopGroup();
 
     @Value("${netty.server.port}")
     private int port;
 
-    private final EventExecutorGroup executorGroup = new DefaultEventExecutorGroup(NettyRuntime.availableProcessors() * 2);
-
     @Autowired
-    private FridayIMServerHeartBeanHandler fridayIMServerHeartBeanHandler;
+    private FridayIMMessageRouteHandler fridayIMMessageRouteHandler;
 
-    @Autowired
-    private FridayIMServerHandler fridayIMServerHandler;
-
-    @Autowired
-    private FridayIMServerAuthHandler fridayIMServerAuthHandler;
-
-    @Autowired
-    private FridayIMAckMessageHandler fridayIMAckMessageHandler;
-
-    @Autowired
-    private FridayIMConversationHandler fridayIMConversationHandler;
-
-    @Autowired
-    private FridayIMHistoryMessageHandler fridayIMHistoryMessageHandler;
-
-    @Autowired
-    private UserServerRedisService userServerRedisService;
-
-    @Autowired
-    private ZK zk;
-
-    /***
-     * Server 启动方法
-     */
     public void start() {
-        ServerBootstrap serverBootstrap = new ServerBootstrap()
-                .group(boss, work)
+        ServerBootstrap serverBootstrap = new ServerBootstrap();
+        serverBootstrap.group(boss, work)
                 .channel(NioServerSocketChannel.class)
-                .localAddress(new InetSocketAddress(port))
                 //保持长连接
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .option(ChannelOption.SO_BACKLOG, 1024)
@@ -99,12 +59,7 @@ public class FridayIMServer {
                                 .addLast(new ProtobufVarint32LengthFieldPrepender())
                                 .addLast(new ProtobufEncoder())
                                 //handler
-                                .addLast(fridayIMServerAuthHandler)
-                                .addLast(fridayIMServerHeartBeanHandler)
-                                .addLast(executorGroup, fridayIMServerHandler)
-                                .addLast(executorGroup, fridayIMAckMessageHandler)
-                                .addLast(executorGroup, fridayIMConversationHandler)
-                                .addLast(executorGroup, fridayIMHistoryMessageHandler);
+                                .addLast(fridayIMMessageRouteHandler);
                     }
                 });
         try {
@@ -123,23 +78,9 @@ public class FridayIMServer {
      * server销毁
      */
     public void destroy() {
-        getServerList().forEach(serverInfo -> userServerRedisService.serverOffLine(serverInfo));
         boss.shutdownGracefully().syncUninterruptibly();
         work.shutdownGracefully().syncUninterruptibly();
         log.info("Friday Netty Server destroy success ...");
-    }
-
-    /**
-     * 获取所有服务器列表
-     */
-    public List<ServerInfo> getServerList() {
-        List<String> strings = new ArrayList<>();
-        List<String> all = zk.getAllNode();
-        for (String node : all) {
-            String key = node.split("-")[1];
-            strings.add(key);
-        }
-        return ServerInfoParseUtil.getServerInfoList(strings);
     }
 
 }
