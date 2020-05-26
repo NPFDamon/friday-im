@@ -10,16 +10,27 @@ spring:
       acks: 1
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: test-consumer-group
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+      auto-commit-interval: 100
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      bootstrap-servers: localhost:9092
   nodeId: 1
 
+
 server:
-    port: 8989
+  port: 8989
 
 netty:
   server:
-    port: 8000
     address: 127.0.0.1
-
+    port:
+      http: 8000
+      tcp: 8001
+      ws: 8002
 zk:
   address: 127.0.0.1:2181
   switch: true

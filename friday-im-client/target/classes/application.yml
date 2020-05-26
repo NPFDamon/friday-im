@@ -2,7 +2,5 @@ server:
   port: 8990
 
 # netty config
-netty:
-  server:
-    port: 8000
-    address: 127.0.0.1
+rest:
+  timeout: 10000

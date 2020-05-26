@@ -15,20 +15,21 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RegistryZK implements Runnable {
 
-    private ZK zk;
+    private final ZK zk;
+    private final String ip;
+    private final int imServerPort;
+    private final int httpPort;
+    private final int tcpPort;
+    private final int wsPort;
 
-    private String ip;
+    private final ZKConfiguration zkConfiguration;
 
-    private int imServerPort;
-
-    private int httpPort;
-
-    private ZKConfiguration zkConfiguration;
-
-    public RegistryZK(String ip, int imServerPort, int httpPort) {
+    public RegistryZK(String ip, int imServerPort, int httpPort, int tcpPort, int wsPort) {
         this.ip = ip;
         this.imServerPort = imServerPort;
         this.httpPort = httpPort;
+        this.tcpPort = tcpPort;
+        this.wsPort = wsPort;
         zk = SpringBeanFactory.getBean(ZK.class);
         zkConfiguration = SpringBeanFactory.getBean(ZKConfiguration.class);
     }
@@ -39,7 +40,7 @@ public class RegistryZK implements Runnable {
         zk.creatRootNode();
 
         if (zkConfiguration.isZkSwitch()) {
-            String path = zkConfiguration.getZkRoot() + "/ip-" + ip + ":" + imServerPort + ":" + httpPort;
+            String path = zkConfiguration.getZkRoot() + "/ip-" + ip + ":" + imServerPort + ":" + httpPort + ":" + tcpPort + ":" + wsPort;
             zk.createNode(path);
             log.info("Registry zK successful, path = [{}]", path);
         }

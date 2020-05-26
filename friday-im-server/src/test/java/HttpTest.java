@@ -1,5 +1,7 @@
 import com.friday.common.bean.reqVo.UserReqVo;
 import com.friday.common.utils.JsonHelper;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -16,6 +18,7 @@ import java.util.Objects;
  * @Author: Damon(npf)
  * @Date: 2020-05-25:12:34
  */
+@Slf4j
 public class HttpTest {
     public static void login(String uid, String secret) {
         CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -36,7 +39,8 @@ public class HttpTest {
                 "utf-8");
         post.setEntity(postingString);
         try {
-            httpClient.execute(post);
+            HttpResponse entity = httpClient.execute(post);
+            log.info("login down msg:{}",entity.getEntity().getContent().toString());
         } catch (IOException e) {
             e.printStackTrace();
         }

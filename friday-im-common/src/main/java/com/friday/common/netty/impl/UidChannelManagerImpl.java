@@ -3,6 +3,9 @@ package com.friday.common.netty.impl;
 import com.friday.common.netty.NettyAttrUtil;
 import com.friday.common.netty.UidChannelManager;
 import io.netty.channel.Channel;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -18,12 +21,17 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date: 2020-05-15:14:48
  */
 @Component
+@Slf4j
 public class UidChannelManagerImpl implements UidChannelManager {
     private static final Map<String, List<Channel>> map = new ConcurrentHashMap<>();
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Override
     public void addUserToChannel(String uid, Channel channel) {
         NettyAttrUtil.setAttrKeyUid(channel, uid);
+        log.info("uid:{} channel:{} save relation", uid, channel.remoteAddress());
         if (!map.containsKey(uid)) {
             List<Channel> channels = new ArrayList<>();
             channels.add(channel);
@@ -35,6 +43,7 @@ public class UidChannelManagerImpl implements UidChannelManager {
 
     @Override
     public List<Channel> getChannelById(String uid) {
+        log.info("map:{}",map);
         if (map.containsKey(uid)) {
             return map.get(uid);
         }

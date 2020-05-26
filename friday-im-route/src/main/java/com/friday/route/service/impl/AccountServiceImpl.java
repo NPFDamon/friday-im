@@ -121,7 +121,7 @@ public class AccountServiceImpl implements AccountService {
             });
 
 
-            log.info("connect server ip[{}]:port[{}] success", serverInfo.getIp(), serverInfo.getPort());
+            log.info("connect server ip[{}]:port[{}] success", serverInfo.getIp(), serverInfo.getHttpPort());
             return resVo;
         } catch (Exception e) {
             throw new BizException("login error");

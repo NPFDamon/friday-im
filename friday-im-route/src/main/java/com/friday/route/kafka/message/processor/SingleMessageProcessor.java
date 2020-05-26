@@ -1,4 +1,4 @@
-package com.friday.route.message.processor;
+package com.friday.route.kafka.message.processor;
 
 import com.friday.common.bean.im.ServerInfo;
 import com.friday.common.netty.ServerChannelManager;
@@ -27,8 +27,8 @@ public class SingleMessageProcessor implements Runnable {
     private String message;
     private ConversationRedisServer conversationRedisServer;
 
-    public SingleMessageProcessor(ServerChannelManager serverChannelManager, UserServerRedisService userServerRedisService, String message
-            , ConversationRedisServer conversationRedisServer) {
+    public SingleMessageProcessor(UserServerRedisService userServerRedisService, String message
+            , ConversationRedisServer conversationRedisServer, ServerChannelManager serverChannelManager) {
         this.message = message;
         this.serverChannelManager = serverChannelManager;
         this.userServerRedisService = userServerRedisService;
@@ -43,7 +43,6 @@ public class SingleMessageProcessor implements Runnable {
         Message.UpDownMessage upDownMessage = builder.getUpDownMessage();
         conversationRedisServer.saveMsgToConversation(upDownMessage.getContent(), upDownMessage.getConverId());
         List<String> uids = conversationRedisServer.getUidListByConversationExcludeSender(upDownMessage.getConverId(), upDownMessage.getFromUid());
-
         if (CollectionUtils.isNotEmpty(uids)) {
             uids.forEach(uid -> {
                 ServerInfo serverInfo = userServerRedisService.getServerInfoByUid(uid);

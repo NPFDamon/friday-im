@@ -28,16 +28,19 @@ public class FridayIMServerApplication implements CommandLineRunner {
     }
 
     @Value("${server.port}")
+    private int serverPort;
+    @Value("${netty.server.port.tcp}")
+    private int tcpPort;
+    @Value("${netty.server.port.http}")
     private int httpPort;
-
-    @Value("${netty.server.port}")
-    private int imServerPort;
+    @Value("${netty.server.port.ws}")
+    private int wsPort;
 
     @Override
     public void run(String... args) throws UnknownHostException {
         String addr = InetAddress.getLocalHost().getHostAddress();
-        Thread thread = new Thread(new RegistryZK(addr, imServerPort, httpPort));
-        thread.setName("REGISTRY-ZK");
+        Thread thread = new Thread(new RegistryZK(addr, serverPort, httpPort, tcpPort, wsPort));
+        thread.setName("ZK-REGISTRY");
         thread.start();
         fridayIMServer.start();
         fridayIMIntelServer.start();

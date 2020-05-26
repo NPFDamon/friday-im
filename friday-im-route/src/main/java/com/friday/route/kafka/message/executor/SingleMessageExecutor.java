@@ -1,9 +1,9 @@
-package com.friday.route.message.executor;
+package com.friday.route.kafka.message.executor;
 
 import com.friday.common.netty.ServerChannelManager;
 import com.friday.common.redis.ConversationRedisServer;
 import com.friday.common.redis.UserServerRedisService;
-import com.friday.route.message.processor.SingleMessageProcessor;
+import com.friday.route.kafka.message.processor.SingleMessageProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,7 +30,8 @@ public class SingleMessageExecutor {
     private ConversationRedisServer conversationRedisServer;
 
     public void sendAndSaveMsg(String message) {
-        SingleMessageProcessor singleMessageProcessor = new SingleMessageProcessor(serverChannelManager, userServerRedisService, message, conversationRedisServer);
+        SingleMessageProcessor singleMessageProcessor =
+                new SingleMessageProcessor(userServerRedisService, message, conversationRedisServer, serverChannelManager);
         executor.execute(singleMessageProcessor);
     }
 }

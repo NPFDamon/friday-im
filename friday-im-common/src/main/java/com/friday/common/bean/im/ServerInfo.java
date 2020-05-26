@@ -19,7 +19,9 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ServerInfo {
-    private int port;
+    private int tcpPort;
+    private int httpPort;
+    private int wsPort;
     private String ip;
     private NetTypeEnum netTypeEnum;
 
@@ -33,12 +35,15 @@ public class ServerInfo {
             return false;
         }
         ServerInfo info = (ServerInfo) o;
-        return port == info.port && Objects.equals(ip, info.ip) && Objects.equals(netTypeEnum, info.netTypeEnum);
+        return tcpPort == info.tcpPort &&
+                wsPort == info.wsPort &&
+                httpPort == info.httpPort &&
+                Objects.equals(ip, info.ip);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(port, ip, netTypeEnum);
+        return Objects.hash(ip, tcpPort, httpPort, wsPort, netTypeEnum);
     }
 
     @Override

@@ -12,6 +12,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -78,17 +79,20 @@ public class FridayIMMessageRouteHandler extends SimpleChannelInboundHandler<Mes
             log.info("received down message:{}", downMessage);
             conversationRedisServer.saveWaitUserAckMsg(downMessage.getToUid(), downMessage.getConverId(), downMessage.getRequestId());
             List<Channel> channels = uidChannelManager.getChannelById(downMessage.getToUid());
-            Message.FridayMessage fridayMessage = Message.FridayMessage.newBuilder()
-                    .setType(Message.FridayMessage.Type.UpDownMessage)
-                    .setUpDownMessage(downMessage).build();
-            channels.forEach(channel -> {
-                channel.writeAndFlush(fridayMessage).addListeners(future -> {
+            if (CollectionUtils.isNotEmpty(channels)) {
+                Message.FridayMessage fridayMessage = Message.FridayMessage.newBuilder()
+                        .setType(Message.FridayMessage.Type.UpDownMessage)
+                        .setUpDownMessage(downMessage).build();
+                channels.forEach(channel -> channel.writeAndFlush(fridayMessage).addListeners(future -> {
                     if (!future.isSuccess()) {
                         log.info("push msg to uid:{} fail", downMessage.getToUid());
                         channel.close();
                     }
-                });
-            });
+                }));
+            } else {
+                log.error("uid:{} is not login in", downMessage.getToUid());
+            }
+
         } else {
             channelHandlerContext.fireChannelRead(message);
         }

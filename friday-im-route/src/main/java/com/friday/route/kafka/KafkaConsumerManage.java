@@ -1,6 +1,6 @@
 package com.friday.route.kafka;
 
-import com.friday.route.message.listener.MessageListener;
+import com.friday.route.kafka.message.listener.MessageListener;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.kafka.clients.consumer.ConsumerConfig;

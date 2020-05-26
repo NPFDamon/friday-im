@@ -19,7 +19,9 @@ public class ServerInfoParseUtil {
         ServerInfo server = new ServerInfo();
         try {
             server.setIp(serverInfo.split(Constants.DEFAULT_SEPARATES)[0]);
-            server.setPort(Integer.parseInt(serverInfo.split(Constants.DEFAULT_SEPARATES)[1]));
+            server.setHttpPort(Integer.parseInt(serverInfo.split(Constants.DEFAULT_SEPARATES)[2]));
+            server.setTcpPort(Integer.parseInt(serverInfo.split(Constants.DEFAULT_SEPARATES)[3]));
+            server.setWsPort(Integer.parseInt(serverInfo.split(Constants.DEFAULT_SEPARATES)[4]));
         } catch (Exception e) {
             e.printStackTrace();
             throw new BizException("parse server fail ...");

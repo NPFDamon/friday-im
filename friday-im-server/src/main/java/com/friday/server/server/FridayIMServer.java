@@ -46,7 +46,7 @@ public class FridayIMServer {
 
     private final EventLoopGroup work = new NioEventLoopGroup();
 
-    @Value("${netty.server.port}")
+    @Value("${netty.server.port.tcp}")
     private int port;
 
     private final EventExecutorGroup executorGroup = new DefaultEventExecutorGroup(NettyRuntime.availableProcessors() * 2);

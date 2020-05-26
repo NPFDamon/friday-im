@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.net.InetSocketAddress;
+
 /**
  * Copyright (C),Damon
  *
@@ -33,7 +35,7 @@ public class FridayIMIntelServer {
     private EventLoopGroup boss = new NioEventLoopGroup();
     private EventLoopGroup work = new NioEventLoopGroup();
 
-    @Value("${netty.server.port}")
+    @Value("${netty.server.port.http}")
     private int port;
 
     @Autowired
@@ -43,6 +45,7 @@ public class FridayIMIntelServer {
         ServerBootstrap serverBootstrap = new ServerBootstrap();
         serverBootstrap.group(boss, work)
                 .channel(NioServerSocketChannel.class)
+                .localAddress(new InetSocketAddress(port))
                 //保持长连接
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .option(ChannelOption.SO_BACKLOG, 1024)

@@ -2,6 +2,7 @@ package com.friday.route.client.handle;
 
 import com.friday.common.netty.ServerChannelManager;
 import com.friday.common.protobuf.Message;
+import com.friday.common.utils.JsonHelper;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -38,6 +39,8 @@ public class RouteClientHandler extends SimpleChannelInboundHandler<Message.Frid
                     channelFuture.channel().close();
                 }
             });
+        } else if (message.getType() == Message.FridayMessage.Type.UpDownMessage) {
+            log.info("client received msg:{}", JsonHelper.toJsonString(message));
         }
     }
 

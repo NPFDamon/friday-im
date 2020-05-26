@@ -1,4 +1,4 @@
-package com.friday.route.message.listener;
+package com.friday.route.kafka.message.listener;
 
 /**
  * Copyright (C),Damon
