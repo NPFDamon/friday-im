@@ -181,14 +181,14 @@ public class ConversationRedisServerImpl implements ConversationRedisServer {
     @Override
     public List<UserConversation> getConversationListByUid(String uid) {
         List<UserConversation> list = new ArrayList<>();
-        Map<String, Long> converList = redisTemplate.boundHashOps(Constants.CONVERSATION_LIST + uid).entries();
+        Map<String, Object> converList = redisTemplate.boundHashOps(Constants.CONVERSATION_LIST + uid).entries();
         Objects.requireNonNull(converList).forEach((key, value) -> {
             Conversation conversation = getConversation(key);
             if (null != conversation) {
                 UserConversation converListInfo = new UserConversation().builder()
                         .id(conversation.getId()).groupId(conversation.getGroupId())
                         .uidList(conversation.getUidList()).type(conversation.getType())
-                        .readMsgId(value).build();
+                        .readMsgId(Long.parseLong(String.valueOf(value))).build();
                 getMessgContent(conversation, converListInfo);
                 list.add(converListInfo);
             }
@@ -221,7 +221,7 @@ public class ConversationRedisServerImpl implements ConversationRedisServer {
     public void updateUserReadMessageId(String uid, String conversationId, Long msgId) {
         Object oldMsgId = redisTemplate.boundHashOps(Constants.CONVERSATION_LIST + uid).get(conversationId);
         if (null != oldMsgId) {
-            if ((Long) oldMsgId < msgId) {
+            if (Long.parseLong(String.valueOf(oldMsgId))  < msgId) {
                 redisTemplate.boundHashOps(Constants.CONVERSATION_LIST + uid).put(conversationId, msgId);
             }
         }

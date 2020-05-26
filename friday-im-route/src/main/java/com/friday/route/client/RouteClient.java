@@ -50,15 +50,15 @@ public class RouteClient {
                     }
                 });
         try {
-            ChannelFuture future = bootstrap.connect(serverInfo.getIp(), serverInfo.getHttpPort()).sync();
+            ChannelFuture future = bootstrap.connect(serverInfo.getIp(), serverInfo.getTcpPort()).sync();
             if (future.isSuccess()) {
-                log.info("Friday Netty Client connect server Address[{}],Port[{}] ...", serverInfo.getIp(), serverInfo.getHttpPort() + "Success");
+                log.info("Friday Netty Client connect server Address[{}],Port[{}] Success ...", serverInfo.getIp(), serverInfo.getTcpPort());
                 return future.channel();
             }
             return null;
         } catch (InterruptedException e) {
             e.printStackTrace();
-            log.error("Friday Netty Server connect server Address[{}],Port[{}] ...", serverInfo.getIp(), serverInfo.getHttpPort() + "fail");
+            log.error("Friday Netty Server connect server Address[{}],Port[{}] fail ...", serverInfo.getIp(), serverInfo.getTcpPort());
             throw new BizException("");
         }
     }

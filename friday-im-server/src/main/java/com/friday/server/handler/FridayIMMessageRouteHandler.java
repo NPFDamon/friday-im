@@ -64,7 +64,7 @@ public class FridayIMMessageRouteHandler extends SimpleChannelInboundHandler<Mes
         NettyAttrUtil.updateReadTime(channelHandlerContext.channel(), System.currentTimeMillis());
         if (message.getType() == Message.FridayMessage.Type.HeartBeat) {
             Message.HeartBeat heartBeat = message.getHeartBeat();
-            log.info("received heart beat msg:{}", heartBeat);
+            log.debug("received heart beat msg:{}", heartBeat);
             if (heartBeat.getHeartBeatType() == Message.HeartBeatType.PING) {
                 Message.HeartBeat pong = Message.HeartBeat.newBuilder()
                         .setHeartBeatType(Message.HeartBeatType.PONG)
@@ -76,19 +76,22 @@ public class FridayIMMessageRouteHandler extends SimpleChannelInboundHandler<Mes
             }
         } else if (message.getType() == Message.FridayMessage.Type.UpDownMessage) {
             Message.UpDownMessage downMessage = message.getUpDownMessage();
-            log.info("received down message:{}", downMessage);
+            log.debug("received down message:{}", downMessage);
             conversationRedisServer.saveWaitUserAckMsg(downMessage.getToUid(), downMessage.getConverId(), downMessage.getRequestId());
             List<Channel> channels = uidChannelManager.getChannelById(downMessage.getToUid());
             if (CollectionUtils.isNotEmpty(channels)) {
                 Message.FridayMessage fridayMessage = Message.FridayMessage.newBuilder()
                         .setType(Message.FridayMessage.Type.UpDownMessage)
                         .setUpDownMessage(downMessage).build();
-                channels.forEach(channel -> channel.writeAndFlush(fridayMessage).addListeners(future -> {
-                    if (!future.isSuccess()) {
-                        log.info("push msg to uid:{} fail", downMessage.getToUid());
-                        channel.close();
-                    }
-                }));
+                for (Channel channel : channels) {
+                    channel.writeAndFlush(fridayMessage).addListeners(future -> {
+                        log.info("send msg to channel:{}", channel);
+                        if (!future.isSuccess()) {
+                            log.info("push msg to uid:{} fail", downMessage.getToUid());
+                            channel.close();
+                        }
+                    });
+                }
             } else {
                 log.error("uid:{} is not login in", downMessage.getToUid());
             }

@@ -2,7 +2,6 @@ package com.friday.route.service;
 
 import com.friday.common.bean.reqVo.UserReqVo;
 import com.friday.common.bean.resVo.LoginResVo;
-import com.friday.common.bean.resVo.Result;
 
 /**
  * Copyright (C),Damon
@@ -14,6 +13,7 @@ import com.friday.common.bean.resVo.Result;
 public interface AccountService {
     /**
      * 登录
+     *
      * @param userReqVo
      * @return
      */
@@ -22,12 +22,11 @@ public interface AccountService {
 
     /**
      * 下线
+     *
      * @param uid
      */
-    void offLine(Long uid,String token);
+    void offLine(Long uid, String token);
 
 
-    void sendMsg(String uid,String msg,String toUid);
-
-    Result sendLogin(String uid,String token);
+    void sendMsg(String uid, String msg, String toUid);
 }

@@ -39,7 +39,7 @@ public class TestController {
 
     @GetMapping("/sendLogin")
     public Result sendLogin(@RequestParam("uid") String uid, @RequestHeader("token") String token) {
-        return accountService.sendLogin(uid, token);
+        return Result.success();
     }
 
 

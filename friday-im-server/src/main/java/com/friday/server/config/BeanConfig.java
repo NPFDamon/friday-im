@@ -1,6 +1,8 @@
 package com.friday.server.config;
 
+import com.friday.common.netty.ServerChannelManager;
 import com.friday.common.netty.UidChannelManager;
+import com.friday.common.netty.impl.ServerChannelManagerImpl;
 import com.friday.common.netty.impl.UidChannelManagerImpl;
 import com.friday.common.redis.ConversationRedisServer;
 import com.friday.common.redis.UserInfoRedisService;
@@ -55,8 +57,14 @@ public class BeanConfig {
     public UserServerRedisService userServerRedisService() {
         return new UserServerRedisServiceImpl();
     }
+
     @Bean
     public SnowFlake snowFlake() {
         return new SnowFlake(1, nodeId);
+    }
+
+    @Bean
+    public ServerChannelManager serverChannelManager() {
+        return new ServerChannelManagerImpl();
     }
 }

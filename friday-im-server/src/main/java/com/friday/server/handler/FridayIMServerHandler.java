@@ -48,13 +48,13 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<Message.F
         if (message.getType() == Message.FridayMessage.Type.UpDownMessage) {
             log.info("received msg:{}", JsonHelper.toJsonString(message));
             Message.UpDownMessage upDownMessage = message.getUpDownMessage();
-            if (!isMsgClientIsInvalid(channelHandlerContext, upDownMessage)) {
-                log.error("client:[{}] msg is repeat", message.getUpDownMessage().getCid());
-                sendFailAck(channelHandlerContext,upDownMessage, Message.Code.CLIENT_ID_REPEAT);
-                return;
-            } else {
-                saveUserClient(channelHandlerContext, message);
-            }
+//            if (!isMsgClientIsInvalid(channelHandlerContext, upDownMessage)) {
+//                log.error("client:[{}] msg is repeat", message.getUpDownMessage().getCid());
+//                sendFailAck(channelHandlerContext,upDownMessage, Message.Code.CLIENT_ID_REPEAT);
+//                return;
+//            } else {
+//                saveUserClient(channelHandlerContext, message);
+//            }
 
             String topic;
             String conversationId;

@@ -1,6 +1,6 @@
-package com.friday.route.kafka.message.listener;
+package com.friday.server.kafka.kafka.message.listener;
 
-import com.friday.route.kafka.message.executor.SingleMessageExecutor;
+import com.friday.server.kafka.kafka.message.executor.SingleMessageExecutor;
 import com.friday.common.constant.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

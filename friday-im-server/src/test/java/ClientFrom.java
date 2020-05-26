@@ -25,7 +25,7 @@ import io.netty.handler.timeout.IdleStateHandler;
 public class ClientFrom {
 
     private static final String HOST = "127.0.0.1";
-    private static final int PORT = 8000;
+    private static final int PORT = 8001;
     private static final int clientNum = 10;
     public static SnowFlake snowFlake = new SnowFlake(1, 2);
 

@@ -1,3 +1,4 @@
+import com.friday.common.bean.token.Token;
 import com.friday.common.protobuf.Message.*;
 import com.friday.common.protobuf.Message.FridayMessage.Type;
 import com.friday.common.utils.JsonHelper;
@@ -30,16 +31,15 @@ public class ClientToHandler extends SimpleChannelInboundHandler<FridayMessage> 
     }
 
     private void sendLogin(ChannelHandlerContext ctx, String uid) {
-//        String token = new Token(uid, secret).getToken(secret);
-//        Login login = Login.newBuilder()
-//                .setUid(uid)
-//                .setId(ClientTo.snowFlake.nextId())
-//                .setToken(token)
-//                .build();
-//        FridayMessage ravenMessage = FridayMessage.newBuilder().setType(FridayMessage.Type.Login).setLogin(login)
-//                .build();
-//        ctx.writeAndFlush(ravenMessage);
-        HttpTest.login(uid, secret);
+        String token = new Token(uid, secret).getToken(secret);
+        Login login = Login.newBuilder()
+                .setUid(uid)
+                .setId(ClientTo.snowFlake.nextId())
+                .setToken(token)
+                .build();
+        FridayMessage ravenMessage = FridayMessage.newBuilder().setType(FridayMessage.Type.Login).setLogin(login)
+                .build();
+        ctx.writeAndFlush(ravenMessage);
     }
 
     @Override

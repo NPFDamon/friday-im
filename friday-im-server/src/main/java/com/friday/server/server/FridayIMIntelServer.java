@@ -2,6 +2,7 @@ package com.friday.server.server;
 
 import com.friday.common.protobuf.Message;
 import com.friday.server.handler.FridayIMMessageRouteHandler;
+import com.friday.server.handler.FridayIMServerAuthHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -41,6 +42,9 @@ public class FridayIMIntelServer {
     @Autowired
     private FridayIMMessageRouteHandler fridayIMMessageRouteHandler;
 
+    @Autowired
+    private FridayIMServerAuthHandler fridayIMServerAuthHandler;
+
     public void start() {
         ServerBootstrap serverBootstrap = new ServerBootstrap();
         serverBootstrap.group(boss, work)
@@ -62,7 +66,8 @@ public class FridayIMIntelServer {
                                 .addLast(new ProtobufVarint32LengthFieldPrepender())
                                 .addLast(new ProtobufEncoder())
                                 //handler
-                                .addLast(fridayIMMessageRouteHandler);
+                                .addLast(fridayIMMessageRouteHandler)
+                                .addLast(fridayIMServerAuthHandler);
                     }
                 });
         try {
