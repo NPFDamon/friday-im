@@ -3,7 +3,6 @@ package com.friday.server.handler;
 import com.friday.common.netty.NettyAttrUtil;
 import com.friday.common.netty.UidChannelManager;
 import com.friday.common.protobuf.Message;
-import com.friday.common.utils.JsonHelper;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -66,7 +65,7 @@ public class FridayIMServerHeartBeanHandler extends SimpleChannelInboundHandler<
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message.FridayMessage fridayMessage) throws Exception {
         if (fridayMessage.getType() == Message.FridayMessage.Type.HeartBeat) {
             Message.HeartBeat beat = fridayMessage.getHeartBeat();
-            log.info("receive heart beat:{}", JsonHelper.toJsonString(beat));
+            log.info("receive heart beat:{}", beat.getHeartBeatType());
             if (beat.getHeartBeatType() == Message.HeartBeatType.PING) {
                 Message.HeartBeat heartBeat = Message.HeartBeat.newBuilder().setHeartBeatType(Message.HeartBeatType.PONG).build();
                 Message.FridayMessage message = Message.FridayMessage.newBuilder().setType(Message.FridayMessage.Type.HeartBeat).setHeartBeat(heartBeat).build();

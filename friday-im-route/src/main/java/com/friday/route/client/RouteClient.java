@@ -41,7 +41,7 @@ public class RouteClient {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         socketChannel.pipeline()
-                                .addLast(new IdleStateHandler(10, 0, 0))
+                                .addLast(new IdleStateHandler(10, 10, 15))
                                 .addLast(new ProtobufVarint32FrameDecoder())
                                 .addLast(new ProtobufDecoder(Message.FridayMessage.getDefaultInstance()))
                                 .addLast(new ProtobufVarint32LengthFieldPrepender())
@@ -59,7 +59,7 @@ public class RouteClient {
         } catch (InterruptedException e) {
             e.printStackTrace();
             log.error("Friday Netty Server connect server Address[{}],Port[{}] fail ...", serverInfo.getIp(), serverInfo.getTcpPort());
-            throw new BizException("");
+            throw new BizException("not connect server Address[{}],Port[{}] ", serverInfo.getIp(), serverInfo.getTcpPort());
         }
     }
 }

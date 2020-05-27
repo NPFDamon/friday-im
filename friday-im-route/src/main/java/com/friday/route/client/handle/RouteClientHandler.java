@@ -1,5 +1,6 @@
 package com.friday.route.client.handle;
 
+import com.friday.common.bean.im.ServerInfo;
 import com.friday.common.netty.ServerChannelManager;
 import com.friday.common.protobuf.Message;
 import com.friday.common.utils.JsonHelper;
@@ -40,7 +41,17 @@ public class RouteClientHandler extends SimpleChannelInboundHandler<Message.Frid
                 }
             });
         } else if (message.getType() == Message.FridayMessage.Type.UpDownMessage) {
-            log.info("client received msg:{}", JsonHelper.toJsonString(message));
+            Message.UpDownMessage downMessage = message.getUpDownMessage();
+            log.info("client received msg:{}", JsonHelper.toJsonString(downMessage));
+            Message.MessageAck messageAck = Message.MessageAck.newBuilder()
+                    .setId(downMessage.getRequestId())
+                    .setConverId(downMessage.getConverId())
+                    .setCode(Message.Code.SUCCESS)
+                    .setTime(System.currentTimeMillis())
+                    .build();
+            Message.FridayMessage ravenMessage = Message.FridayMessage.newBuilder().setType(Message.FridayMessage.Type.MessageAck)
+                    .setMessageAck(messageAck).build();
+            channelHandlerContext.writeAndFlush(ravenMessage);
         }
     }
 
@@ -52,6 +63,8 @@ public class RouteClientHandler extends SimpleChannelInboundHandler<Message.Frid
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        ServerInfo serverInfo = serverChannelManager.getServerByChannel(ctx.channel());
+        serverChannelManager.removeServer(serverInfo);
         log.info("Friday IM route server disconnected from address:[{}]", ctx.channel().remoteAddress());
     }
 

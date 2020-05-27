@@ -41,11 +41,6 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class AccountServiceImpl implements AccountService {
 
-//    @Value("123456")
-//    private String uid;
-//    @Value("test123456")
-//    private String secret;
-
     @Autowired
     private UserInfoRedisService userInfoRedisService;
 
@@ -82,14 +77,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public LoginResVo getToken(UserReqVo userReqVo) {
+        LoginResVo resVo = new LoginResVo();
         try {
             if (userServerRedisService.getServerInfoByUid(userReqVo.getUid()) == null) {
-                LoginResVo resVo = new LoginResVo();
-//            if (userReqVo.getUid().equals(uid) && userReqVo.getSecret().equals(secret)) {
-//                resVo.setLoginStatus(LoginStatusEnum.SUCCESS);
-//            } else {
-//                resVo.setLoginStatus(LoginStatusEnum.ACCOUNT_NOT_MATCH);
-//            }
+
                 //获取token
                 String token = new Token(userReqVo.getUid(), userReqVo.getSecret()).getToken(userReqVo.getSecret());
                 resVo.setToken(token);
@@ -99,13 +90,15 @@ public class AccountServiceImpl implements AccountService {
                 List<String> servers = serverCache.getServerList();
                 //根据负载均衡策略选取服务器
                 ServerInfo serverInfo = serverRouteLoadBalanceHandler.routeServer(ServerInfoParseUtil.getServerInfoList(servers), userReqVo.getUid());
-                //保存服务器信息
+
                 Channel channel = serverChannelManager.getChannelByServer(serverInfo);
                 if (channel == null) {
                     //连接服务器
                     channel = client.connect(serverInfo);
+                    log.info("uid:[{}] login,channel[{}] ", userReqVo.getUid(), channel);
                     //保存server channel关系
                     serverChannelManager.addServerToChannel(serverInfo, channel);
+
                 }
                 userServerRedisService.addUserToServer(userReqVo.getUid(), serverInfo);
                 Message.Login login = Message.Login.newBuilder()
@@ -113,26 +106,22 @@ public class AccountServiceImpl implements AccountService {
                         .setUid(userReqVo.getUid()).build();
                 Message.FridayMessage message = Message.FridayMessage.newBuilder().setType(Message.FridayMessage.Type.Login).setLogin(login).build();
                 ChannelFuture future = channel.writeAndFlush(message);
-                future.addListeners(new ChannelFutureListener() {
-                    @Override
-                    public void operationComplete(ChannelFuture channelFuture) throws Exception {
-                        if (future.isSuccess()) {
-                            log.info("login success");
-                        }
+                future.addListeners((ChannelFutureListener) channelFuture -> {
+                    if (future.isSuccess()) {
+                        log.info("connect server ip[{}]:port[{}] success", serverInfo.getIp(), serverInfo.getHttpPort());
+                        resVo.setLoginStatus(LoginStatusEnum.SUCCESS);
+                    } else {
+                        resVo.setLoginStatus(LoginStatusEnum.SERVER_NOT_AVAILABLE);
                     }
                 });
-
-                log.info("connect server ip[{}]:port[{}] success", serverInfo.getIp(), serverInfo.getHttpPort());
-                return resVo;
             } else {
                 log.error("user:{} is login already", userReqVo.getUid());
-                return LoginResVo.builder().loginStatus(LoginStatusEnum.REPEAT_LOGIN).build();
+                resVo.setLoginStatus(LoginStatusEnum.REPEAT_LOGIN);
             }
-
         } catch (Exception e) {
             throw new BizException("login error");
         }
-
+        return resVo;
     }
 
     @Override
