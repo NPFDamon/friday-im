@@ -43,15 +43,6 @@ public class RouteClientHandler extends SimpleChannelInboundHandler<Message.Frid
         } else if (message.getType() == Message.FridayMessage.Type.UpDownMessage) {
             Message.UpDownMessage downMessage = message.getUpDownMessage();
             log.info("client received msg:{}", JsonHelper.toJsonString(downMessage));
-            Message.MessageAck messageAck = Message.MessageAck.newBuilder()
-                    .setId(downMessage.getRequestId())
-                    .setConverId(downMessage.getConverId())
-                    .setCode(Message.Code.SUCCESS)
-                    .setTime(System.currentTimeMillis())
-                    .build();
-            Message.FridayMessage ravenMessage = Message.FridayMessage.newBuilder().setType(Message.FridayMessage.Type.MessageAck)
-                    .setMessageAck(messageAck).build();
-            channelHandlerContext.writeAndFlush(ravenMessage);
         }
     }
 
