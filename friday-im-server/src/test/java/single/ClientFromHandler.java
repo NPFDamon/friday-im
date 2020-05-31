@@ -1,3 +1,5 @@
+package single;
+
 import com.friday.common.bean.token.Token;
 import com.friday.common.protobuf.Message.*;
 import com.friday.common.utils.JsonHelper;

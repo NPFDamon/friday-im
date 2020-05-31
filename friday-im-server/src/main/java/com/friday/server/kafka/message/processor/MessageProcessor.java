@@ -19,7 +19,7 @@ import java.util.List;
  * @Date: 2020-05-19:11:59
  */
 @Slf4j
-public class SingleMessageProcessor implements Runnable {
+public abstract class MessageProcessor{
 
 //    private ServerChannelManager serverChannelManager;
     private UserServerRedisService userServerRedisService;
@@ -27,7 +27,7 @@ public class SingleMessageProcessor implements Runnable {
     private ConversationRedisServer conversationRedisServer;
     private UidChannelManager uidChannelManager;
 
-    public SingleMessageProcessor(UserServerRedisService userServerRedisService, String message
+    public MessageProcessor(UserServerRedisService userServerRedisService, String message
             , ConversationRedisServer conversationRedisServer, UidChannelManager uidChannelManager) {
         this.message = message;
 //        this.serverChannelManager = serverChannelManager;
@@ -36,8 +36,7 @@ public class SingleMessageProcessor implements Runnable {
         this.uidChannelManager = uidChannelManager;
     }
 
-    @Override
-    public void run() {
+    public void init() {
         log.info("get kafka msg:{}", message);
         Message.FridayMessage.Builder builder = Message.FridayMessage.newBuilder();
         JsonHelper.readValue(message, builder);

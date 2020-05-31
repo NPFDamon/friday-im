@@ -1,3 +1,5 @@
+package group;
+
 import com.friday.common.protobuf.Message;
 import com.friday.common.utils.SnowFlake;
 import io.netty.bootstrap.Bootstrap;
@@ -19,11 +21,9 @@ import io.netty.handler.timeout.IdleStateHandler;
  *
  * @Description:
  * @Author: Damon(npf)
- * @Date: 2020-05-25:11:24
+ * @Date: 2020-05-31:10:56
  */
-
-public class ClientFrom {
-
+public class Group1 {
     private static final String HOST = "127.0.0.1";
     private static final int PORT = 8001;
     private static final int clientNum = 10;
@@ -49,7 +49,7 @@ public class ClientFrom {
                         // 对protobuf协议的消息头上加上一个长度为32的整形字段
                         pipeline.addLast(new ProtobufVarint32LengthFieldPrepender());
                         pipeline.addLast(new ProtobufEncoder());
-                        pipeline.addLast(new ClientFromHandler());
+                        pipeline.addLast(new Group1Handler());
                     }
                 });
         b.connect(HOST, PORT);

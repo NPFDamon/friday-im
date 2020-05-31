@@ -1,4 +1,4 @@
-package com.friday.server.kafka.kafka.message.listener;
+package com.friday.server.kafka.message.listener;
 
 /**
  * Copyright (C),Damon

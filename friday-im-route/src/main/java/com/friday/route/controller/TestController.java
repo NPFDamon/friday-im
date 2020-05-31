@@ -1,10 +1,12 @@
 package com.friday.route.controller;
 
+import com.friday.common.bean.reqVo.GroupOut;
+import com.friday.common.bean.reqVo.GroupParams;
+import com.friday.common.bean.reqVo.UserReqVo;
+import com.friday.common.bean.resVo.LoginResVo;
 import com.friday.common.bean.resVo.Result;
 import com.friday.route.cache.ServerCache;
 import com.friday.route.service.AccountService;
-import com.friday.common.bean.reqVo.UserReqVo;
-import com.friday.common.bean.resVo.LoginResVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,6 +53,11 @@ public class TestController {
     @GetMapping("/msg")
     public void sendMsg(@RequestParam("token") String uid, @RequestParam("msg") String msg, @RequestParam("toUid") String toUid) {
         accountService.sendMsg(uid, msg, toUid);
+    }
+
+    @PostMapping("/createGroup")
+    public GroupOut createGroup(@RequestBody GroupParams p) {
+        return accountService.createGroup(p);
     }
 
 }

@@ -19,11 +19,11 @@ import java.util.Map;
  */
 @Slf4j
 public class JsonHelper {
-    private static final ObjectMapper mapper = new ObjectMapper();
+    public static final ObjectMapper mapper = new ObjectMapper();
 
-    private static final JsonFormat.Parser parser = JsonFormat.parser();
+    public static final JsonFormat.Parser parser = JsonFormat.parser();
 
-    private static final JsonFormat.Printer printer = JsonFormat.printer().includingDefaultValueFields().printingEnumsAsInts();
+    public static final JsonFormat.Printer printer = JsonFormat.printer().includingDefaultValueFields().printingEnumsAsInts();
 
 
     public static String toJsonString(Object o) {

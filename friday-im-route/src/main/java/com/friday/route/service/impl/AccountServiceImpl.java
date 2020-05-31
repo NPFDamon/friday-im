@@ -1,6 +1,8 @@
 package com.friday.route.service.impl;
 
 import com.friday.common.bean.im.ServerInfo;
+import com.friday.common.bean.reqVo.GroupOut;
+import com.friday.common.bean.reqVo.GroupParams;
 import com.friday.common.bean.reqVo.UserReqVo;
 import com.friday.common.bean.resVo.LoginResVo;
 import com.friday.common.bean.token.Token;
@@ -8,13 +10,14 @@ import com.friday.common.constant.Constants;
 import com.friday.common.enums.LoginStatusEnum;
 import com.friday.common.exception.BizException;
 import com.friday.common.netty.ServerChannelManager;
-import com.friday.common.netty.UidChannelManager;
 import com.friday.common.protobuf.Message;
+import com.friday.common.redis.ConversationRedisServer;
 import com.friday.common.redis.UserInfoRedisService;
 import com.friday.common.redis.UserServerRedisService;
 import com.friday.common.utils.JsonHelper;
 import com.friday.common.utils.ServerInfoParseUtil;
 import com.friday.common.utils.SnowFlake;
+import com.friday.common.utils.UidUtil;
 import com.friday.route.cache.ServerCache;
 import com.friday.route.client.RouteClient;
 import com.friday.route.lb.ServerRouteLoadBalanceHandler;
@@ -60,7 +63,7 @@ public class AccountServiceImpl implements AccountService {
     private ServerChannelManager serverChannelManager;
 
     @Autowired
-    private UidChannelManager uidChannelManager;
+    private ConversationRedisServer conversationRedisServer;
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -164,5 +167,15 @@ public class AccountServiceImpl implements AccountService {
         } else {
             log.error("user:{} is not login !", uid);
         }
+    }
+
+    @Override
+    public GroupOut createGroup(GroupParams params) {
+        String groupId = UidUtil.uuid();
+        String converId = conversationRedisServer.newGroupConversationId(groupId, params.getMembers());
+        GroupOut out = new GroupOut();
+        out.setConverId(converId);
+        out.setGroupId(groupId);
+        return out;
     }
 }

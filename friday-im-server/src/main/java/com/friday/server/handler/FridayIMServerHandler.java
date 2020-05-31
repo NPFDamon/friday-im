@@ -78,10 +78,11 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<Message.F
 
                 conversationId = upDownMessage.getConverId();
 
-                if (StringUtils.isNotBlank(conversationId)) {
+                if (StringUtils.isNotEmpty(conversationId)) {
                     String groupId = conversationRedisServer.getGroupIdByConversationId(conversationId);
                     if (StringUtils.isBlank(groupId)) {
                         log.error("illegal conversation id ！");
+                        sendFailAck(channelHandlerContext, upDownMessage, Message.Code.CONVER_ID_INVALID);
                     }
                     upDownMessage = upDownMessage.toBuilder().setGroupId(groupId).build();
                 } else if (StringUtils.isNotBlank(upDownMessage.getGroupId())) {
@@ -90,6 +91,7 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<Message.F
 
                 } else {
                     log.error("conversation id and group id all empty.");
+                    sendFailAck(channelHandlerContext, upDownMessage, Message.Code.NO_TARGET);
                     return;
                 }
                 topic = Constants.KAFKA_TOPIC_GROUP;
@@ -163,6 +165,7 @@ public class FridayIMServerHandler extends SimpleChannelInboundHandler<Message.F
                 .setGroupId(message.getGroupId()).build();
         return Message.FridayMessage.newBuilder().setType(Message.FridayMessage.Type.UpDownMessage).setUpDownMessage(upDownMessage).build();
     }
+
     private void sendFailAck(ChannelHandlerContext ctx, Message.UpDownMessage message, Message.Code code) {
         sendAck(ctx, message, code, 0);
     }

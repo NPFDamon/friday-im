@@ -1,0 +1,24 @@
+package com.friday.server.kafka.message.processor;
+
+import com.friday.common.netty.UidChannelManager;
+import com.friday.common.redis.ConversationRedisServer;
+import com.friday.common.redis.UserServerRedisService;
+
+/**
+ * Copyright (C),Damon
+ *
+ * @Description:
+ * @Author: Damon(npf)
+ * @Date: 2020-05-31:10:26
+ */
+public class SingleMessageProcessor extends MessageProcessor implements Runnable{
+    public SingleMessageProcessor(UserServerRedisService userServerRedisService, String message,
+                                  ConversationRedisServer conversationRedisServer, UidChannelManager uidChannelManager) {
+        super(userServerRedisService, message, conversationRedisServer, uidChannelManager);
+    }
+
+    @Override
+    public void run() {
+        super.init();
+    }
+}

@@ -1,3 +1,5 @@
+package single;
+
 import com.friday.common.protobuf.Message;
 import com.friday.common.utils.SnowFlake;
 import io.netty.bootstrap.Bootstrap;
@@ -13,17 +15,16 @@ import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.timeout.IdleStateHandler;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Copyright (C),Damon
  *
  * @Description:
  * @Author: Damon(npf)
- * @Date: 2020-05-25:11:31
+ * @Date: 2020-05-25:11:24
  */
-@Slf4j
-public class ClientTo {
+
+public class ClientFrom {
 
     private static final String HOST = "127.0.0.1";
     private static final int PORT = 8001;
@@ -31,10 +32,10 @@ public class ClientTo {
     public static SnowFlake snowFlake = new SnowFlake(1, 2);
 
     public static void main(String[] args) throws Exception {
-        beginTest();
+        beginPressTest();
     }
 
-    public static void beginTest() throws InterruptedException {
+    public static void beginPressTest() throws InterruptedException {
         EventLoopGroup group = new NioEventLoopGroup();
         Bootstrap b = new Bootstrap();
         b.group(group)
@@ -50,21 +51,9 @@ public class ClientTo {
                         // 对protobuf协议的消息头上加上一个长度为32的整形字段
                         pipeline.addLast(new ProtobufVarint32LengthFieldPrepender());
                         pipeline.addLast(new ProtobufEncoder());
-                        pipeline.addLast(new ClientToHandler());
+                        pipeline.addLast(new ClientFromHandler());
                     }
                 });
-        b.connect(HOST, PORT);
-    }
-
-    private static void startConnection(Bootstrap b, int index) {
-        b.connect(HOST, PORT).addListener(future -> {
-            if (future.isSuccess()) {
-                //init registry
-                log.info("ClientFrom:{} connected MessageServer Successed...", index);
-            } else {
-                log.error("ClientFrom:{} connected MessageServer Failed", index);
-            }
-        });
         b.connect(HOST, PORT);
     }
 }

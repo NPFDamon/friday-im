@@ -1,5 +1,7 @@
 package com.friday.route.service;
 
+import com.friday.common.bean.reqVo.GroupOut;
+import com.friday.common.bean.reqVo.GroupParams;
 import com.friday.common.bean.reqVo.UserReqVo;
 import com.friday.common.bean.resVo.LoginResVo;
 
@@ -29,4 +31,6 @@ public interface AccountService {
 
 
     void sendMsg(String uid, String msg, String toUid);
+
+    GroupOut createGroup(GroupParams params);
 }
