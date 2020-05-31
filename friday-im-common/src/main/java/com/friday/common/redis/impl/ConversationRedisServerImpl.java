@@ -117,10 +117,11 @@ public class ConversationRedisServerImpl implements ConversationRedisServer {
     @Override
     public String getGroupIdByConversationId(String conversationId) {
         Conversation conversation = getConversation(conversationId);
-        if (conversation == null && conversation.getType() == Message.ConverType.GROUP.getNumber()) {
+        if (conversation == null ? false : conversation.getType() == Message.ConverType.GROUP.getNumber()) {
             return conversation.getGroupId();
+        } else {
+            return null;
         }
-        return null;
     }
 
     @Override
@@ -221,7 +222,7 @@ public class ConversationRedisServerImpl implements ConversationRedisServer {
     public void updateUserReadMessageId(String uid, String conversationId, Long msgId) {
         Object oldMsgId = redisTemplate.boundHashOps(Constants.CONVERSATION_LIST + uid).get(conversationId);
         if (null != oldMsgId) {
-            if (Long.parseLong(String.valueOf(oldMsgId))  < msgId) {
+            if (Long.parseLong(String.valueOf(oldMsgId)) < msgId) {
                 redisTemplate.boundHashOps(Constants.CONVERSATION_LIST + uid).put(conversationId, msgId);
             }
         }
