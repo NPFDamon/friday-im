@@ -95,14 +95,14 @@ public class AccountServiceImpl implements AccountService {
                 ServerInfo serverInfo = serverRouteLoadBalanceHandler.routeServer(ServerInfoParseUtil.getServerInfoList(servers), userReqVo.getUid());
 
                 Channel channel = serverChannelManager.getChannelByServer(serverInfo);
-                if (channel == null) {
-                    //连接服务器
-                    channel = client.connect(serverInfo);
-                    log.info("uid:[{}] login,channel[{}] ", userReqVo.getUid(), channel);
-                    //保存server channel关系
-                    serverChannelManager.addServerToChannel(serverInfo, channel);
-
-                }
+//                if (channel == null) {
+//                    //连接服务器
+//                    channel = client.connect(serverInfo);
+//                    log.info("uid:[{}] login,channel[{}] ", userReqVo.getUid(), channel);
+//                    //保存server channel关系
+//                    serverChannelManager.addServerToChannel(serverInfo, channel);
+//
+//                }
                 userServerRedisService.addUserToServer(userReqVo.getUid(), serverInfo);
                 Message.Login login = Message.Login.newBuilder()
                         .setToken(token).setId(snowFlake.nextId())

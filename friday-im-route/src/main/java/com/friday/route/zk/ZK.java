@@ -6,7 +6,6 @@ import com.friday.common.netty.ServerChannelManager;
 import com.friday.common.utils.JsonHelper;
 import com.friday.common.utils.ServerInfoParseUtil;
 import com.friday.route.client.RouteClient;
-import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.I0Itec.zkclient.IZkChildListener;
 import org.I0Itec.zkclient.ZkClient;
@@ -45,13 +44,6 @@ public class ZK {
             public void handleChildChange(String s, List<String> list) throws Exception {
                 List<ServerInfo> serverInfos = ServerInfoParseUtil.getServerInfoList(list);
                 log.info("Clear and update local cache parentPath=[{}],currentChildren=[{}]", path, JsonHelper.toJsonString(serverInfos));
-                for (ServerInfo serverInfo : serverInfos) {
-                    Channel channel = routeClient.connect(serverInfo);
-                    if (channel != null) {
-                        serverChannelManager.addServerToChannel(serverInfo, channel);
-                        log.info("client connect to server:{} success!", serverInfo);
-                    }
-                }
             }
         });
     }
