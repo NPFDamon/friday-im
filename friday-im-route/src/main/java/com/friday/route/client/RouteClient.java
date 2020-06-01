@@ -39,7 +39,7 @@ public class RouteClient implements Client {
     @Autowired
     private SnowFlake snowFlake;
 
-    Channel channel;
+    private Channel channel;
     private final AtomicLong atomicLong = new AtomicLong(1);
 
     public void connect(ServerInfo serverInfo) {

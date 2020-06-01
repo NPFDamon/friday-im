@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date: 2020-05-22:14:41
  */
 @RestController
-@RequestMapping("/test")
-public class TestController {
+@RequestMapping("/friday-im")
+public class RustController {
 
     
 
