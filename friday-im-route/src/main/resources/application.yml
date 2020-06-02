@@ -37,6 +37,20 @@ zk:
   connection:
     timeout: 15000
 
+#负载均衡策略选择
 app:
   router:
     method: com.friday.route.lb.hash.ConsistentHashLoadBalanceHandler
+
+# eureka 配置
+eureka:
+  client:
+    # 是否将自己注册到eureka
+    register-with-eureka: false
+    # 是否从eureka server获取注册信息
+    fetch-registry: false
+    # 设置与eureka server 交互的地址 查询服务和注册服务都需要依赖这个地址。默认是http://localhost:8761/eureka ；多个地址可使用 , 分隔。
+    service-url:
+      defaultZone: http://localhost:8009/eureka/
+  server:
+    enable-self-preservation: true

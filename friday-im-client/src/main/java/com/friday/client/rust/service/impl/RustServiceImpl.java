@@ -1,6 +1,6 @@
 package com.friday.client.rust.service.impl;
 
-import com.friday.client.rust.service.TestService;
+import com.friday.client.rust.service.RustService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @Component
 @Slf4j
-public class TestServiceImpl implements TestService {
+public class RustServiceImpl implements RustService {
 
     @Value("${}")
     private String serverUrl;

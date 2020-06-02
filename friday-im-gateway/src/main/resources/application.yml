@@ -1,22 +1,18 @@
 spring:
   application:
-    name: friday-im-server
+    name: friday-im-gateway
 
 server:
     port: 8009
-
-netty:
+eureka:
+  client:
+    # 是否将自己注册到eureka
+    register-with-eureka: false
+    # 是否从eureka server获取注册信息
+    fetch-registry: false
+    # 设置与eureka server 交互的地址 查询服务和注册服务都需要依赖这个地址。默认是http://localhost:8761/eureka ；多个地址可使用 , 分隔。
+    service-url:
+      defaultZone: http://localhost:${server.port}/eureka/
   server:
-    port: 8000
-    address: 127.0.0.1
+    enable-self-preservation: true
 
-zk:
-  address: 127.0.0.1:2181
-  switch: true
-  root: /router
-  connection:
-    timeout: 15000
-
-app:
-  im:
-    serverport:

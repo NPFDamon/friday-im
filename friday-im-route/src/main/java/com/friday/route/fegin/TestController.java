@@ -1,4 +1,4 @@
-package com.friday.route.controller;
+package com.friday.route.fegin;
 
 import com.friday.common.bean.reqVo.GroupOut;
 import com.friday.common.bean.reqVo.GroupParams;

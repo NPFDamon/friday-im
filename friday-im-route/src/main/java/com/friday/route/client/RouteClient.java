@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @Component
 @Slf4j
-public class RouteClient implements Client {
+public class RouteClient implements Client{
     @Autowired
     private RouteClientHandler routeClientHandler;
     @Autowired
@@ -73,7 +73,6 @@ public class RouteClient implements Client {
     }
 
 
-    @Override
     public void sendMsg(MessageContext messageContext) {
         Message.MessageContent content = Message.MessageContent.newBuilder()
                 .setId(snowFlake.nextId())
@@ -99,7 +98,6 @@ public class RouteClient implements Client {
         });
     }
 
-    @Override
     public Result login(UserLoginBeanVO loginBeanVO) {
         Result result = new Result();
         Message.Login login = Message.Login.newBuilder()
@@ -117,7 +115,6 @@ public class RouteClient implements Client {
         return result;
     }
 
-    @Override
     public void reconnection() {
 
     }

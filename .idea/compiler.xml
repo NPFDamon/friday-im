@@ -10,11 +10,13 @@
         <module name="friday-im-common" />
         <module name="friday-im-server" />
         <module name="friday-im-route" />
-        <module name="friday-Im-route-api" />
         <module name="friday-im-gateway" />
         <module name="friday-im-client" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="friday-Im-route-api" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
