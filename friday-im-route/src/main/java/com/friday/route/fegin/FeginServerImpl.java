@@ -1,12 +1,13 @@
 package com.friday.route.fegin;
 
+import com.friday.common.bean.reqVo.MessageContext;
 import com.friday.common.bean.reqVo.UserLoginBeanVO;
 import com.friday.common.bean.resVo.Result;
 import com.friday.route.client.Client;
+import com.friday.route.fegin.interfaces.FeginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -17,12 +18,21 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date: 2020-06-02:12:22
  */
 @RestController
-public class FeginServer {
+public class FeginServerImpl implements FeginService {
     @Autowired
     private Client client;
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @Override
+    @PostMapping("/send-message")
+    public void sendMsg(@RequestBody MessageContext messageContext) {
+        client.sendMsg(messageContext);
+    }
+
+
+    @Override
+    @PostMapping("/login")
     public Result login(@RequestBody UserLoginBeanVO vo) {
-        return client.login(vo);
+//        client.login(vo);
+        return Result.success("Test Fegin");
     }
 }

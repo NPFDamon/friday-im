@@ -1,6 +1,15 @@
+spring:
+  application:
+    name: friday-im-client
+
 server:
   port: 8990
 
 # netty config
 rest:
   timeout: 10000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8009/eureka/
