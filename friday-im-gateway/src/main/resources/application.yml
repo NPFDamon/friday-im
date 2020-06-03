@@ -13,6 +13,4 @@ eureka:
     # 设置与eureka server 交互的地址 查询服务和注册服务都需要依赖这个地址。默认是http://localhost:8761/eureka ；多个地址可使用 , 分隔。
     service-url:
       defaultZone: http://localhost:${server.port}/eureka/
-  server:
-    enable-self-preservation: true
 
