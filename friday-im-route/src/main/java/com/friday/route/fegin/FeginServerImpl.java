@@ -2,12 +2,11 @@ package com.friday.route.fegin;
 
 import com.friday.common.bean.reqVo.MessageContext;
 import com.friday.common.bean.reqVo.UserLoginBeanVO;
+import com.friday.common.bean.reqVo.UserReqVo;
 import com.friday.common.bean.resVo.Result;
 import com.friday.route.client.Client;
 import com.friday.route.fegin.interfaces.FeginService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -23,16 +22,29 @@ public class FeginServerImpl implements FeginService {
     private Client client;
 
     @Override
-    @PostMapping("/send-message")
-    public void sendMsg(@RequestBody MessageContext messageContext) {
+    public Result registry(UserReqVo reqVo) {
+        return null;
+    }
+
+    @Override
+    public String getToken(UserReqVo reqVo) {
+        return null;
+    }
+
+    @Override
+    public void sendMsg(MessageContext messageContext) {
         client.sendMsg(messageContext);
     }
 
 
     @Override
-    @PostMapping("/login")
-    public Result login(@RequestBody UserLoginBeanVO vo) {
+    public Result login(UserLoginBeanVO vo) {
 //        client.login(vo);
         return Result.success("Test Fegin");
+    }
+
+    @Override
+    public Result logout(UserLoginBeanVO userLoginBeanVO) {
+        return null;
     }
 }
