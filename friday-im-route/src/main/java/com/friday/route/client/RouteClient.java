@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @Component
 @Slf4j
-public class RouteClient implements Client{
+public class RouteClient implements Client {
     @Autowired
     private RouteClientHandler routeClientHandler;
     @Autowired
@@ -100,18 +100,24 @@ public class RouteClient implements Client{
 
     public Result login(UserLoginBeanVO loginBeanVO) {
         Result result = new Result();
-        Message.Login login = Message.Login.newBuilder()
-                .setToken(loginBeanVO.getToken()).setId(snowFlake.nextId())
-                .setUid(loginBeanVO.getUid()).build();
-        Message.FridayMessage message = Message.FridayMessage.newBuilder().setType(Message.FridayMessage.Type.Login).setLogin(login).build();
-        ChannelFuture future = channel.writeAndFlush(message);
-        future.addListeners((ChannelFutureListener) channelFuture -> {
-            if (future.isSuccess()) {
-                result.setCode(ResultCode.COMMON_SUCCESS.getCode());
-            } else {
-                result.setCode(ResultCode.COMMON_ERROR.getCode());
-            }
-        });
+        if (loginBeanVO.getServerInfo() == null) {
+            result.setCode(ResultCode.COMMON_SERVER_NOT_AVAILABLE.getCode());
+        } else {
+            connect(loginBeanVO.getServerInfo());
+            Message.Login login = Message.Login.newBuilder()
+                    .setToken(loginBeanVO.getToken()).setId(snowFlake.nextId())
+                    .setUid(loginBeanVO.getUid()).build();
+            Message.FridayMessage message = Message.FridayMessage.newBuilder().setType(Message.FridayMessage.Type.Login).setLogin(login).build();
+            ChannelFuture future = channel.writeAndFlush(message);
+            future.addListeners((ChannelFutureListener) channelFuture -> {
+                if (future.isSuccess()) {
+                    result.setCode(ResultCode.COMMON_SUCCESS.getCode());
+                } else {
+                    result.setCode(ResultCode.COMMON_ERROR.getCode());
+                }
+            });
+        }
+
         return result;
     }
 
