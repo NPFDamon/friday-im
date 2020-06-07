@@ -1,4 +1,4 @@
-package com.cn.gateway.com.friday.gateway.rust;
+package com.eurake.rust;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;

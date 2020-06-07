@@ -7,21 +7,23 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="friday-im-eurake" />
         <module name="friday-im-common" />
         <module name="friday-im-server" />
         <module name="friday-im-route" />
-        <module name="friday-Im-route-api" />
-        <module name="friday-im-gateway" />
         <module name="friday-im-client" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="friday-Im-route-api" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="friday-Im-route-api" options="-parameters" />
       <module name="friday-im-client" options="-parameters" />
       <module name="friday-im-common" options="-parameters" />
-      <module name="friday-im-gateway" options="-parameters" />
+      <module name="friday-im-eurake" options="-parameters" />
       <module name="friday-im-route" options="-parameters" />
       <module name="friday-im-server" options="-parameters" />
     </option>
