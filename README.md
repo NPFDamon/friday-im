@@ -13,6 +13,7 @@
 * Redis
 * Mysql
 * Protobuf
+* MyBatis
 
 ### Module
 * friday-im-client
