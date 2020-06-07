@@ -6,11 +6,12 @@
 * JDk-1.8
 * Netty 4.1.49.Final
 * Spring-Boot 2.2.7.RELEASE
+* Spring Cloud Hoxton.SR5
+* Netflix-Eureka
 * Zookeeper
 * Kafka
-* Spring Cloud Hoxton.SR5
 * Redis
-* Netflix-Eureka
+* Mysql
 * Protobuf
 
 ### Module
