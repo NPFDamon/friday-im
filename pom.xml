@@ -12,8 +12,7 @@
         <module>friday-im-server</module>
         <module>friday-im-common</module>
         <module>friday-im-route</module>
-        <module>friday-im-gateway</module>
-        <module>friday-Im-route-api</module>
+        <module>friday-im-eurake</module>
     </modules>
     <packaging>pom</packaging>
 
