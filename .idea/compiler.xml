@@ -7,15 +7,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="friday-im-common" />
         <module name="friday-im-client" />
+        <module name="friday-im-common" />
         <module name="friday-im-eurake" />
         <module name="friday-im-server" />
         <module name="friday-im-route" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="friday-im-eurake" target="1.8" />
       <module name="friday-Im-route-api" target="1.8" />
     </bytecodeTargetLevel>
   </component>
