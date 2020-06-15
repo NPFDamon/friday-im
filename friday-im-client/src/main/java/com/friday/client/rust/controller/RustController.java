@@ -21,22 +21,22 @@ public class RustController {
     @Autowired
     private FeginRuetClient feignClient;
 
-    @PostMapping("/send-message")
+    @RequestMapping(value = "/send-message", method = RequestMethod.POST)
     public Result sendMsg(@RequestBody MessageContext messageContext) {
         return feignClient.sendMsg(messageContext);
     }
 
-    @PostMapping("/login")
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result login(@RequestBody UserLoginBeanVO loginBeanVO) {
         return feignClient.login(loginBeanVO);
     }
 
-    @PostMapping("/token")
+    @RequestMapping(value = "/token", method = RequestMethod.POST)
     Result getToken(@RequestBody UserReqVo reqVo) {
         return feignClient.getToken(reqVo);
     }
 
-    @PostMapping("/serverInfo")
+    @RequestMapping(value = "/serverInfo", method = RequestMethod.POST)
     Result getServer(@RequestHeader String token) {
         return feignClient.getServer(token);
     }
