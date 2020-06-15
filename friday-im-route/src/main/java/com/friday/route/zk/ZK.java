@@ -2,10 +2,8 @@ package com.friday.route.zk;
 
 import com.alibaba.fastjson.JSON;
 import com.friday.common.bean.im.ServerInfo;
-import com.friday.common.netty.ServerChannelManager;
 import com.friday.common.utils.JsonHelper;
 import com.friday.common.utils.ServerInfoParseUtil;
-import com.friday.route.client.RouteClient;
 import lombok.extern.slf4j.Slf4j;
 import org.I0Itec.zkclient.IZkChildListener;
 import org.I0Itec.zkclient.ZkClient;
@@ -28,10 +26,6 @@ public class ZK {
 
     @Autowired
     private ZkClient zkClient;
-    @Autowired
-    private RouteClient routeClient;
-    @Autowired
-    private ServerChannelManager serverChannelManager;
 
 
     @Value("${zk.root}")

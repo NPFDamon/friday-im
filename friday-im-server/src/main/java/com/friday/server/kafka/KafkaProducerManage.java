@@ -26,7 +26,7 @@ public class KafkaProducerManage {
 
     @PostConstruct
     public void init() {
-        producer = new KafkaProducer<String, String>(producerProperties());
+        producer = new KafkaProducer<>(producerProperties());
     }
 
     public Result send(String topic, String key, String message) {

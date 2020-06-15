@@ -23,12 +23,6 @@ public class ZKConfiguration {
     @Value("${zk.switch}")
     private boolean zkSwitch;
 
-//    @Value("${}")
-//    private int imServerPort;
-//
-//    @Value("${}")
-//    private String routerUrl;
-
     @Value("${zk.connection.timeout}")
     private int zkConnectTimeOut;
 }

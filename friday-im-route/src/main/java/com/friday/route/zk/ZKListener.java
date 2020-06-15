@@ -14,9 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ZKListener implements Runnable {
 
-    private ZK zk;
+    private final ZK zk;
 
-    private ZKConfiguration zkConfiguration;
+    private final ZKConfiguration zkConfiguration;
 
 
     public ZKListener() {

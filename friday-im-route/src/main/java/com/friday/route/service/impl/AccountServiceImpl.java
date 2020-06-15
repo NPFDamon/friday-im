@@ -19,7 +19,6 @@ import com.friday.common.utils.ServerInfoParseUtil;
 import com.friday.common.utils.SnowFlake;
 import com.friday.common.utils.UidUtil;
 import com.friday.route.cache.ServerCache;
-import com.friday.route.client.RouteClient;
 import com.friday.route.lb.ServerRouteLoadBalanceHandler;
 import com.friday.route.service.AccountService;
 import io.netty.channel.Channel;
@@ -55,9 +54,6 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private UserServerRedisService userServerRedisService;
-
-    @Autowired
-    private RouteClient client;
 
     @Autowired
     private ServerChannelManager serverChannelManager;
